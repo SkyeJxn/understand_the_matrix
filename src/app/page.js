@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LevelOverview from "../components/LevelOverview";
 
 export default function Home() {
@@ -6,7 +7,6 @@ export default function Home() {
       <Header></Header>
       <MainContent></MainContent>
       <StartButton></StartButton>
-      <LevelOverview mode="tutorial"></LevelOverview>
     </div>
   );
 }
@@ -26,7 +26,9 @@ function MainContent() {
 function StartButton() {
   return (
     <div>
-      <button className="button"> Start Learning </button>
+      <Link href={`/tutorial`}>
+        <button className="button"> Start Learning </button>
+      </Link>
     </div>
   );
 }
