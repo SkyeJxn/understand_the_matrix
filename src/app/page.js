@@ -4,7 +4,7 @@ export default function Home() {
       <Header></Header>
       <MainContent></MainContent>
       <StartButton></StartButton>
-      <LevelOverview id="level_overview"></LevelOverview>
+      <LevelOverview></LevelOverview>
     </div>
   );
 }
