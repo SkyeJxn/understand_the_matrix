@@ -12,7 +12,7 @@ export default function Home() {
 }
 
 function Header() {
-  return (<div id="landing_header"> Understand the Matrix</div>);
+  return (<div className="header"> Understand the Matrix</div>);
 }
 
 function MainContent() {
