@@ -1,4 +1,4 @@
-import LevelOverview from "./components/LevelOverview";
+import LevelOverview from "../components/LevelOverview";
 
 export default function Home() {
   return (
