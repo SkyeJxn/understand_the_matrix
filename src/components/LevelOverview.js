@@ -30,7 +30,7 @@ export default function LevelOverview({mode = "challenge"}){
 function LevelItem({ number = 1, title = 'no title', description='', mode='challenge' }){
   return(
     <div className="level_item">
-      <Link href={`/level/${mode}/${number}`} >
+      <Link href={`/${mode}/${number}`} >
         <button id={`level_${number}_btn`} type="button">
           <div className="level_btn_top">{number}</div>
           <div className="level_btn_bottom"></div>
