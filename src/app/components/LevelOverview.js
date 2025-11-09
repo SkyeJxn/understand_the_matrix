@@ -1,3 +1,4 @@
+import './LevelOverview.css'
 export default function LevelOverview(){
   const levels = [
     { number: 1, description: 'Koeffizientenmatrix' },
