@@ -24,6 +24,7 @@
   margin: 0;
   padding: 0;
 }
+.level_item p {font-size: 11px;}
 .level_btn_top, .level_btn_bottom {
   border-radius: 50%;
   position: relative;

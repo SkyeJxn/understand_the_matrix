@@ -6,7 +6,7 @@ export default function Home() {
       <Header></Header>
       <MainContent></MainContent>
       <StartButton></StartButton>
-      <LevelOverview></LevelOverview>
+      <LevelOverview mode="tutorial"></LevelOverview>
     </div>
   );
 }
