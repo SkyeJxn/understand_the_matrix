@@ -1,12 +1,33 @@
-.matrix {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.matrix_wrapper {
+  display: inline-flex;
+  align-items: stretch;
   margin: 0 auto;
+  justify-content: center;
+  /* border: 1px solid red; */
+  margin: 0 auto;
+}
+.matrix {
+  margin: 10px;
   /* border: 1px solid red; */
   text-align: center;
+  border-collapse: collapse;
+  /* border: 1px solid red; */
+
 }
 .matrix td{
-  padding: 10px;
   /* border: 1px solid red; */
+  padding: 5px;
+  text-align: center;
+}
+
+svg {
+  height: auto;
+  /* border: 1px solid red; */
+  width: 25px;
+  align-self: stretch;
+}
+svg path {
+    stroke: var(--color5);
+    stroke-width: 2px;
+    fill: none;
 }
