@@ -1,0 +1,12 @@
+.matrix {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  /* border: 1px solid red; */
+  text-align: center;
+}
+.matrix td{
+  padding: 10px;
+  /* border: 1px solid red; */
+}
