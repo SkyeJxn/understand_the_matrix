@@ -3,7 +3,13 @@ import React from "react";
 import './Matrix.css'
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
-
+/**
+ * StaticMatrix component to display any matrix
+ * 
+ * @param {number[][]} data - 2-dim array with the matrix values (each inner list is a row)
+ * @param {boolean} resultCol - is the last column a results column
+ * @param {boolean} det - is the matrix a determinant
+ */
 export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
   const cols = data[0].length;
   const colFormat = resultCol ? 'c'.repeat(cols - 1) + '|c': 'c'.repeat(cols);
@@ -16,24 +22,26 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
   const bracketLeft = det ? "|": "("
   const bracketRight = det ? "|": ")"
 
-  const latexMatrix = `
-    \\left${bracketLeft}
-    \\begin{array}{${colFormat}}
-    ${rows}
-    \\end{array}
-    \\right${bracketRight}
-  `;
+  const latexMatrix = `\\left${bracketLeft}\\begin{array}{${colFormat}}${rows}\\end{array}\\right${bracketRight}`;
   
   return (
-    <div className='matrix'>
+    <div className='matrix-container'>
         <InlineMath math={latexMatrix} />      
     </div>
   );
 }
-
+/**
+ * EditableMatrix component for user input of any matrix
+ * 
+ * @param {number} rows - number of rows 
+ * @param {number} cols - number of columns (including result column if `resultCol` is true)
+ * @param {boolean} resultCol - is the last column a results column
+ * @param {boolean} det - is the matrix a determinant
+ * @param {(matrix: string[][]) => void} onChange - Callback, that returns the current matrix
+ */
 export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange }) {
   const [matrix, setMatrix] = React.useState(
-    Array.from({ length: rows }, () => Array(cols).fill("0"))
+    Array.from({ length: rows }, () => Array(cols).fill(""))
   );
 
   const handleChange = (i, j, value) => {
@@ -48,30 +56,14 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
   const bracketLeft = det ? "|": "("
   const bracketRight = det ? "|": ")"
   
-  const colFormat = resultCol ? "c".repeat(cols - 1) + "|c" : "c".repeat(cols);
   const dummyRows = Array.from({ length: rows }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
-
-  const latexLeftBracket = `
-    \\left${bracketLeft}
-    \\vphantom{\\begin{array}{c}
-    ${dummyRows}
-    \\end{array}}
-    \\right.
-  `;
-  const latexRightBracket = `
-    \\left.
-    \\vphantom{\\begin{array}{c}
-    ${dummyRows}
-    \\end{array}}
-    \\right${bracketRight}
-  `;
+  const latexLeftBracket = `\\left${bracketLeft}\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right.`;
+  const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right${bracketRight}`;
 
   return (
     <div className="matrix-container">
       <InlineMath math={latexLeftBracket} />
-
-      <table className="matrix-inputs">
-        <tbody>
+      <table className="matrix-inputs"><tbody>
           {matrix.map((row, i) => (
             <tr key={i}>
               {row.map((cell, j) => (
@@ -82,15 +74,14 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
                     type="number"
                     value={cell}
                     onChange={(e) => handleChange(i, j, e.target.value)}
+                    autoFocus={i === 0 && j === 0}
                   />
                 </td>
               ))}
             </tr>
           ))}
-        </tbody>
-      </table>
+      </tbody></table>
       <InlineMath math={latexRightBracket} />
-
     </div>
   );
 }
