@@ -1,5 +1,4 @@
 import Link from "next/link";
-import LevelOverview from "../components/LevelOverview";
 
 export default function Home() {
   return (
