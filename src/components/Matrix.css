@@ -1,32 +1,29 @@
-.matrix {
-  /* border: 1px solid red; */
-  text-align: center;
-  margin: 10px;
-  font-size: 20px;
+.matrix-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  margin: 10px;  
 }
-.katex .delimsizing {font-size: 1.1em;}
+
 .katex .mord {
   margin-right: 0.1em; 
   margin-left: 0.1em; 
 }
 
-.matrix-container {
-  display: flex;
-  justify-content: center;
-}
-
 .matrix-inputs td {padding: 5px;}
-
 .matrix-inputs input {
   width: 40px;
   text-align: center;
   border-radius: 12px;
   background: var(--color1);
-  border: 3px solid var(--color5);
+  border: 2px solid var(--color5);
   color: var(--color5);
 }
+.matrix-inputs input:focus {
+  outline: none;
+  border-color: var(--color4);
+}
 
-.matrix-container {align-items: stretch;}
 
 /* no arrows in input */
 /* Chrome, Safari, Edge, Opera */
