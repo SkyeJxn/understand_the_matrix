@@ -1,28 +1,31 @@
 import './Matrix.css'
+import 'katex/dist/katex.min.css';
+import { InlineMath } from 'react-katex';
 
-export function Matrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, editable = false, det = false}){
-    
-    return (
-        <div className='matrix_wrapper'>
-            <svg viewBox="0 0 20 100" preserveAspectRatio="none">
-                <path d="M20,0 Q0,50 20,100" />
-            </svg>
-            <table className="matrix"><tbody>
-                {data.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        {row.map((value, colIndex) => (
-                            <td key={colIndex}>
-                                {value}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody></table>
-            <svg viewBox="0 0 20 100" preserveAspectRatio="none">
-                <path d="M0,0 Q20,50 0,100" />
-            </svg>
-        </div>
-        
-    )
-    
+export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
+  const cols = data[0].length;
+  const colFormat = resultCol ? 'c'.repeat(cols - 1) + '|c': 'c'.repeat(cols);
+
+  const rows = data.map(row => {
+    if (resultCol) {return row.slice(0, -1).join(' & ') + ' & ' + row[row.length - 1];} 
+    else {return row.join(' & ');}
+  }).join(' \\\\ ');
+
+  const bracketLeft = det ? "|": "("
+  const bracketRight = det ? "|": ")"
+
+  const latexMatrix = `
+    \\left${bracketLeft}
+    \\begin{array}{${colFormat}}
+    ${rows}
+    \\end{array}
+    \\right${bracketRight}
+  `;
+  
+  return (
+    <div className='matrix'>
+        <InlineMath math={latexMatrix} />      
+    </div>
+  );
 }
+
