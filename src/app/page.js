@@ -1,3 +1,6 @@
+import Link from "next/link";
+import LevelOverview from "../components/LevelOverview";
+
 export default function Home() {
   return (
     <div>
@@ -9,7 +12,7 @@ export default function Home() {
 }
 
 function Header() {
-  return (<div id="landing_header"> Understand the Matrix</div>);
+  return (<div className="header"> Understand the Matrix</div>);
 }
 
 function MainContent() {
@@ -23,7 +26,9 @@ function MainContent() {
 function StartButton() {
   return (
     <div>
-      <button className="button"> Start Learning </button>
+      <Link href={`/tutorial`}>
+        <button className="button"> Start Learning </button>
+      </Link>
     </div>
   );
 }
