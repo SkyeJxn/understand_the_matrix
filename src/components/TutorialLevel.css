@@ -1,0 +1,35 @@
+.toolbar {
+   /* display: flex; */
+}
+/* Hintergrundfarbe der ProgressBar */
+.p-progressbar {
+  background-color: var(--color3); /* Hintergrund */
+  border-radius: 12px;    /* abgerundete Form */
+  margin: 20px;
+}
+
+/* Farbe des Fortschrittsbalkens */
+.p-progressbar .p-progressbar-value {
+  background-color: var(--color4); /* Grün */
+  border-radius: 12px;       /* gleiche Rundung */
+}
+.p-progressbar .p-progressbar-label {
+  display: none;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px;
+    height: 70vh;
+    /* border: 1px solid gray; */
+}
+.navigator_btn {
+    text-align: center;
+}
+
+.titel {
+    font-weight: bold;
+    font-size: larger;
+}
