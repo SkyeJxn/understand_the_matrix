@@ -1,0 +1,79 @@
+[
+  {
+    "id": "1",
+    "page": "1",
+    "part": "1",
+    "typ": "titel",
+    "content": "Level 1: What's a LGS? (System of linear equations/ linares Gleichungssystem)"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "2",
+    "typ": "text",
+    "content": "There are equations with a number of variables:"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "2",
+    "typ": "katex",
+    "content": "5x + 7y = 3x"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "2",
+    "typ": "katex",
+    "content": "3x - 4y = -10"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "3",
+    "typ": "text",
+    "content": "sorted by variable"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "3",
+    "typ": "katex",
+    "content": "2x + 7y = 0"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "3",
+    "typ": "katex",
+    "content": "3x - 4y = -10"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "4",
+    "typ": "text",
+    "content": "write in matrix"
+  },
+  {
+    "id": "1",
+    "page": "1",
+    "part": "4",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}2 & 7 & 0 \\\\3 & -4 & -10\\end{array}\\right)"
+  },
+  {
+    "id": "1",
+    "page": "2",
+    "part": "1",
+    "typ": "text",
+    "content": "homogeneous LGS: ⇒ LGS with only equations = 0"
+  },
+  {
+    "id": "1",
+    "page": "2",
+    "part": "1",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}3 & 2 & 0 \\\\1 & 1 & 0\\end{array}\\right)=\\begin{pmatrix} 3 & 2 \\\\ 1 & 1 \\end{pmatrix}"
+  }
+]
