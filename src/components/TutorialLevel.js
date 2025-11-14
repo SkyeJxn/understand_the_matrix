@@ -6,6 +6,7 @@ import { InlineMath } from 'react-katex';
 import { useState } from "react";
 
 import { ProgressBar } from 'primereact/progressbar';
+import { Button } from 'primereact/button';
 import "primereact/resources/themes/nano/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -35,7 +36,7 @@ export function TutorialLevel({ level_id = "1" }) {
       setPage(String(Number(page) + 1));
       setCurrentPart(1);
     }
-    setProgressValue(progressValue + (1/partsOnLevel) * 100);
+    setProgressValue(prev => prev + (1/partsOnLevel) * 100);
 
   }
 
@@ -49,17 +50,19 @@ export function TutorialLevel({ level_id = "1" }) {
 
   return (
     <div>
-      <div className='toolbar'>
-        <ProgressBar value={progressValue}></ProgressBar>
+      <div className="toolbar">
+        <Button ><i className="pi pi-times" style={{ fontSize: '2.5rem' }}></i></Button>
+        <ProgressBar value={progressValue} />
       </div>
+
       <div className='content'>
         {Array.from({ length: currentPart }, (_, i) => (
           <Content key={i} id={level_id} page={page} part={String(i + 1)} />
         ))}
       </div>
       <div className='navigator_btn'>
-        <button onClick={back}>Back</button>
-        <button onClick={next}>Next</button>
+        <button onClick={back}><i className="pi pi-arrow-left" style={{ fontSize: '2.5rem' }}></i></button>
+        <button onClick={next}><i className="pi pi-arrow-right" style={{ fontSize: '2.5rem' }}></i></button>
       </div>
     </div>
   );
