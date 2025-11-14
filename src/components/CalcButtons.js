@@ -1,3 +1,5 @@
+"use client";
+import './CalcButtons.css'
 import React, {useState} from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -9,7 +11,7 @@ import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
 
 export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, dimension}) {
   return (
-    <div style={{display: 'flex', gap: 12, alignItems: 'canter'}}>
+    <div className="calc_btns" >
         <MultButton deactivate={DisableZM} matrix={matrix} dimension={dimension} />
         <AddButton deactivate={DisableZA} matrix={matrix} dimension={dimension}/>
         <SwitchButton deactivate={DisableZV} matrix={matrix} dimension={dimension}/>
@@ -44,10 +46,11 @@ function MultButton({ deactivate, matrix, dimension }){
       <Button
         disabled={deactivate}
         onClick={() => { setVisible(true); }}>
-        <InlineMath math="ZM_{i} (S)" />
+        <InlineMath math="\xrightarrow{\rm{ZM}_{i} (S)}" />
       </Button>
 
       <Dialog
+        className='dialog'
         header="Multiply Row"
         visible={visible}
         style={{ width: "60vw" }}
@@ -56,12 +59,12 @@ function MultButton({ deactivate, matrix, dimension }){
         <div>
             <div>
                 <h4>Row</h4>
-                <SelectButton value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
+                <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
             </div>
 
             <div>
             <h4>Scalar</h4>
-            <InputNumber value={scalar} onValueChange={(e) => setScalar(e.value)} />
+            <InputNumber className="scalar_input" value={scalar} onValueChange={(e) => setScalar(e.value)} />
             </div>
 
         </div>
@@ -101,10 +104,11 @@ function AddButton({ deactivate, matrix, dimension }) {
             setVisible(true);
           }}
         >
-          <InlineMath math="ZA_{ij} (S)" />
+          <InlineMath math="\xrightarrow{\rm{ZA}_{ij} (S)}" />
         </Button>
 
         <Dialog
+          className='dialog'
           header="Add Rows"
           visible={visible}
           style={{ width: "60vw" }}
@@ -116,8 +120,9 @@ function AddButton({ deactivate, matrix, dimension }) {
         >
           <div>
             <div>
-              <h4>Source Row</h4>
+              <h4>Source</h4>
               <SelectButton
+                className="select_btn"
                 value={sourceValue}
                 onChange={(e) => setSourceValue(e.value)}
                 options={items}
@@ -125,8 +130,9 @@ function AddButton({ deactivate, matrix, dimension }) {
             </div>
 
             <div>
-              <h4>Target Row</h4>
+              <h4>Target</h4>
               <SelectButton
+                className="select_btn"
                 value={targetValue}
                 onChange={(e) => setTargetValue(e.value)}
                 options={items}
@@ -136,6 +142,7 @@ function AddButton({ deactivate, matrix, dimension }) {
             <div>
               <h4>Scalar</h4>
               <InputNumber
+                className="scalar_input"
                 value={scalar}
                 onValueChange={(e) => setScalar(e.value)}
               />
@@ -176,10 +183,11 @@ function SwitchButton({ deactivate , matrix, dimension}) {
            setVisible(true);
          }}
        >
-         <InlineMath math="ZM_{i} (S)" />
+         <InlineMath math="\xrightarrow{\rm{ZV}_{ij} (S)}" />
        </Button>
 
        <Dialog
+         className='dialog'
          header="Multiply Row"
          visible={visible}
          style={{ width: "60vw" }}
@@ -191,8 +199,9 @@ function SwitchButton({ deactivate , matrix, dimension}) {
        >
          <div>
            <div>
-             <h4>Source Row</h4>
+             <h4>Source</h4>
              <SelectButton
+               className="select_btn"
                value={sourceValue}
                onChange={(e) => setSourceValue(e.value)}
                options={items}
@@ -200,8 +209,9 @@ function SwitchButton({ deactivate , matrix, dimension}) {
            </div>
 
            <div>
-             <h4>Target Row</h4>
+             <h4>Target</h4>
              <SelectButton
+               className="select_btn"
                value={targetValue}
                onChange={(e) => setTargetValue(e.value)}
                options={items}
