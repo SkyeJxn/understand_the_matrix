@@ -61,8 +61,8 @@ function MultButton({ deactivate, matrix, setMatrix }){
           </div>
           <table className='dialog_table'><thead>
           <tr>
-              <th>Row</th>
-              <th>Target</th>
+              <th></th>
+              <th>Row i</th>
               <th>Scalar</th>
           </tr>
           <tr className="row_container">
@@ -73,7 +73,10 @@ function MultButton({ deactivate, matrix, setMatrix }){
               <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
             </td>
             <td>
-            <InputNumber className="scalar_input" value={scalar} onValueChange={(e) => setScalar(e.value)} />
+            <InputNumber className="scalar_input" 
+            mode="decimal" value={scalar} 
+            minFractionDigits={0}
+            onValueChange={(e) => { if (e.value !== 0 && e.value !== null) setScalar(e.value)}} />
             </td>
           </tr>
         </thead></table>
@@ -133,24 +136,15 @@ function AddButton({ deactivate, matrix, setMatrix }) {
 
           <table className='dialog_table'><thead>
           <tr>
-              <th>Row</th>
-              <th>Source</th>
+              <th></th>
               <th>Target</th>
+              <th>Source</th>
               <th>Scalar</th>
           </tr>
           <tr className="row_container">
             <td >
               {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
             </td>
-            <td>
-              <SelectButton
-                className="select_btn"
-                value={sourceValue}
-                onChange={(e) => setSourceValue(e.value)}
-                options={items}
-              />
-            </td>
-
             <td>
               <SelectButton
                 className="select_btn"
@@ -161,10 +155,23 @@ function AddButton({ deactivate, matrix, setMatrix }) {
             </td>
 
             <td>
+              <SelectButton
+                className="select_btn"
+                value={sourceValue}
+                onChange={(e) => setSourceValue(e.value)}
+                options={items}
+              />
+            </td>
+
+            <td>
               <InputNumber
                 className="scalar_input"
                 value={scalar}
-                onValueChange={(e) => setScalar(e.value)}
+                mode="decimal"
+                minFractionDigits={0}   // mindestens 1 Nachkommastelle
+                maxFractionDigits={10}   
+                onValueChange={(e) => { if (e.value !== 0 && e.value !== null) setScalar(e.value)}}
+                locale='en-US'
               />
             </td>
           </tr>
@@ -224,9 +231,9 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
 
           <table className='dialog_table'><thead>
             <tr>
-              <th>Row</th>
-              <th>Source</th>
-              <th>Target</th>
+              <th></th>
+              <th>Row i</th>
+              <th>Row j</th>
             </tr>
            <tr className="row_container">
             <td >
