@@ -23,9 +23,8 @@ export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = f
 function MultButton({ deactivate, matrix, setMatrix }){
   const dimension = matrix.length;
   const items = Array.from({ length: dimension }, (_, i) => ({
-        label: `Row ${i+1}`, value: i }
+        label: `${matrix[i].join(" ")}`, value: i }
   ));
-  console.log(items);
 
     const [visible, setVisible] = useState(false);
     const [rowValue, setRowValue] = useState(items[0].value);
@@ -34,6 +33,7 @@ function MultButton({ deactivate, matrix, setMatrix }){
     function onConfirm(){
       const newMatrix = MultiplyRow(matrix, rowValue, scalar);
       setMatrix(newMatrix);
+      setVisible(false);
     }
 
     const dialogFooter = (
@@ -56,18 +56,24 @@ function MultButton({ deactivate, matrix, setMatrix }){
         visible={visible}
         onHide={() => { if (!visible) return; setVisible(false); }}
         footer={dialogFooter}>
-        <div>
-            <div>
-                <h4>Row</h4>
-                <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
-            </div>
-
-            <div>
-            <h4>Scalar</h4>
+          <table className='dialog_table'><thead>
+          <tr>
+              <th>Row</th>
+              <th>Target</th>
+              <th>Scalar</th>
+          </tr>
+          <tr className="row_container">
+            <td>
+              {items.map(items => (<div className='row_index' key={items.value}>{items.value}</div>))}
+            </td>
+            <td>
+              <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
+            </td>
+            <td>
             <InputNumber className="scalar_input" value={scalar} onValueChange={(e) => setScalar(e.value)} />
-            </div>
-
-        </div>
+            </td>
+          </tr>
+        </thead></table>
       </Dialog>
     </div>
   );
@@ -76,7 +82,7 @@ function MultButton({ deactivate, matrix, setMatrix }){
 function AddButton({ deactivate, matrix, setMatrix }) {
   const dimension = matrix.length;
     const items = Array.from({ length: dimension }, (_, i) => ({
-      label: `Row ${i+1}`, value: i }
+      label: `${matrix[i].join(" ")}`, value: i }
     ));
 
     const [visible, setVisible] = useState(false);
@@ -87,6 +93,7 @@ function AddButton({ deactivate, matrix, setMatrix }) {
     function onConfirm() {
       const newMatrix = AddRows(matrix, sourceValue, targetValue, scalar);
       setMatrix(newMatrix);
+      setVisible(false);
     }
 
     const dialogFooter = (
@@ -116,36 +123,44 @@ function AddButton({ deactivate, matrix, setMatrix }) {
           }}
           footer={dialogFooter}
         >
-          <div>
-            <div>
-              <h4>Source</h4>
+          <table className='dialog_table'><thead>
+          <tr>
+              <th>Row</th>
+              <th>Source</th>
+              <th>Target</th>
+              <th>Scalar</th>
+          </tr>
+          <tr className="row_container">
+            <td >
+              {items.map(items => (<div className='row_index' key={items.value}>{items.value}</div>))}
+            </td>
+            <td>
               <SelectButton
                 className="select_btn"
                 value={sourceValue}
                 onChange={(e) => setSourceValue(e.value)}
                 options={items}
               />
-            </div>
+            </td>
 
-            <div>
-              <h4>Target</h4>
+            <td>
               <SelectButton
                 className="select_btn"
                 value={targetValue}
                 onChange={(e) => setTargetValue(e.value)}
                 options={items}
               />
-            </div>
+            </td>
 
-            <div>
-              <h4>Scalar</h4>
+            <td>
               <InputNumber
                 className="scalar_input"
                 value={scalar}
                 onValueChange={(e) => setScalar(e.value)}
               />
-            </div>
-          </div>
+            </td>
+          </tr>
+          </thead></table>
         </Dialog>
       </div>
     );
@@ -154,7 +169,7 @@ function AddButton({ deactivate, matrix, setMatrix }) {
 function SwitchButton({ deactivate , matrix, setMatrix}) {
   const dimension = matrix.length;
   const items = Array.from({ length: dimension }, (_, i) => ({
-    label: `Row ${i+1}`, value: i }
+    label: `${matrix[i].join(" ")}`, value: i }
   ));
 
    const [visible, setVisible] = useState(false);
@@ -164,6 +179,7 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
    function onConfirm() {
     const newMatrix = SwitchRows(matrix, sourceValue, targetValue);
     setMatrix(newMatrix);
+    setVisible(false);
    }
 
    const dialogFooter = (
@@ -185,7 +201,7 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
 
        <Dialog
          className='dialog'
-         header="Multiply Row"
+         header="Switch Rows"
          visible={visible}
          onHide={() => {
            if (!visible) return;
@@ -193,27 +209,34 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
          }}
          footer={dialogFooter}
        >
-         <div>
-           <div>
-             <h4>Source</h4>
+          <table className='dialog_table'><thead>
+            <tr>
+              <th>Row</th>
+              <th>Source</th>
+              <th>Target</th>
+            </tr>
+           <tr className="row_container">
+            <td >
+              {items.map(items => (<div className='row_index' key={items.value}>{items.value}</div>))}
+            </td>
+            <td>
              <SelectButton
                className="select_btn"
                value={sourceValue}
                onChange={(e) => setSourceValue(e.value)}
                options={items}
              />
-           </div>
-
-           <div>
-             <h4>Target</h4>
+            </td>
+           <td>
              <SelectButton
                className="select_btn"
                value={targetValue}
                onChange={(e) => setTargetValue(e.value)}
                options={items}
              />
-           </div>
-         </div>
+           </td>
+           </tr>
+          </thead></table>
        </Dialog>
      </div>
    );

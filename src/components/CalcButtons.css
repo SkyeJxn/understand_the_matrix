@@ -24,6 +24,7 @@ button {
 .p-dialog .p-dialog-content {
     display: flex;
     justify-content: center;
+    /* flex-direction: column; */
 }
 /* header */
 .p-dialog-title {
@@ -32,10 +33,20 @@ button {
 }
 .dialog :only-child {
     border-radius: 12px;
-    display: flex;
-    gap: 10px;
     text-align: center;
 }
+
+.row_index {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    height: 100%;
+}
+.dialog_table {width: 100%;}
+.matrix-table th, .dialog_table td {padding: 8px;}
+
+
 .select_btn{
     display: flex;
     flex-direction: column;
