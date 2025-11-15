@@ -7,7 +7,7 @@
     margin: 0;
 }
 button {
-    padding: 5px;
+    padding: 0px;
     margin: 0;
     background: none;
 }
@@ -15,25 +15,65 @@ button {
     background-color: var(--color3);
     border-radius: 12px;
     padding: 20px;
-    display: flex;
+    display: inline-flex;
     gap: 10px;
+    width: auto;
+    max-width: 90vw;
+    min-width: 250px;
 }
-.dialog header {
-    text-align: left;
+.p-dialog .p-dialog-content {
+    display: flex;
+    justify-content: center;
+}
+/* header */
+.p-dialog-title {
+    font-size: large;
+    font-weight: 600;
 }
 .dialog :only-child {
-    border: 1px solid var(--color2);
     border-radius: 12px;
-    padding: 5px;
     display: flex;
-    width: fit-content;
-    height: fit-content;
     gap: 10px;
     text-align: center;
 }
 .select_btn{
     display: flex;
     flex-direction: column;
+    gap: 2px;
     border-radius: 12px;
+    background: none;
+    padding: 0;
+}
+/* inactive button */
+.select_btn .p-button {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background-color: var(--color2);
+    color: var(--color3); 
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    margin: 0;
+}
+/* active button */
+.select_btn .p-button.p-highlight {
     background: var(--color4);
+    color: var(--color5);
+    border: none;
+}
+.scalar_input input {
+    width: 50px;
+    border: 3px solid var(--color5);
+}
+.dialog_footer {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+.dialog_footer button {
+    border: 3px solid var(--color2);
+    padding: 5px;
+    background: var(--color2);
+    color: var(--color3);
 }

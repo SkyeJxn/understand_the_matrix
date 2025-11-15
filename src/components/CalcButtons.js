@@ -35,7 +35,7 @@ function MultButton({ deactivate, matrix, dimension }){
     }
 
     const dialogFooter = (
-        <div>
+        <div className='dialog_footer'>
             <Button label="Cancel" onClick={() => setVisible(false)}/>
             <Button label="Apply" onClick={onConfirm}/>
         </div>
@@ -53,7 +53,6 @@ function MultButton({ deactivate, matrix, dimension }){
         className='dialog'
         header="Multiply Row"
         visible={visible}
-        style={{ width: "60vw" }}
         onHide={() => { if (!visible) return; setVisible(false); }}
         footer={dialogFooter}>
         <div>
@@ -90,7 +89,7 @@ function AddButton({ deactivate, matrix, dimension }) {
     }
 
     const dialogFooter = (
-       <div>
+       <div className='dialog_footer'>
          <Button label="Cancel" onClick={() => setVisible(false)} />
          <Button label="Apply" onClick={onConfirm} />
        </div>
@@ -111,7 +110,6 @@ function AddButton({ deactivate, matrix, dimension }) {
           className='dialog'
           header="Add Rows"
           visible={visible}
-          style={{ width: "60vw" }}
           onHide={() => {
             if (!visible) return;
             setVisible(false);
@@ -169,7 +167,7 @@ function SwitchButton({ deactivate , matrix, dimension}) {
    }
 
    const dialogFooter = (
-     <div>
+     <div className='dialog_footer'>
        <Button label="Cancel" onClick={() => setVisible(false)} />
        <Button label="Apply" onClick={onConfirm} />
      </div>
@@ -190,7 +188,6 @@ function SwitchButton({ deactivate , matrix, dimension}) {
          className='dialog'
          header="Multiply Row"
          visible={visible}
-         style={{ width: "60vw" }}
          onHide={() => {
            if (!visible) return;
            setVisible(false);
