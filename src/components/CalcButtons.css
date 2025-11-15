@@ -16,15 +16,14 @@ button {
     border-radius: 12px;
     padding: 20px;
     display: inline-flex;
-    gap: 10px;
     width: auto;
     max-width: 90vw;
     min-width: 250px;
 }
 .p-dialog .p-dialog-content {
     display: flex;
-    justify-content: center;
-    /* flex-direction: column; */
+    flex-direction: column;
+    align-items: center;
 }
 /* header */
 .p-dialog-title {

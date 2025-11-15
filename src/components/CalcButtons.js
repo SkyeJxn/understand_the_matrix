@@ -56,6 +56,9 @@ function MultButton({ deactivate, matrix, setMatrix }){
         visible={visible}
         onHide={() => { if (!visible) return; setVisible(false); }}
         footer={dialogFooter}>
+          <div style={{marginTop: "10px"}}>
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZM}_{${rowValue +1}} (${scalar})}`} />
+          </div>
           <table className='dialog_table'><thead>
           <tr>
               <th>Row</th>
@@ -64,7 +67,7 @@ function MultButton({ deactivate, matrix, setMatrix }){
           </tr>
           <tr className="row_container">
             <td>
-              {items.map(items => (<div className='row_index' key={items.value}>{items.value}</div>))}
+              {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
             </td>
             <td>
               <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
@@ -123,6 +126,11 @@ function AddButton({ deactivate, matrix, setMatrix }) {
           }}
           footer={dialogFooter}
         >
+
+          <div style={{marginTop: "10px"}}>
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZA}_{${sourceValue +1}${targetValue +1}} (${scalar})}`} />
+          </div>
+
           <table className='dialog_table'><thead>
           <tr>
               <th>Row</th>
@@ -132,7 +140,7 @@ function AddButton({ deactivate, matrix, setMatrix }) {
           </tr>
           <tr className="row_container">
             <td >
-              {items.map(items => (<div className='row_index' key={items.value}>{items.value}</div>))}
+              {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
             </td>
             <td>
               <SelectButton
@@ -196,7 +204,7 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
            setVisible(true);
          }}
        >
-         <InlineMath math="\xrightarrow{\rm{ZV}_{ij} (S)}" />
+         <InlineMath math="\xrightarrow{\rm{ZV}_{ij}}" />
        </Button>
 
        <Dialog
@@ -209,6 +217,11 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
          }}
          footer={dialogFooter}
        >
+
+          <div style={{marginTop: "10px"}}>
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZV}_{${sourceValue +1}${targetValue +1}}}`} />
+          </div>
+
           <table className='dialog_table'><thead>
             <tr>
               <th>Row</th>
@@ -217,7 +230,7 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
             </tr>
            <tr className="row_container">
             <td >
-              {items.map(items => (<div className='row_index' key={items.value}>{items.value}</div>))}
+              {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
             </td>
             <td>
              <SelectButton
