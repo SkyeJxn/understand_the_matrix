@@ -10,29 +10,30 @@ import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
 
-export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, dimension}) {
+export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, setMatrix}) {
   return (
     <div className="calc_btns" >
-        <MultButton deactivate={DisableZM} matrix={matrix} dimension={dimension} />
-        <AddButton deactivate={DisableZA} matrix={matrix} dimension={dimension}/>
-        <SwitchButton deactivate={DisableZV} matrix={matrix} dimension={dimension}/>
+        <MultButton deactivate={DisableZM} matrix={matrix} setMatrix={setMatrix} />
+        <AddButton deactivate={DisableZA} matrix={matrix} setMatrix={setMatrix} />
+        <SwitchButton deactivate={DisableZV} matrix={matrix} setMatrix={setMatrix} />
     </div>
   );
 }
 
-function MultButton({ deactivate, matrix, dimension }){
-  const items = [
-        {label: 'Row 1', value: 1 },
-        {label: 'Row 2', value: 2 },
-        {label: 'Row 3', value: 3 }
-    ];
+function MultButton({ deactivate, matrix, setMatrix }){
+  const dimension = matrix.length;
+  const items = Array.from({ length: dimension }, (_, i) => ({
+        label: `Row ${i+1}`, value: i }
+  ));
+  console.log(items);
 
     const [visible, setVisible] = useState(false);
     const [rowValue, setRowValue] = useState(items[0].value);
     const [scalar, setScalar] = useState(1)
 
     function onConfirm(){
-        MultiplyRow(matrix, rowValue, scalar, dimension);
+      const newMatrix = MultiplyRow(matrix, rowValue, scalar);
+      setMatrix(newMatrix);
     }
 
     const dialogFooter = (
@@ -72,12 +73,11 @@ function MultButton({ deactivate, matrix, dimension }){
   );
 }
 
-function AddButton({ deactivate, matrix, dimension }) {
-    const items = [
-       { label: "Row 1", value: 1 },
-       { label: "Row 2", value: 2 },
-       { label: "Row 3", value: 3 },
-    ];
+function AddButton({ deactivate, matrix, setMatrix }) {
+  const dimension = matrix.length;
+    const items = Array.from({ length: dimension }, (_, i) => ({
+      label: `Row ${i+1}`, value: i }
+    ));
 
     const [visible, setVisible] = useState(false);
     const [sourceValue, setSourceValue] = useState(items[0].value);
@@ -85,7 +85,8 @@ function AddButton({ deactivate, matrix, dimension }) {
     const [scalar, setScalar] = useState(1);
 
     function onConfirm() {
-       AddRows(matrix, sourceValue, targetValue, scalar, dimension);
+      const newMatrix = AddRows(matrix, sourceValue, targetValue, scalar);
+      setMatrix(newMatrix);
     }
 
     const dialogFooter = (
@@ -150,19 +151,19 @@ function AddButton({ deactivate, matrix, dimension }) {
     );
 }
 
-function SwitchButton({ deactivate , matrix, dimension}) {
-   const items = [
-     { label: "Row 1", value: 1 },
-     { label: "Row 2", value: 2 },
-     { label: "Row 3", value: 3 },
-   ];
+function SwitchButton({ deactivate , matrix, setMatrix}) {
+  const dimension = matrix.length;
+  const items = Array.from({ length: dimension }, (_, i) => ({
+    label: `Row ${i+1}`, value: i }
+  ));
 
    const [visible, setVisible] = useState(false);
    const [sourceValue, setSourceValue] = useState(items[0].value)
    const [targetValue, setTargetValue] = useState(items[0].value);
 
    function onConfirm() {
-     SwitchRows(matrix, sourceValue, targetValue, dimension);
+    const newMatrix = SwitchRows(matrix, sourceValue, targetValue);
+    setMatrix(newMatrix);
    }
 
    const dialogFooter = (
