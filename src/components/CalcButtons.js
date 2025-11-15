@@ -1,5 +1,6 @@
 "use client";
 import './CalcButtons.css'
+import 'primeicons/primeicons.css';     
 import React, {useState} from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -36,8 +37,7 @@ function MultButton({ deactivate, matrix, dimension }){
 
     const dialogFooter = (
         <div className='dialog_footer'>
-            <Button label="Cancel" onClick={() => setVisible(false)}/>
-            <Button label="Apply" onClick={onConfirm}/>
+            <Button label="Apply" icon="pi pi-check" onClick={onConfirm}/>
         </div>
     )
 
@@ -90,8 +90,7 @@ function AddButton({ deactivate, matrix, dimension }) {
 
     const dialogFooter = (
        <div className='dialog_footer'>
-         <Button label="Cancel" onClick={() => setVisible(false)} />
-         <Button label="Apply" onClick={onConfirm} />
+         <Button label="Apply" icon="pi pi-check" onClick={onConfirm} />
        </div>
     );
 
@@ -168,8 +167,7 @@ function SwitchButton({ deactivate , matrix, dimension}) {
 
    const dialogFooter = (
      <div className='dialog_footer'>
-       <Button label="Cancel" onClick={() => setVisible(false)} />
-       <Button label="Apply" onClick={onConfirm} />
+       <Button label="Apply"  icon="pi pi-check" onClick={onConfirm} />
      </div>
    );
 

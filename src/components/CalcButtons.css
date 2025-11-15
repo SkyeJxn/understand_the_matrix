@@ -72,8 +72,8 @@ button {
     justify-content: center;
 }
 .dialog_footer button {
-    border: 3px solid var(--color2);
+    border: 2px solid var(--color5);
     padding: 5px;
-    background: var(--color2);
-    color: var(--color3);
+    font-size: small;
+    color: var(--color5);
 }
