@@ -6,10 +6,10 @@ import { StaticMatrix } from "@/components/Matrix";
 
 export default function Gauss() {
     const [matrix, setMatrix] = useState([
-    [1,2,4],
+    [3,2,4],
     [2,5,1],
-    [2,5,4],
     [2,5,4]
+    
   ]);
   return (
     <div>
