@@ -23,7 +23,7 @@ export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = f
 function MultButton({ deactivate, matrix, setMatrix }){
   const dimension = matrix.length;
   const items = Array.from({ length: dimension }, (_, i) => ({
-        label: `${matrix[i].join(" ")}`, value: i }
+        label: `${i+1}`, value: i }
   ));
 
     const [visible, setVisible] = useState(false);
@@ -86,14 +86,10 @@ function MultButton({ deactivate, matrix, setMatrix }){
           </div>
           <table className='dialog_table'><thead>
           <tr>
-              <th></th>
               <th>Row i</th>
               <th>Scalar</th>
           </tr>
           <tr className="row_container">
-            <td>
-              {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
-            </td>
             <td>
               <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
             </td>
@@ -114,7 +110,7 @@ function MultButton({ deactivate, matrix, setMatrix }){
 function AddButton({ deactivate, matrix, setMatrix }) {
   const dimension = matrix.length;
     const items = Array.from({ length: dimension }, (_, i) => ({
-      label: `${matrix[i].join(" ")}`, value: i }
+      label: `${i+1}`, value: i }
     ));
 
     const [visible, setVisible] = useState(false);
@@ -188,15 +184,11 @@ function AddButton({ deactivate, matrix, setMatrix }) {
 
           <table className='dialog_table'><thead>
           <tr>
-              <th></th>
               <th>Target</th>
               <th>Source</th>
               <th>Scalar</th>
           </tr>
           <tr className="row_container">
-            <td >
-              {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
-            </td>
             <td>
               <SelectButton
                 className="select_btn"
@@ -233,7 +225,7 @@ function AddButton({ deactivate, matrix, setMatrix }) {
 function SwitchButton({ deactivate , matrix, setMatrix}) {
   const dimension = matrix.length;
   const items = Array.from({ length: dimension }, (_, i) => ({
-    label: `${matrix[i].join(" ")}`, value: i }
+    label: `${i+1}`, value: i }
   ));
 
    const [visible, setVisible] = useState(false);
@@ -280,14 +272,10 @@ function SwitchButton({ deactivate , matrix, setMatrix}) {
 
           <table className='dialog_table'><thead>
             <tr>
-              <th></th>
               <th>Row i</th>
               <th>Row j</th>
             </tr>
            <tr className="row_container">
-            <td >
-              {items.map(items => (<div className='row_index' key={items.value}>{items.value +1}</div>))}
-            </td>
             <td>
              <SelectButton
                className="select_btn"
