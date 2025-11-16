@@ -2,10 +2,10 @@
 import './CalcButtons.css'
 import 'primeicons/primeicons.css';     
 import React, {useState} from "react";
+import { fraction } from "mathjs";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { SelectButton } from "primereact/selectbutton";
-import { InputNumber } from "primereact/inputnumber";
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
@@ -28,12 +28,37 @@ function MultButton({ deactivate, matrix, setMatrix }){
 
     const [visible, setVisible] = useState(false);
     const [rowValue, setRowValue] = useState(items[0].value);
+    const [scalarInput, setScalarInput] = useState("1");
+    const [scalarFeedback, setScalarFeedback] = useState('1');
     const [scalar, setScalar] = useState(1)
 
     function onConfirm(){
       const newMatrix = MultiplyRow(matrix, rowValue, scalar);
       setMatrix(newMatrix);
       setVisible(false);
+    }
+    function handleInput(input){
+      setScalarInput(input);
+      try {
+        let frac;
+        if(input.includes('/')) {
+          // fraction
+          const [num, den] = input.split('/').map(Number);
+          if(!isNaN(num) && !isNaN(den) && num !== 0 && den !== 0) {
+            frac = fraction(num, den);
+            setScalarFeedback(num+'/'+den);
+          } else {setScalarFeedback('invalid')}
+        } else {
+          // integer
+          const num = Number(input);
+          if (!isNaN(num) && num !== 0) {
+            frac = fraction(num, 1);
+            setScalarFeedback(num);
+          } else {setScalarFeedback('invalid')}
+        }
+        if (frac) setScalar(frac);
+      }
+      catch { setScalarFeedback('invalid')}
     }
 
     const dialogFooter = (
@@ -57,7 +82,7 @@ function MultButton({ deactivate, matrix, setMatrix }){
         onHide={() => { if (!visible) return; setVisible(false); }}
         footer={dialogFooter}>
           <div style={{marginTop: "10px"}}>
-            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZM}_{${rowValue +1}} (${scalar})}`} />
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZM}_{${rowValue +1}} (${scalarFeedback})}`} />
           </div>
           <table className='dialog_table'><thead>
           <tr>
@@ -73,10 +98,11 @@ function MultButton({ deactivate, matrix, setMatrix }){
               <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
             </td>
             <td>
-            <InputNumber className="scalar_input" 
-            mode="decimal" value={scalar} 
-            minFractionDigits={0}
-            onValueChange={(e) => { if (e.value !== 0 && e.value !== null) setScalar(e.value)}} />
+            <input className="scalar_input" 
+            type='text'
+            value={scalarInput}   
+            onChange={(e) => { handleInput(e.target.value)}} 
+            />
             </td>
           </tr>
         </thead></table>
@@ -93,13 +119,39 @@ function AddButton({ deactivate, matrix, setMatrix }) {
 
     const [visible, setVisible] = useState(false);
     const [sourceValue, setSourceValue] = useState(items[0].value);
-    const [targetValue, setTargetValue] = useState(items[0].value)
+    const [targetValue, setTargetValue] = useState(items[0].value);
+    const [scalarInput, setScalarInput] = useState("1");
+    const [scalarFeedback, setScalarFeedback] = useState('1');
     const [scalar, setScalar] = useState(1);
 
     function onConfirm() {
       const newMatrix = AddRows(matrix, sourceValue, targetValue, scalar);
       setMatrix(newMatrix);
       setVisible(false);
+    }
+
+    function handleInput(input){
+      setScalarInput(input);
+      try {
+        let frac;
+        if(input.includes('/')) {
+          // fraction
+          const [num, den] = input.split('/').map(Number);
+          if(!isNaN(num) && !isNaN(den) && num !== 0 && den !== 0) {
+            frac = fraction(num, den);
+            setScalarFeedback(num+'/'+den);
+          } else {setScalarFeedback('invalid')}
+        } else {
+          // integer
+          const num = Number(input);
+          if (!isNaN(num) && num !== 0) {
+            frac = fraction(num, 1);
+            setScalarFeedback(num);
+          } else {setScalarFeedback('invalid')}
+        }
+        if (frac) setScalar(frac);
+      }
+      catch { setScalarFeedback('invalid')}
     }
 
     const dialogFooter = (
@@ -131,7 +183,7 @@ function AddButton({ deactivate, matrix, setMatrix }) {
         >
 
           <div style={{marginTop: "10px"}}>
-            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZA}_{${sourceValue +1}${targetValue +1}} (${scalar})}`} />
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZA}_{${targetValue +1}${sourceValue +1}} (${scalarFeedback})}`} />
           </div>
 
           <table className='dialog_table'><thead>
@@ -164,14 +216,11 @@ function AddButton({ deactivate, matrix, setMatrix }) {
             </td>
 
             <td>
-              <InputNumber
+              <input
                 className="scalar_input"
-                value={scalar}
-                mode="decimal"
-                minFractionDigits={0}   // mindestens 1 Nachkommastelle
-                maxFractionDigits={10}   
-                onValueChange={(e) => { if (e.value !== 0 && e.value !== null) setScalar(e.value)}}
-                locale='en-US'
+                type='text'
+                value={scalarInput}
+                onChange={(e) => { handleInput(e.target.value)}}
               />
             </td>
           </tr>
