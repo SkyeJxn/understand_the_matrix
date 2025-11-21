@@ -5,17 +5,18 @@ import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { useState } from "react";
 
-import { ProgressBar } from 'primereact/progressbar';
-import { Button } from 'primereact/button';
 import "primereact/resources/themes/nano/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import Toolbar from './LevelTools';
 
 
 export function TutorialLevel({ level_id = "1" }) {
   const [page, setPage] = useState("1");
   const [currentPart, setCurrentPart] = useState(1);
   const [progressValue, setProgressValue] = useState(0);
+  const [heartCount, setheartCount] = useState(5);
+
 
   const partsOnLevel = tutorial_data.filter(row => row.id === level_id).length;
 
@@ -36,8 +37,8 @@ export function TutorialLevel({ level_id = "1" }) {
       setPage(String(Number(page) + 1));
       setCurrentPart(1);
     }
-    setProgressValue(prev => prev + (1/partsOnLevel) * 100);
-
+    setProgressValue(prev => prev + (100/partsOnLevel));
+    setheartCount(prev => prev - 1);
   }
 
   function back() {
@@ -50,10 +51,7 @@ export function TutorialLevel({ level_id = "1" }) {
 
   return (
     <div>
-      <div className="toolbar">
-        <Button ><i className="pi pi-times" style={{ fontSize: '2.5rem' }}></i></Button>
-        <ProgressBar value={progressValue} />
-      </div>
+      <Toolbar mode='tutorial' progressValue={progressValue} heartCount={heartCount}/>
 
       <div className='content'>
         {Array.from({ length: currentPart }, (_, i) => (
