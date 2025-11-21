@@ -3,6 +3,7 @@ import React from "react";
 import './Matrix.css'
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
+import { fraction } from "mathjs";
 /**
  * StaticMatrix component to display any matrix
  * 
@@ -14,9 +15,16 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
   const cols = data[0].length;
   const colFormat = resultCol ? 'c'.repeat(cols - 1) + '|c': 'c'.repeat(cols);
 
+  function formatCell(cell) {
+    console.log(cell);
+    const frac = fraction(cell);
+      if(frac.d !== 1n){ return `${frac.s == -1n ? '-': ''}${frac.n}/${frac.d}`;}
+      else { return `${frac}`}
+  }
+
   const rows = data.map(row => {
-    if (resultCol) {return row.slice(0, -1).join(' & ') + ' & ' + row[row.length - 1];} 
-    else {return row.join(' & ');}
+    if (resultCol) {return row.slice(0, -1).map(formatCell).join(' & ') + ' & ' + formatCell(row[row.length - 1]);} 
+    else {return row.map(formatCell).join(' & ');}
   }).join(' \\\\ ');
 
   const bracketLeft = det ? "|": "("

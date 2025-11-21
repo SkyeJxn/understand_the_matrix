@@ -1,41 +1,69 @@
+"use client";
+import './CalcButtons.css'
+import 'primeicons/primeicons.css';     
 import React, {useState} from "react";
+import { fraction } from "mathjs";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { SelectButton } from "primereact/selectbutton";
-import { InputNumber } from "primereact/inputnumber";
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
 
-export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, dimension}) {
+export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, setMatrix}) {
   return (
-    <div style={{display: 'flex', gap: 12, alignItems: 'canter'}}>
-        <MultButton deactivate={DisableZM} matrix={matrix} dimension={dimension} />
-        <AddButton deactivate={DisableZA} matrix={matrix} dimension={dimension}/>
-        <SwitchButton deactivate={DisableZV} matrix={matrix} dimension={dimension}/>
+    <div className="calc_btns" >
+        <MultButton deactivate={DisableZM} matrix={matrix} setMatrix={setMatrix} />
+        <AddButton deactivate={DisableZA} matrix={matrix} setMatrix={setMatrix} />
+        <SwitchButton deactivate={DisableZV} matrix={matrix} setMatrix={setMatrix} />
     </div>
   );
 }
 
-function MultButton({ deactivate, matrix, dimension }){
-  const items = [
-        {label: 'Row 1', value: 1 },
-        {label: 'Row 2', value: 2 },
-        {label: 'Row 3', value: 3 }
-    ];
+function MultButton({ deactivate, matrix, setMatrix }){
+  const dimension = matrix.length;
+  const items = Array.from({ length: dimension }, (_, i) => ({
+        label: `${i+1}`, value: i }
+  ));
 
     const [visible, setVisible] = useState(false);
     const [rowValue, setRowValue] = useState(items[0].value);
+    const [scalarInput, setScalarInput] = useState("1");
+    const [scalarFeedback, setScalarFeedback] = useState('1');
     const [scalar, setScalar] = useState(1)
 
     function onConfirm(){
-        MultiplyRow(matrix, rowValue, scalar, dimension);
+      const newMatrix = MultiplyRow(matrix, rowValue, scalar);
+      setMatrix(newMatrix);
+      setVisible(false);
+    }
+    function handleInput(input){
+      setScalarInput(input);
+      try {
+        let frac;
+        if(input.includes('/')) {
+          // fraction
+          const [num, den] = input.split('/').map(Number);
+          if(!isNaN(num) && !isNaN(den) && num !== 0 && den !== 0) {
+            frac = fraction(num, den);
+            setScalarFeedback(num+'/'+den);
+          } else {setScalarFeedback('invalid')}
+        } else {
+          // integer
+          const num = Number(input);
+          if (!isNaN(num) && num !== 0) {
+            frac = fraction(num, 1);
+            setScalarFeedback(num);
+          } else {setScalarFeedback('invalid')}
+        }
+        if (frac) setScalar(frac);
+      }
+      catch { setScalarFeedback('invalid')}
     }
 
     const dialogFooter = (
-        <div>
-            <Button label="Cancel" onClick={() => setVisible(false)}/>
-            <Button label="Apply" onClick={onConfirm}/>
+        <div className='dialog_footer'>
+            <Button label="Apply" icon="pi pi-check" onClick={onConfirm}/>
         </div>
     )
 
@@ -44,52 +72,87 @@ function MultButton({ deactivate, matrix, dimension }){
       <Button
         disabled={deactivate}
         onClick={() => { setVisible(true); }}>
-        <InlineMath math="ZM_{i} (S)" />
+        <InlineMath math="\xrightarrow{\rm{ZM}_{i} (S)}" />
       </Button>
 
       <Dialog
+        className='dialog'
         header="Multiply Row"
         visible={visible}
-        style={{ width: "60vw" }}
         onHide={() => { if (!visible) return; setVisible(false); }}
         footer={dialogFooter}>
-        <div>
-            <div>
-                <h4>Row</h4>
-                <SelectButton value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
-            </div>
-
-            <div>
-            <h4>Scalar</h4>
-            <InputNumber value={scalar} onValueChange={(e) => setScalar(e.value)} />
-            </div>
-
-        </div>
+          <div style={{marginTop: "10px"}}>
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZM}_{${rowValue +1}} (${scalarFeedback})}`} />
+          </div>
+          <table className='dialog_table'><thead>
+          <tr>
+              <th>Row i</th>
+              <th>Scalar</th>
+          </tr>
+          <tr className="row_container">
+            <td>
+              <SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
+            </td>
+            <td>
+            <input className="scalar_input" 
+            type='text'
+            value={scalarInput}   
+            onChange={(e) => { handleInput(e.target.value)}} 
+            />
+            </td>
+          </tr>
+        </thead></table>
       </Dialog>
     </div>
   );
 }
 
-function AddButton({ deactivate, matrix, dimension }) {
-    const items = [
-       { label: "Row 1", value: 1 },
-       { label: "Row 2", value: 2 },
-       { label: "Row 3", value: 3 },
-    ];
+function AddButton({ deactivate, matrix, setMatrix }) {
+  const dimension = matrix.length;
+    const items = Array.from({ length: dimension }, (_, i) => ({
+      label: `${i+1}`, value: i }
+    ));
 
     const [visible, setVisible] = useState(false);
     const [sourceValue, setSourceValue] = useState(items[0].value);
-    const [targetValue, setTargetValue] = useState(items[0].value)
+    const [targetValue, setTargetValue] = useState(items[0].value);
+    const [scalarInput, setScalarInput] = useState("1");
+    const [scalarFeedback, setScalarFeedback] = useState('1');
     const [scalar, setScalar] = useState(1);
 
     function onConfirm() {
-       AddRows(matrix, sourceValue, targetValue, scalar, dimension);
+      const newMatrix = AddRows(matrix, sourceValue, targetValue, scalar);
+      setMatrix(newMatrix);
+      setVisible(false);
+    }
+
+    function handleInput(input){
+      setScalarInput(input);
+      try {
+        let frac;
+        if(input.includes('/')) {
+          // fraction
+          const [num, den] = input.split('/').map(Number);
+          if(!isNaN(num) && !isNaN(den) && num !== 0 && den !== 0) {
+            frac = fraction(num, den);
+            setScalarFeedback(num+'/'+den);
+          } else {setScalarFeedback('invalid')}
+        } else {
+          // integer
+          const num = Number(input);
+          if (!isNaN(num) && num !== 0) {
+            frac = fraction(num, 1);
+            setScalarFeedback(num);
+          } else {setScalarFeedback('invalid')}
+        }
+        if (frac) setScalar(frac);
+      }
+      catch { setScalarFeedback('invalid')}
     }
 
     const dialogFooter = (
-       <div>
-         <Button label="Cancel" onClick={() => setVisible(false)} />
-         <Button label="Apply" onClick={onConfirm} />
+       <div className='dialog_footer'>
+         <Button label="Apply" icon="pi pi-check" onClick={onConfirm} />
        </div>
     );
 
@@ -101,70 +164,83 @@ function AddButton({ deactivate, matrix, dimension }) {
             setVisible(true);
           }}
         >
-          <InlineMath math="ZA_{ij} (S)" />
+          <InlineMath math="\xrightarrow{\rm{ZA}_{ij} (S)}" />
         </Button>
 
         <Dialog
+          className='dialog'
           header="Add Rows"
           visible={visible}
-          style={{ width: "60vw" }}
           onHide={() => {
             if (!visible) return;
             setVisible(false);
           }}
           footer={dialogFooter}
         >
-          <div>
-            <div>
-              <h4>Source Row</h4>
-              <SelectButton
-                value={sourceValue}
-                onChange={(e) => setSourceValue(e.value)}
-                options={items}
-              />
-            </div>
 
-            <div>
-              <h4>Target Row</h4>
+          <div style={{marginTop: "10px"}}>
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZA}_{${targetValue +1}${sourceValue +1}} (${scalarFeedback})}`} />
+          </div>
+
+          <table className='dialog_table'><thead>
+          <tr>
+              <th>Target</th>
+              <th>Source</th>
+              <th>Scalar</th>
+          </tr>
+          <tr className="row_container">
+            <td>
               <SelectButton
+                className="select_btn"
                 value={targetValue}
                 onChange={(e) => setTargetValue(e.value)}
                 options={items}
               />
-            </div>
+            </td>
 
-            <div>
-              <h4>Scalar</h4>
-              <InputNumber
-                value={scalar}
-                onValueChange={(e) => setScalar(e.value)}
+            <td>
+              <SelectButton
+                className="select_btn"
+                value={sourceValue}
+                onChange={(e) => setSourceValue(e.value)}
+                options={items}
               />
-            </div>
-          </div>
+            </td>
+
+            <td>
+              <input
+                className="scalar_input"
+                type='text'
+                value={scalarInput}
+                onChange={(e) => { handleInput(e.target.value)}}
+              />
+            </td>
+          </tr>
+          </thead></table>
         </Dialog>
       </div>
     );
 }
 
-function SwitchButton({ deactivate , matrix, dimension}) {
-   const items = [
-     { label: "Row 1", value: 1 },
-     { label: "Row 2", value: 2 },
-     { label: "Row 3", value: 3 },
-   ];
+function SwitchButton({ deactivate , matrix, setMatrix}) {
+  const dimension = matrix.length;
+  const items = Array.from({ length: dimension }, (_, i) => ({
+    label: `${i+1}`, value: i }
+  ));
 
    const [visible, setVisible] = useState(false);
    const [sourceValue, setSourceValue] = useState(items[0].value)
    const [targetValue, setTargetValue] = useState(items[0].value);
 
    function onConfirm() {
-     SwitchRows(matrix, sourceValue, targetValue, dimension);
+    const newMatrix = SwitchRows(matrix, sourceValue, targetValue);
+    setMatrix(newMatrix);
+    setVisible(false);
    }
 
    const dialogFooter = (
-     <div>
-       <Button label="Cancel" onClick={() => setVisible(false)} />
-       <Button label="Apply" onClick={onConfirm} />
+     <div className='dialog_footer'>
+       <Button label="Apply"  icon="pi pi-check" onClick={onConfirm} />
      </div>
    );
 
@@ -176,38 +252,48 @@ function SwitchButton({ deactivate , matrix, dimension}) {
            setVisible(true);
          }}
        >
-         <InlineMath math="ZM_{i} (S)" />
+         <InlineMath math="\xrightarrow{\rm{ZV}_{ij}}" />
        </Button>
 
        <Dialog
-         header="Multiply Row"
+         className='dialog'
+         header="Switch Rows"
          visible={visible}
-         style={{ width: "60vw" }}
          onHide={() => {
            if (!visible) return;
            setVisible(false);
          }}
          footer={dialogFooter}
        >
-         <div>
-           <div>
-             <h4>Source Row</h4>
+
+          <div style={{marginTop: "10px"}}>
+            <InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZV}_{${sourceValue +1}${targetValue +1}}}`} />
+          </div>
+
+          <table className='dialog_table'><thead>
+            <tr>
+              <th>Row i</th>
+              <th>Row j</th>
+            </tr>
+           <tr className="row_container">
+            <td>
              <SelectButton
+               className="select_btn"
                value={sourceValue}
                onChange={(e) => setSourceValue(e.value)}
                options={items}
              />
-           </div>
-
-           <div>
-             <h4>Target Row</h4>
+            </td>
+           <td>
              <SelectButton
+               className="select_btn"
                value={targetValue}
                onChange={(e) => setTargetValue(e.value)}
                options={items}
              />
-           </div>
-         </div>
+           </td>
+           </tr>
+          </thead></table>
        </Dialog>
      </div>
    );
