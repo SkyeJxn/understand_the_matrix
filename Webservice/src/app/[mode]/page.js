@@ -2,6 +2,8 @@ import LevelOverview from "@/components/LevelOverview";
 import './LearningPage.css'
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function LearningPage({ params }) {
   let { mode } = await params;
   return (

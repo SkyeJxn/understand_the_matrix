@@ -1,11 +1,9 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import Link from 'next/link';
-import "primereact/resources/themes/nano/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
 
 /**
  * 
@@ -113,13 +111,9 @@ export function LevelEndContent({nextLevel = null}){
     "Well done!","Level Done!",
     "You did it!","Level complete!"
   ];
-  const [congrats, setCongrats] = useState(null);
-  useEffect(() => {
-    const random = congratsList[Math.floor(Math.random() * congratsList.length)]; 
-    setCongrats(random);
-  }, []);
-  
-
+  const [congrats, setCongrats] = useState(() =>
+    congratsList[Math.floor(Math.random() * congratsList.length)]
+  );
   if(congrats) return(
     <div>
     <div style={{height: '70vh'}}>
