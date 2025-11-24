@@ -27,7 +27,7 @@ export function TutorialLevel({ level_id = "1" }) {
 
   // number of parts in the level
   const partsOnLevel = Math.max(
-    ...tutorialData
+    tutorialData
       .filter(e => e.id === level_id)
       .map(e => Number(e.part))
   );
