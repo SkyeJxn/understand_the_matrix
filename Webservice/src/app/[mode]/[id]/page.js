@@ -3,7 +3,7 @@ import Gauss from "@/components/Level_2_gauss";
 
 export const dynamic = "force-dynamic";
 
-export default async function LevelPage({ params }) {
+export default function LevelPage({ params }) {
   const { mode, id } = params;
   return (
     <div>
@@ -12,8 +12,4 @@ export default async function LevelPage({ params }) {
       {mode === 'challenge' && id == 2 && (<Gauss />) }
     </div>
   );
-}
-
-export function generateStaticParams(){
-  return [];
 }
