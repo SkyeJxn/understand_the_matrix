@@ -1,12 +1,7 @@
 "use client";
 import './TutorialLevel.css'
-import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { useState, useEffect } from "react";
-
-import "primereact/resources/themes/nano/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
 import {LevelEndContent, NavigationArrows, Toolbar} from './LevelTools';
 
 

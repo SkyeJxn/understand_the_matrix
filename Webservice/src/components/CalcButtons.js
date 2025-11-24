@@ -1,12 +1,11 @@
 "use client";
 import './CalcButtons.css'
-import 'primeicons/primeicons.css';     
 import React, {useState} from "react";
 import { fraction } from "mathjs";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { SelectButton } from "primereact/selectbutton";
-import "katex/dist/katex.min.css";
+
 import { InlineMath } from "react-katex";
 import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
 

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import './Matrix.css'
-import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { fraction } from "mathjs";
 /**
