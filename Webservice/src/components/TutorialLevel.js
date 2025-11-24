@@ -20,8 +20,7 @@ export function TutorialLevel({ level_id = "1" }) {
   const [progressValue, setProgressValue] = useState(0);
 
   // number of parts in the level
-  const partsOnLevel = Math.max(
-    tutorialData
+  const partsOnLevel = Math.max(0, ...tutorialData
       .filter(e => e.id === level_id)
       .map(e => Number(e.part))
   );
@@ -32,7 +31,7 @@ export function TutorialLevel({ level_id = "1" }) {
       .filter(row => row.id === level_id && row.page === page)
       .map(row => Number(row.part));
     return Math.max(...partsOnPage, 0);
-    return Math.max(...partsOnPage, 0);
+  }
 
   function next() {
     const maxPart = getMaxPart(page);
@@ -67,7 +66,7 @@ export function TutorialLevel({ level_id = "1" }) {
       {currentPart <= partsOnLevel ? (<>
       
         <div className='content'>
-          <Content id={level_id} page={page} part={currentPart} dataPass={tutorialData} />
+          <Content id={level_id} page={page} part={currentPart} tutorialData={tutorialData} />
         </div>
         <NavigationArrows onBack={back} onNext={next}/>
         
@@ -95,5 +94,4 @@ function Content({ id, page, part, tutorialData }) {
       ))}
     </div>
   );
-}
 }
