@@ -1,6 +1,8 @@
 import { TutorialLevel } from "@/components/TutorialLevel";
 import Gauss from "@/components/Level_2_gauss";
 
+export const dynamic = "force-dynamic";
+
 export default async function LevelPage({ params }) {
   const { mode, id } = params;
   return (
@@ -12,4 +14,6 @@ export default async function LevelPage({ params }) {
   );
 }
 
-export const dynamic = 'force-dynamic';
+export function generateStaticParams(){
+  return [];
+}
