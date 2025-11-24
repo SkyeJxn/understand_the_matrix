@@ -43,7 +43,7 @@ export function TutorialLevel({ level_id = "1" }) {
       setPage(String(Number(page) + 1));
       setCurrentPart(prev => prev + 1);
     }
-    setProgressValue(prev => prev + (100/partsOnLevel));
+    if (partsOnLevel > 0) setProgressValue(prev => prev + (100/partsOnLevel));
   }
 
   function back() {
