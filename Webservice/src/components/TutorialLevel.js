@@ -3,7 +3,7 @@ import './TutorialLevel.css'
 import { InlineMath } from 'react-katex';
 import { useState, useEffect } from "react";
 import {LevelEndContent, NavigationArrows, Toolbar} from './LevelTools';
-
+import React from "react";
 
 export function TutorialLevel({ level_id = "1" }) {
 
@@ -68,7 +68,7 @@ export function TutorialLevel({ level_id = "1" }) {
       {currentPart <= partsOnLevel ? (<>
       
         <div className='content'>
-          <Content id={level_id} page={page} part={currentPart} />
+          <Content id={level_id} page={page} part={currentPart} dataPass={tutorialData} />
         </div>
         <NavigationArrows onBack={back} onNext={next}/>
         
@@ -78,10 +78,10 @@ export function TutorialLevel({ level_id = "1" }) {
     </div>
   );
 }
-import React from 'react';
-function Content({ id, page, part }) {
+
+function Content({ id, page, part, dataPass }) {
   // all parts to the current part
-  const data = tutorialData.filter(
+  const data = dataPass.filter(
     row => row.id === id && row.page === page && Number(row.part) <= part
   );
 
