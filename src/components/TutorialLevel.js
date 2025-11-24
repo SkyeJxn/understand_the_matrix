@@ -1,6 +1,6 @@
 "use client";
 import './TutorialLevel.css'
-import tutorial_data from "./tutorial_data.json"
+import tutorial_data from "../data/tutorial_data.json"
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { useState } from "react";
