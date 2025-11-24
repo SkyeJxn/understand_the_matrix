@@ -13,7 +13,6 @@ export function TutorialLevel({ level_id = "1" }) {
     fetch("/data/tutorial_data.json")
     .then(res => res.json())
     .then(data => setTutorialData(data))
-    .catch(console.error);
   }, []);
 
   const [page, setPage] = useState("1");
@@ -32,8 +31,8 @@ export function TutorialLevel({ level_id = "1" }) {
     const partsOnPage = tutorialData
       .filter(row => row.id === level_id && row.page === page)
       .map(row => Number(row.part));
-    return Math.max(...partsOnPage);
-  }
+    return Math.max(...partsOnPage, 0);
+    return Math.max(...partsOnPage, 0);
 
   function next() {
     const maxPart = getMaxPart(page);
@@ -79,9 +78,9 @@ export function TutorialLevel({ level_id = "1" }) {
   );
 }
 
-function Content({ id, page, part, dataPass }) {
+function Content({ id, page, part, tutorialData }) {
   // all parts to the current part
-  const data = dataPass.filter(
+  const data = tutorialData.filter(
     row => row.id === id && row.page === page && Number(row.part) <= part
   );
 
@@ -96,4 +95,5 @@ function Content({ id, page, part, dataPass }) {
       ))}
     </div>
   );
+}
 }
