@@ -12,13 +12,14 @@ import {LevelEndContent, NavigationArrows, Toolbar} from './LevelTools';
 
 export function TutorialLevel({ level_id = "1" }) {
 
-  const [tutorialData, setTutorialData] = UseState([]);
+  const [tutorialData, setTutorialData] = useState([]);
 
   useEffect(() => {
     fetch("/data/tutorial_data.json")
     .then(res => res.json())
     .then(data => setTutorialData(data))
-  })
+    .catch(console.error);
+  }, []);
 
   const [page, setPage] = useState("1");
   const [currentPart, setCurrentPart] = useState(1);
