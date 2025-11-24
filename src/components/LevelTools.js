@@ -1,13 +1,23 @@
+import { useState, useEffect } from "react";
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
-import { useState } from 'react';
+import { ButtonGroup } from 'primereact/buttongroup';
+import Link from 'next/link';
 import "primereact/resources/themes/nano/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import Link from 'next/link';
 
-export default function Toolbar({mode = 'tutorial', progressValue, heartCount }){
-  const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 600;
+/**
+ * 
+ * @param {String} mode - 'tutorial' or 'challenge'
+ * @param {function} progressValue - progress bar value (0 - 100) 
+ * @param {function} heartCount - only challenge: number of hearts (5 - 0) 
+ * @param {boolean} isSmallScreen - relevant for heartCount, but should actually be determined automatically
+ * 
+ * @returns 
+ */
+export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmallScreen=true }){
+  // const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 600;
   return(
       <div>
         <div className="toolbar" style={{
@@ -32,7 +42,7 @@ export default function Toolbar({mode = 'tutorial', progressValue, heartCount })
           }}/>
 
           {/* hearts */}
-          {mode == 'tutorial' ? (<div>
+          {mode == 'challenge' ? (<div>
             {isSmallScreen ? (
               // small screen
               <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -68,4 +78,91 @@ export default function Toolbar({mode = 'tutorial', progressValue, heartCount })
         `}</style>
       </div>
     )
+}
+
+/**
+ * renders two arrow buttons (<- ->)
+ * @param {function} props.onBack - Callback-Funktion, die beim Klick auf den Zurück-Button ausgeführt wird
+ * @param {function} props.onNext - Callback-Funktion, die beim Klick auf den Weiter-Button ausgeführt wird.
+ */
+export function NavigationArrows({onBack, onNext}){
+  return (
+    <div className='navigator_btn' style={{
+          alignItems: 'center', justifyContent: 'center',
+          display: 'flex', gap: '20px',
+          width: '100%',
+          }}>
+      <button onClick={onBack}>
+        <i className="pi pi-arrow-left" style={{ fontSize: '2.5rem' }}></i>
+      </button>
+      <button onClick={onNext}>
+        <i className="pi pi-arrow-right" style={{ fontSize: '2.5rem' }}></i>
+      </button>
+    </div>
+  )
+}
+
+/**
+ * renders congratulation and two buttons: repeat level and next level
+ * @param {number} nextLevel - next level id, **null** if there is no next level!
+ */
+export function LevelEndContent({nextLevel = null}){
+  const congratsList = [
+    "Finished!",'Exercise complete!',
+    "Completed!",'Lesson complete!',
+    "Well done!","Level Done!",
+    "You did it!","Level complete!"
+  ];
+  const [congrats, setCongrats] = useState(null);
+  useEffect(() => {
+    const random = congratsList[Math.floor(Math.random() * congratsList.length)]; 
+    setCongrats(random);
+  }, []);
+  
+
+  if(congrats) return(
+    <div>
+    <div style={{height: '70vh'}}>
+      <div className='end_content'>
+        <h1>{congrats}</h1>
+
+      <ButtonGroup>
+        <Button icon='pi pi-arrow-left' label='repeat level' onClick={() => window.location.reload()}></Button>
+
+        {nextLevel && 
+        <Link href={`${nextLevel}/`}>
+          <Button label='next level' icon='pi pi-arrow-right' iconPos='right'></Button>
+        </Link>}
+
+      </ButtonGroup>
+      </div>
+    </div>
+    <style>{`
+      .end_content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* feste Zentrierung */
+        text-align: center;
+        animation: popIn 0.3s ease-in;
+      }
+      .end_content h1 {
+        font-size: 50px;
+        color: var(--color4);
+      }
+      @keyframes popIn {
+        from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+        to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+      }
+      Button {
+        color: var(--color3);
+        border: 1.8px solid var(--color3);
+        padding: 4px 7px;
+        margin: 10px;
+      }
+
+    `}</style>
+    
+    </div>
+  )
 }
