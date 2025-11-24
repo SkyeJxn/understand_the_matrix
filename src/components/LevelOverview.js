@@ -3,10 +3,10 @@ import './LevelOverview.css'
 export default function LevelOverview({mode = "challenge"}){
     // tutorial content
     const tutorial_levels = [
-    { number: 1, title: 'Linear systems of equations', description: 'coefficient matrix, homogeneous LGS' },
+    { number: 1, title: "What's a Matrix?", description: 'system of linear equations, homogeneous LGS' },
     { number: 2, title: 'Elementary row operations', description: '(ZV, ZM, ZA)' },
     { number: 3, title: 'Solution sets', description: 'no, one, infinite' },
-    { number: 4, title: 'Gauss algorithm', description: 'Extension: Gauss-Jordan algorithm' },
+    { number: 4, title: 'Gauss-jordan algorithm', description: '(without a strategy)' },
     { number: 5, title: 'Vector spaces', description: 'Addition and scalar multiplication' },
   ];
   // challenge content
