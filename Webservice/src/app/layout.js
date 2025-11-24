@@ -1,5 +1,5 @@
 import "./globals.css";
-import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import { PrimeReactProvider } from "primereact/api";
         
 export const metadata = {
   title: "Understand the Matrix",
