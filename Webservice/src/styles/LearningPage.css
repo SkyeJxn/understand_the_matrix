@@ -15,7 +15,7 @@
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background-color: var(--color2);
+  background-color: var(--color3);
   transition: .4s;
 }
 
@@ -31,7 +31,7 @@
 }
 
 input:checked + .slider {
-  background-color: var(--color3);
+  background-color: var(--color1);
 }
 
 input:checked + .slider:before {

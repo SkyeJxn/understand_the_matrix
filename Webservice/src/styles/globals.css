@@ -3,22 +3,25 @@
 /* standard */
 :root {
     /* global styles */
+    /* colors from bright to dark -> 1 to 5 */
   /* background */
-  --color1: #B9E6FF;
-  --color2: #551b14;
-  --color3: #8a7e72;
-  --color4: #06ba63;
+  --color1: #ffffff;
+
+  --color2: #7FB3FF;
+  --color3: #1E4FA3;
+  --color4: #0D1B4C;
+
   /* font-color */
-  --color5: #090302; 
+  --color5: #000000; 
   --font1: Arial;
 }
 /* dark-mode */
 @media (prefers-color-scheme: dark) {
   :root {
   /* background */
-  --color1: #090302;
+  --color1: #000000;
   /* font-color */
-  --color5: #B9E6FF;
+  --color5: #ffffff;
   }
 }
 /* 
@@ -50,7 +53,7 @@ body {
 
 button {
   border-radius: 12px;
-  background-color: var(--color2);
+  background-color: var(--color3);
   padding: 5px;
   margin: 10px;
 }
