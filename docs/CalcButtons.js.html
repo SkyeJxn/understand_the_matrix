@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CalcButtons.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CalcButtons.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import './CalcButtons.css'
+import React, {useState} from "react";
+import { fraction } from "mathjs";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { SelectButton } from "primereact/selectbutton";
+
+import { InlineMath } from "react-katex";
+import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
+
+/** 
+ * Component that displays Calculation function buttons in challenges
+ * 
+ * @param {Boolean} DisableZV - Disables the Switch Button if true
+ * @param {Boolean} DisableZA - Disables the Addition Button if true
+ * @param {Boolean} DisableZM - Disables the Multiplication Button if true
+ * @param {number[][]} matrix - Matrix given from the Challenge
+ * @param {function} setMatrix - Callback that displays the new matrix
+ * @returns {JSX.Element}
+ */
+export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, setMatrix}) {
+  return (
+    &lt;div className="calc_btns" >
+        &lt;MultButton deactivate={DisableZM} matrix={matrix} setMatrix={setMatrix} />
+        &lt;AddButton deactivate={DisableZA} matrix={matrix} setMatrix={setMatrix} />
+        &lt;SwitchButton deactivate={DisableZV} matrix={matrix} setMatrix={setMatrix} />
+    &lt;/div>
+  );
+}
+
+function MultButton({ deactivate, matrix, setMatrix }){
+  const dimension = matrix.length;
+  const items = Array.from({ length: dimension }, (_, i) => ({
+        label: `${i+1}`, value: i }
+  ));
+
+    const [visible, setVisible] = useState(false);
+    const [rowValue, setRowValue] = useState(items[0].value);
+    const [scalarInput, setScalarInput] = useState("1");
+    const [scalarFeedback, setScalarFeedback] = useState('1');
+    const [scalar, setScalar] = useState(1)
+
+    function onConfirm(){
+      const newMatrix = MultiplyRow(matrix, rowValue, scalar);
+      setMatrix(newMatrix);
+      setVisible(false);
+    }
+    function handleInput(input){
+      setScalarInput(input);
+      try {
+        let frac;
+        if(input.includes('/')) {
+          // fraction
+          const [num, den] = input.split('/').map(Number);
+          if(!isNaN(num) &amp;&amp; !isNaN(den) &amp;&amp; num !== 0 &amp;&amp; den !== 0) {
+            frac = fraction(num, den);
+            setScalarFeedback(num+'/'+den);
+          } else {setScalarFeedback('invalid')}
+        } else {
+          // integer
+          const num = Number(input);
+          if (!isNaN(num) &amp;&amp; num !== 0) {
+            frac = fraction(num, 1);
+            setScalarFeedback(num);
+          } else {setScalarFeedback('invalid')}
+        }
+        if (frac) setScalar(frac);
+      }
+      catch { setScalarFeedback('invalid')}
+    }
+
+    const dialogFooter = (
+        &lt;div className='dialog_footer'>
+            &lt;Button label="Apply" icon="pi pi-check" onClick={onConfirm}/>
+        &lt;/div>
+    )
+
+  return (
+    &lt;div>
+      &lt;Button
+        disabled={deactivate}
+        onClick={() => { setVisible(true); }}>
+        &lt;InlineMath math="\xrightarrow{\rm{ZM}_{i} (S)}" />
+      &lt;/Button>
+
+      &lt;Dialog
+        className='dialog'
+        header="Multiply Row"
+        visible={visible}
+        onHide={() => { if (!visible) return; setVisible(false); }}
+        footer={dialogFooter}>
+          &lt;div style={{marginTop: "10px"}}>
+            &lt;InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZM}_{${rowValue +1}} (${scalarFeedback})}`} />
+          &lt;/div>
+          &lt;table className='dialog_table'>&lt;thead>
+          &lt;tr>
+              &lt;th>Row i&lt;/th>
+              &lt;th>Scalar&lt;/th>
+          &lt;/tr>
+          &lt;tr className="row_container">
+            &lt;td>
+              &lt;SelectButton className="select_btn" value={rowValue} onChange={(e) => setRowValue(e.value)} options={items}/>
+            &lt;/td>
+            &lt;td>
+            &lt;input className="scalar_input" 
+            type='text'
+            value={scalarInput}   
+            onChange={(e) => { handleInput(e.target.value)}} 
+            />
+            &lt;/td>
+          &lt;/tr>
+        &lt;/thead>&lt;/table>
+      &lt;/Dialog>
+    &lt;/div>
+  );
+}
+
+function AddButton({ deactivate, matrix, setMatrix }) {
+  const dimension = matrix.length;
+    const items = Array.from({ length: dimension }, (_, i) => ({
+      label: `${i+1}`, value: i }
+    ));
+
+    const [visible, setVisible] = useState(false);
+    const [sourceValue, setSourceValue] = useState(items[0].value);
+    const [targetValue, setTargetValue] = useState(items[0].value);
+    const [scalarInput, setScalarInput] = useState("1");
+    const [scalarFeedback, setScalarFeedback] = useState('1');
+    const [scalar, setScalar] = useState(1);
+
+    function onConfirm() {
+      const newMatrix = AddRows(matrix, sourceValue, targetValue, scalar);
+      setMatrix(newMatrix);
+      setVisible(false);
+    }
+
+    function handleInput(input){
+      setScalarInput(input);
+      try {
+        let frac;
+        if(input.includes('/')) {
+          // fraction
+          const [num, den] = input.split('/').map(Number);
+          if(!isNaN(num) &amp;&amp; !isNaN(den) &amp;&amp; num !== 0 &amp;&amp; den !== 0) {
+            frac = fraction(num, den);
+            setScalarFeedback(num+'/'+den);
+          } else {setScalarFeedback('invalid')}
+        } else {
+          // integer
+          const num = Number(input);
+          if (!isNaN(num) &amp;&amp; num !== 0) {
+            frac = fraction(num, 1);
+            setScalarFeedback(num);
+          } else {setScalarFeedback('invalid')}
+        }
+        if (frac) setScalar(frac);
+      }
+      catch { setScalarFeedback('invalid')}
+    }
+
+    const dialogFooter = (
+       &lt;div className='dialog_footer'>
+         &lt;Button label="Apply" icon="pi pi-check" onClick={onConfirm} />
+       &lt;/div>
+    );
+
+    return (
+      &lt;div>
+        &lt;Button
+          disabled={deactivate}
+          onClick={() => {
+            setVisible(true);
+          }}
+        >
+          &lt;InlineMath math="\xrightarrow{\rm{ZA}_{ij} (S)}" />
+        &lt;/Button>
+
+        &lt;Dialog
+          className='dialog'
+          header="Add Rows"
+          visible={visible}
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+          footer={dialogFooter}
+        >
+
+          &lt;div style={{marginTop: "10px"}}>
+            &lt;InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZA}_{${targetValue +1}${sourceValue +1}} (${scalarFeedback})}`} />
+          &lt;/div>
+
+          &lt;table className='dialog_table'>&lt;thead>
+          &lt;tr>
+              &lt;th>Target&lt;/th>
+              &lt;th>Source&lt;/th>
+              &lt;th>Scalar&lt;/th>
+          &lt;/tr>
+          &lt;tr className="row_container">
+            &lt;td>
+              &lt;SelectButton
+                className="select_btn"
+                value={targetValue}
+                onChange={(e) => setTargetValue(e.value)}
+                options={items}
+              />
+            &lt;/td>
+
+            &lt;td>
+              &lt;SelectButton
+                className="select_btn"
+                value={sourceValue}
+                onChange={(e) => setSourceValue(e.value)}
+                options={items}
+              />
+            &lt;/td>
+
+            &lt;td>
+              &lt;input
+                className="scalar_input"
+                type='text'
+                value={scalarInput}
+                onChange={(e) => { handleInput(e.target.value)}}
+              />
+            &lt;/td>
+          &lt;/tr>
+          &lt;/thead>&lt;/table>
+        &lt;/Dialog>
+      &lt;/div>
+    );
+}
+
+function SwitchButton({ deactivate , matrix, setMatrix}) {
+  const dimension = matrix.length;
+  const items = Array.from({ length: dimension }, (_, i) => ({
+    label: `${i+1}`, value: i }
+  ));
+
+   const [visible, setVisible] = useState(false);
+   const [sourceValue, setSourceValue] = useState(items[0].value)
+   const [targetValue, setTargetValue] = useState(items[0].value);
+
+   function onConfirm() {
+    const newMatrix = SwitchRows(matrix, sourceValue, targetValue);
+    setMatrix(newMatrix);
+    setVisible(false);
+   }
+
+   const dialogFooter = (
+     &lt;div className='dialog_footer'>
+       &lt;Button label="Apply"  icon="pi pi-check" onClick={onConfirm} />
+     &lt;/div>
+   );
+
+   return (
+     &lt;div>
+       &lt;Button
+         disabled={deactivate}
+         onClick={() => {
+           setVisible(true);
+         }}
+       >
+         &lt;InlineMath math="\xrightarrow{\rm{ZV}_{ij}}" />
+       &lt;/Button>
+
+       &lt;Dialog
+         className='dialog'
+         header="Switch Rows"
+         visible={visible}
+         onHide={() => {
+           if (!visible) return;
+           setVisible(false);
+         }}
+         footer={dialogFooter}
+       >
+
+          &lt;div style={{marginTop: "10px"}}>
+            &lt;InlineMath math={`\\LARGE \\xrightarrow{\\rm{ZV}_{${sourceValue +1}${targetValue +1}}}`} />
+          &lt;/div>
+
+          &lt;table className='dialog_table'>&lt;thead>
+            &lt;tr>
+              &lt;th>Row i&lt;/th>
+              &lt;th>Row j&lt;/th>
+            &lt;/tr>
+           &lt;tr className="row_container">
+            &lt;td>
+             &lt;SelectButton
+               className="select_btn"
+               value={sourceValue}
+               onChange={(e) => setSourceValue(e.value)}
+               options={items}
+             />
+            &lt;/td>
+           &lt;td>
+             &lt;SelectButton
+               className="select_btn"
+               value={targetValue}
+               onChange={(e) => setTargetValue(e.value)}
+               options={items}
+             />
+           &lt;/td>
+           &lt;/tr>
+          &lt;/thead>&lt;/table>
+       &lt;/Dialog>
+     &lt;/div>
+   );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#Toolbar">Toolbar</a></li><li><a href="global.html#TutorialLevel">TutorialLevel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Nov 26 2025 21:41:00 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
