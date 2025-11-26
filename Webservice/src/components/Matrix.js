@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import './Matrix.css'
+import '../styles/Matrix.css'
 import { InlineMath } from 'react-katex';
 import { fraction } from "mathjs";
 /**

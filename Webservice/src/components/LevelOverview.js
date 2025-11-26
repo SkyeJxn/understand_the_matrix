@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import './LevelOverview.css'
+import '../styles/LevelOverview.css'
 export default function LevelOverview({mode = "challenge"}){
     // tutorial content
     const tutorial_levels = [

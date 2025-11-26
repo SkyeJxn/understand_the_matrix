@@ -1,5 +1,4 @@
 import LevelOverview from "@/components/LevelOverview";
-import './LearningPage.css'
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
