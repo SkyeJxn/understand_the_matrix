@@ -9,6 +9,16 @@ import { SelectButton } from "primereact/selectbutton";
 import { InlineMath } from "react-katex";
 import { SwitchRows, MultiplyRow, AddRows } from "./CalcFunctions";
 
+/** 
+ * Component that displays Calculation function buttons in challenges
+ * 
+ * @param {Boolean} DisableZV - Disables the Switch Button if true
+ * @param {Boolean} DisableZA - Disables the Addition Button if true
+ * @param {Boolean} DisableZM - Disables the Multiplication Button if true
+ * @param {number[][]} matrix - Matrix given from the Challenge
+ * @param {function} setMatrix - Callback that displays the new matrix
+ * @returns {JSX.Element}
+ */
 export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, setMatrix}) {
   return (
     <div className="calc_btns" >
