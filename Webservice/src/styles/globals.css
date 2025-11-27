@@ -11,6 +11,14 @@
   --color3: #1E4FA3;
   --color4: #0D1B4C;
 
+  --color2: #A5D6A7;
+  --color3: #66BB6A;
+  --color4: #2E7D32;
+
+  --color2: #F8BBD0;
+  --color3: #E53935;
+  --color4: #951818;
+
   /* font-color */
   --color5: #000000; 
   --font1: Arial;
@@ -53,7 +61,21 @@ body {
 
 button {
   border-radius: 12px;
-  background-color: var(--color3);
+  background-color: none;
+  color: var(--color5);
   padding: 5px;
   margin: 10px;
+}
+.main_content{
+  margin: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.start_btn {
+  background: none;
+  border: 3px solid var(--color2);
+  color: var(--color2);
+  padding: 5px;
 }
