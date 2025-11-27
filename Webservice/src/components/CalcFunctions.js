@@ -1,4 +1,4 @@
-import { fraction } from "mathjs";
+import { fraction, random, round } from "mathjs";
 
 /**
  * Help component that Switches given Rows in a Matrix
@@ -56,4 +56,47 @@ export function MultiplyRow(matrix, Row, scalar) {
   }
 
   return newMatrix;
+}
+
+/**
+ * Help component that Transforms a Matrix with a reverse gauss algorithm
+ * 
+ * @param {number[][]} result - Starting Matrix
+ * @param {number} scaleStart - Minimum scaling while transforming
+ * @param {number} scaleStop - Maximum scaling while transforming
+ * @param {number} rounding - maximum number of decimals for scalars
+ * @param {number} steps - number of steps
+ * @returns {number[][]}
+ */
+export function MatrixCreator(result, scaleStart, scaleStop, rounding, steps = 1){
+  // copy of result
+  let matrix = result;
+  let zm, zw;
+
+  for ( let k = 0; k < steps; k++){
+    for (let i = 0; i < matrix.length; i++) {
+      const randMult = round(random(scaleStart, scaleStop), rounding);
+      const randAdd = round(random(scaleStart, scaleStop), rounding);
+      
+      zm = MultiplyRow(matrix, i, randMult);
+      if (i != (matrix.length - 1)){
+        zw = AddRows(zm, i, i + 1, randAdd);
+        matrix = zw;
+      }
+      else{
+        matrix = zm;
+      }
+    }
+    for (let i = (matrix.length - 1); i >= 0 ; i--) {
+      
+      zm = MultiplyRow(matrix, i, 1);
+      if (i != 1) {
+        zw = AddRows(zm, i, i-1, 1);
+        matrix = zw;
+      } else {
+        matrix = zm;
+      }
+    } 
+  }
+  return matrix;
 }
