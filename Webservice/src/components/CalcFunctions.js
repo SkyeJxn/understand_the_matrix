@@ -1,4 +1,4 @@
-import { fraction, random, round } from "mathjs";
+import { fraction, randomInt } from "mathjs";
 
 /**
  * Help component that Switches given Rows in a Matrix
@@ -29,7 +29,7 @@ export function SwitchRows(matrix, row1, row2) {
  */
 export function AddRows(matrix, sourceRow, targetRow, scalar) {
   // copy of matrix
-  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell)));
+  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell).simplify()));
 
   for (let i = 0; i < newMatrix[targetRow].length; i++) {
     const s = fraction(scalar);
@@ -49,7 +49,7 @@ export function AddRows(matrix, sourceRow, targetRow, scalar) {
  */
 export function MultiplyRow(matrix, Row, scalar) {
   // copy of matrix
-  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell)));
+  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell).simplify()));
 
   for (let i = 0; i < newMatrix[Row].length; i++) {
     newMatrix[Row][i] = fraction(scalar).mul(newMatrix[Row][i]);
@@ -62,41 +62,37 @@ export function MultiplyRow(matrix, Row, scalar) {
  * Help component that Transforms a Matrix with a reverse gauss algorithm
  * 
  * @param {number[][]} result - Starting Matrix
- * @param {number} scaleStart - Minimum scaling while transforming
- * @param {number} scaleStop - Maximum scaling while transforming
- * @param {number} rounding - maximum number of decimals for scalars
- * @param {number} steps - number of steps
+ * @param {number} maxNum - Maximum number in scalar
+ * @param {number[]} denominator - array of possible denominators, default is [1]
  * @returns {number[][]}
  */
-export function MatrixCreator(result, scaleStart, scaleStop, rounding, steps = 1){
+export function MatrixCreator(result, maxNum, denominator){
   // copy of result
-  let matrix = result;
-  let zm, zw;
+  let downward = result;
 
-  for ( let k = 0; k < steps; k++){
-    for (let i = 0; i < matrix.length; i++) {
-      const randMult = round(random(scaleStart, scaleStop), rounding);
-      const randAdd = round(random(scaleStart, scaleStop), rounding);
-      
-      zm = MultiplyRow(matrix, i, randMult);
-      if (i != (matrix.length - 1)){
-        zw = AddRows(zm, i, i + 1, randAdd);
-        matrix = zw;
-      }
-      else{
-        matrix = zm;
-      }
+  for (let i = 0; i < result.length; i++) {
+    const randMult = randomFraction(maxNum, denominator);
+
+    downward = MultiplyRow(downward, i, randMult);
+    for (let j = i + 1; j < result.length; j++){
+      const randAdd = randomFraction(maxNum, denominator);
+      downward = AddRows(downward, i, j, randAdd);
     }
-    for (let i = (matrix.length - 1); i >= 0 ; i--) {
-      
-      zm = MultiplyRow(matrix, i, 1);
-      if (i != 1) {
-        zw = AddRows(zm, i, i-1, 1);
-        matrix = zw;
-      } else {
-        matrix = zm;
-      }
-    } 
   }
-  return matrix;
+  let upward = downward;
+  for (let i = result.length - 1; i >= 0; i--) {
+    for (let j = i - 1; j >= 0; j--) {
+      const randAdd = randomFraction(maxNum);
+      upward = AddRows(upward, i, j, randAdd);
+    }
+  } 
+  const task = upward;
+  return task;
+}
+
+function randomFraction(maxNum, denominator = [1]){
+  const num = randomInt(1, maxNum);
+  const den = denominator[randomInt(0, denominator.length)];
+
+  return fraction(num, den);
 }

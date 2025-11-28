@@ -14,7 +14,7 @@ export default function Gauss() {
   ];
   
   
-  const [matrix, setMatrix] = useState(MatrixCreator(result, 1, 2, 1));
+  const [matrix, setMatrix] = useState(MatrixCreator(result, 3, [1,2,4]));
 
   return (
     <div>
