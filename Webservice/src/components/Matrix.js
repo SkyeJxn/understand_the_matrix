@@ -4,11 +4,12 @@ import '../styles/Matrix.css'
 import { InlineMath } from 'react-katex';
 import { fraction } from "mathjs";
 /**
- * StaticMatrix component to display any matrix
+ * Component that renders a given matrix
  * 
  * @param {number[][]} data - 2-dim array with the matrix values (each inner list is a row)
  * @param {boolean} resultCol - is the last column a results column
  * @param {boolean} det - is the matrix a determinant
+ * @returns {JSX.Element}
  */
 export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
   const cols = data[0].length;
@@ -38,13 +39,14 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
   );
 }
 /**
- * EditableMatrix component for user input of any matrix
+ * Component that renders an empty matrix with room for user inputs
  * 
  * @param {number} rows - number of rows 
  * @param {number} cols - number of columns (including result column if `resultCol` is true)
  * @param {boolean} resultCol - is the last column a results column
  * @param {boolean} det - is the matrix a determinant
  * @param {(matrix: string[][]) => void} onChange - Callback, that returns the current matrix
+ * @returns {JSX.Element}
  */
 export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange }) {
   const [matrix, setMatrix] = React.useState(

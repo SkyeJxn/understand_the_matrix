@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: LevelTools.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: LevelTools.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { useState, useEffect } from "react";
+import { ProgressBar } from 'primereact/progressbar';
+import { Button } from 'primereact/button';
+import { ButtonGroup } from 'primereact/buttongroup';
+import Link from 'next/link';
+
+/**
+ * Component that Renders a dynamic progress bar
+ * 
+ * @param {String} mode - 'tutorial' or 'challenge'
+ * @param {function} progressValue - progress bar value (0 - 100) 
+ * @param {function} heartCount - only challenge: number of hearts (5 - 0) 
+ * @param {boolean} isSmallScreen - relevant for heartCount, but should actually be determined automatically
+ * @returns {JSX.Element}
+ */
+export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmallScreen=true }){
+  // const isSmallScreen = typeof window !== 'undefined' &amp;&amp; window.innerWidth &lt; 600;
+  return(
+      &lt;div>
+        &lt;div className="toolbar" style={{
+          display: 'flex',
+          width: '100%',
+          gap: '20px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+        }}>
+            
+          &lt;Link href={`/${mode}`}>&lt;Button style={{
+            background: 'none', border: 'none',
+            color: 'var(--color3)',
+            padding: 0, margin: 0,
+          }}>&lt;i className="pi pi-times" style={{ fontSize: '2.5rem' }}>&lt;/i>&lt;/Button>&lt;/Link>
+          
+          &lt;ProgressBar value={progressValue}  showValue={false} style={{
+            background: 'var(--color2)',
+            borderRadius: '12px',
+            flex: '1',
+          }}/>
+
+          {/* hearts */}
+          {mode == 'challenge' ? (&lt;div>
+            {isSmallScreen ? (
+              // small screen
+              &lt;div style={{ position: 'relative', display: 'inline-block' }}>
+                &lt;i className='pi pi-heart-fill' style={{ fontSize: '2.5rem', color: 'var(--color3)' }}>&lt;/i>
+                &lt;span style={{
+                  position: 'absolute', top: '50%', left: '50%', 
+                  transform: 'translate(-50%, -50%)',
+                  color: 'var(--color2)', fontSize: '1.4rem', fontWeight: 'bold',
+                  }}>{heartCount}&lt;/span>
+              &lt;/div>
+              )
+              :(
+              // big screen
+              &lt;div>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  &lt;i key={i} className={i+1 > heartCount ? "pi pi-heart": "pi pi-heart-fill"} style={{
+                    fontSize: '2.5rem', padding: '5px',
+                    color: 'var(--color3)'}}
+                  />
+                ))}
+              &lt;/div>
+            )}
+          &lt;/div>): (&lt;div>&lt;/div>)}
+
+        &lt;/div>
+        
+        &lt;style>{`
+          /* inside */
+          .p-progressbar .p-progressbar-value {
+            background-color: var(--color4); 
+            border-radius: 12px;      
+          }
+        `}&lt;/style>
+      &lt;/div>
+    )
+}
+
+/**
+ * Component that Renders a Forward and a Backward Arrow
+ * 
+ * 
+ * @param {function} props.onBack - Callback-function for the backward button
+ * @param {function} props.onNext - Callback-function for the forward button
+ * @returns {JSX.Element}
+ */
+export function NavigationArrows({onBack, onNext}){
+  return (
+    &lt;div className='navigator_btn' style={{
+          alignItems: 'center', justifyContent: 'center',
+          display: 'flex', gap: '20px',
+          width: '100%',
+          }}>
+      &lt;button onClick={onBack}>
+        &lt;i className="pi pi-arrow-left" style={{ fontSize: '2.5rem' }}>&lt;/i>
+      &lt;/button>
+      &lt;button onClick={onNext}>
+        &lt;i className="pi pi-arrow-right" style={{ fontSize: '2.5rem' }}>&lt;/i>
+      &lt;/button>
+    &lt;/div>
+  )
+}
+
+/**
+ * Component that renders a congratulation, a repeat level button and a next level buttons
+ * 
+ * @param {number} nextLevel - next level id, **null** if there is no next level!
+ * @returns {JSX.Element}
+ */
+export function LevelEndContent({nextLevel = null}){
+  const congratsList = [
+    "Finished!",'Exercise complete!',
+    "Completed!",'Lesson complete!',
+    "Well done!","Level Done!",
+    "You did it!","Level complete!"
+  ];
+  const [congrats, setCongrats] = useState(() =>
+    congratsList[Math.floor(Math.random() * congratsList.length)]
+  );
+  if(congrats) return(
+    &lt;div>
+    &lt;div style={{height: '70vh'}}>
+      &lt;div className='end_content'>
+        &lt;h1>{congrats}&lt;/h1>
+
+      &lt;ButtonGroup>
+        &lt;Button icon='pi pi-arrow-left' label='repeat level' onClick={() => window.location.reload()}>&lt;/Button>
+
+        {nextLevel &amp;&amp; 
+        &lt;Link href={`${nextLevel}/`}>
+          &lt;Button label='next level' icon='pi pi-arrow-right' iconPos='right'>&lt;/Button>
+        &lt;/Link>}
+
+      &lt;/ButtonGroup>
+      &lt;/div>
+    &lt;/div>
+    &lt;style>{`
+      .end_content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* feste Zentrierung */
+        text-align: center;
+        animation: popIn 0.3s ease-in;
+      }
+      .end_content h1 {
+        font-size: 50px;
+        color: var(--color4);
+      }
+      @keyframes popIn {
+        from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+        to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+      }
+      Button {
+        color: var(--color3);
+        border: 1.8px solid var(--color3);
+        padding: 4px 7px;
+        margin: 10px;
+      }
+
+    `}&lt;/style>
+    
+    &lt;/div>
+  )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#Toolbar">Toolbar</a></li><li><a href="global.html#TutorialLevel">TutorialLevel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Nov 26 2025 21:41:00 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

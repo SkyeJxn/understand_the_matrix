@@ -5,6 +5,12 @@ import { useState, useEffect } from "react";
 import {LevelEndContent, NavigationArrows, Toolbar} from './LevelTools';
 import React from "react";
 
+/**
+ * Component that renders the content of a given Level
+ * 
+ * @param {number} level_id - Passes the Level Number
+ * @returns {JSX.Element}
+ */
 export function TutorialLevel({ level_id = "1" }) {
 
   const [tutorialData, setTutorialData] = useState([]);

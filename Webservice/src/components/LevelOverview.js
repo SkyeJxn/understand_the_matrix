@@ -1,7 +1,16 @@
 import Link from 'next/link';
 import '../styles/LevelOverview.css'
+
+/**
+ * Component that creates the Level choosing sites
+ * 
+ * @param {string} mode - defines the chosen game mode 
+ * @returns {JSX.Element}
+ */
 export default function LevelOverview({mode = "challenge"}){
     // tutorial content
+
+    //TODO: outsource to JSON files
     const tutorial_levels = [
     { number: 1, title: "What's a Matrix?", description: 'system of linear equations, homogeneous LGS' },
     { number: 2, title: 'Elementary row operations', description: '(ZV, ZM, ZA)' },

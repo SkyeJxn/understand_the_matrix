@@ -1,4 +1,13 @@
 import { fraction } from "mathjs";
+
+/**
+ * Help component that Switches given Rows in a Matrix
+ * 
+ * @param {number[][]} matrix - matrix that get's passed by the challenge
+ * @param {number} row1 - first row to switch
+ * @param {number} row2 - second row to switch
+ * @returns {number[][]}
+ */
 export function SwitchRows(matrix, row1, row2) {
   // copy of matrix
   let newMatrix =  matrix.map(rowArr => [...rowArr]);
@@ -9,6 +18,15 @@ export function SwitchRows(matrix, row1, row2) {
   return newMatrix;
 }
 
+/**
+ * Help Component that Adds given Rows in a Matrix
+ * 
+ * @param {number[][]} matrix - Matrix passed by the challenge
+ * @param {number} sourceRow - Row that's getting added to another
+ * @param {number} targetRow - Row to add sourceRow on
+ * @param {number} scalar - Multiplicator for the sourceRow
+ * @returns {number[][]}
+ */
 export function AddRows(matrix, sourceRow, targetRow, scalar) {
   // copy of matrix
   let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell)));
@@ -21,6 +39,14 @@ export function AddRows(matrix, sourceRow, targetRow, scalar) {
   return newMatrix;
 }
 
+/**
+ * Help Component that Multiplies a given Row in a Matrix
+ * 
+ * @param {number[][]} matrix - Matrix passed by the challenge
+ * @param {number} Row - Row that's getting multiplied
+ * @param {number} scalar - Multiplicator for the Row
+ * @returns {number[][]}
+ */
 export function MultiplyRow(matrix, Row, scalar) {
   // copy of matrix
   let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell)));

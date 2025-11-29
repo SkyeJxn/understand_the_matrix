@@ -6,13 +6,13 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import Link from 'next/link';
 
 /**
+ * Component that Renders a dynamic progress bar
  * 
  * @param {String} mode - 'tutorial' or 'challenge'
  * @param {function} progressValue - progress bar value (0 - 100) 
  * @param {function} heartCount - only challenge: number of hearts (5 - 0) 
  * @param {boolean} isSmallScreen - relevant for heartCount, but should actually be determined automatically
- * 
- * @returns 
+ * @returns {JSX.Element}
  */
 export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmallScreen=true }){
   // const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 600;
@@ -79,9 +79,12 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
 }
 
 /**
- * renders two arrow buttons (<- ->)
- * @param {function} props.onBack - Callback-Funktion, die beim Klick auf den Zurück-Button ausgeführt wird
- * @param {function} props.onNext - Callback-Funktion, die beim Klick auf den Weiter-Button ausgeführt wird.
+ * Component that Renders a Forward and a Backward Arrow
+ * 
+ * 
+ * @param {function} props.onBack - Callback-function for the backward button
+ * @param {function} props.onNext - Callback-function for the forward button
+ * @returns {JSX.Element}
  */
 export function NavigationArrows({onBack, onNext}){
   return (
@@ -101,8 +104,10 @@ export function NavigationArrows({onBack, onNext}){
 }
 
 /**
- * renders congratulation and two buttons: repeat level and next level
+ * Component that renders a congratulation, a repeat level button and a next level buttons
+ * 
  * @param {number} nextLevel - next level id, **null** if there is no next level!
+ * @returns {JSX.Element}
  */
 export function LevelEndContent({nextLevel = null}){
   const congratsList = [
