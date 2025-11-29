@@ -1,4 +1,4 @@
-import { fraction } from "mathjs";
+import { fraction, randomInt } from "mathjs";
 
 /**
  * Help component that Switches given Rows in a Matrix
@@ -29,7 +29,7 @@ export function SwitchRows(matrix, row1, row2) {
  */
 export function AddRows(matrix, sourceRow, targetRow, scalar) {
   // copy of matrix
-  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell)));
+  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell).simplify()));
 
   for (let i = 0; i < newMatrix[targetRow].length; i++) {
     const s = fraction(scalar);
@@ -49,11 +49,50 @@ export function AddRows(matrix, sourceRow, targetRow, scalar) {
  */
 export function MultiplyRow(matrix, Row, scalar) {
   // copy of matrix
-  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell)));
+  let newMatrix = matrix.map(rowArr => rowArr.map(cell => fraction(cell).simplify()));
 
   for (let i = 0; i < newMatrix[Row].length; i++) {
     newMatrix[Row][i] = fraction(scalar).mul(newMatrix[Row][i]);
   }
 
   return newMatrix;
+}
+
+/**
+ * Help component that Transforms a Matrix with a reverse gauss algorithm
+ * 
+ * @param {number[][]} result - Starting Matrix
+ * @param {number} maxNum - Maximum number in scalar
+ * @param {number[]} denominator - array of possible denominators, default is [1]
+ * @returns {number[][]}
+ */
+export function MatrixCreator(result, maxNum, denominator){
+  // copy of result
+  let downward = result;
+
+  for (let i = 0; i < result.length; i++) {
+    const randMult = randomFraction(maxNum, denominator);
+
+    downward = MultiplyRow(downward, i, randMult);
+    for (let j = i + 1; j < result.length; j++){
+      const randAdd = randomFraction(maxNum, denominator);
+      downward = AddRows(downward, i, j, randAdd);
+    }
+  }
+  let upward = downward;
+  for (let i = result.length - 1; i >= 0; i--) {
+    for (let j = i - 1; j >= 0; j--) {
+      const randAdd = randomFraction(maxNum);
+      upward = AddRows(upward, i, j, randAdd);
+    }
+  } 
+  const task = upward;
+  return task;
+}
+
+function randomFraction(maxNum, denominator = [1]){
+  const num = randomInt(1, maxNum);
+  const den = denominator[randomInt(0, denominator.length)];
+
+  return fraction(num, den);
 }
