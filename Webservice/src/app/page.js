@@ -1,23 +1,21 @@
 import Link from "next/link";
+import { Button } from 'primereact/button';
+import Header from "@/components/Header";
 
 export default function Home() {
   return (
     <div>
-      <Header></Header>
+      <Header home={true}>Understand the Matrix</Header>
       <MainContent></MainContent>
-      <StartButton></StartButton>
     </div>
   );
 }
 
-function Header() {
-  return (<div className="header"> Understand the Matrix</div>);
-}
-
 function MainContent() {
   return (
-    <div className="body">
-      <p> Welcome to understand the matrix, a matrix equations learning platform.</p>
+    <div className="main_content">
+      <p>Welcome to understand the matrix, a matrix equations learning platform.</p>
+      <StartButton></StartButton>
     </div>
   );
 }
@@ -26,7 +24,7 @@ function StartButton() {
   return (
     <div>
       <Link href={`/tutorial`}>
-        <button className="button"> Start Learning </button>
+        <Button className="start_btn" label="Start Learning" outlined/>
       </Link>
     </div>
   );

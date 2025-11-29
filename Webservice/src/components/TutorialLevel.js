@@ -1,5 +1,5 @@
 "use client";
-import './TutorialLevel.css'
+import '../styles/TutorialLevel.css'
 import { InlineMath } from 'react-katex';
 import { useState, useEffect } from "react";
 import {LevelEndContent, NavigationArrows, Toolbar} from './LevelTools';

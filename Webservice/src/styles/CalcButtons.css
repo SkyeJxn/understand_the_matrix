@@ -12,34 +12,30 @@ button {
     background: none;
 }
 .dialog {
-    background-color: var(--color3);
+    background: var(--color3);
     border-radius: 12px;
     padding: 20px;
-    height: 330px;
+    height: fit-content;
     width: 330px;
 }
+.dialog .p-dialog-content {background-color: var(--color3); }
+.dialog .p-dialog-header {
+  background-color: var(--color3); 
+  color: var(--color5);
+}
+.dialog .p-dialog-footer {background-color: var(--color3); }
 .p-dialog .p-dialog-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: var(--color5);
 }
-/* header */
-.p-dialog-title {
-    font-size: large;
-    font-weight: 600;
-}
+.p-icon{color: var(--color5);}
 .dialog :only-child {
     border-radius: 12px;
     text-align: center;
 }
 
-.row_index {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
-    height: 100%;
-}
 .dialog_table {width: 100%;}
 .matrix-table th, .dialog_table td {
     padding: 10px;

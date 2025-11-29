@@ -1,5 +1,5 @@
 "use client";
-import './CalcButtons.css'
+import '../styles/CalcButtons.css'
 import React, {useState} from "react";
 import { fraction } from "mathjs";
 import { Button } from "primereact/button";

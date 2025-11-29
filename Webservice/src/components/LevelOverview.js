@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import './LevelOverview.css'
+import '../styles/LevelOverview.css'
 
 /**
  * Component that creates the Level choosing sites

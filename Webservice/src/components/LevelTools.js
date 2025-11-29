@@ -34,7 +34,7 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
           }}><i className="pi pi-times" style={{ fontSize: '2.5rem' }}></i></Button></Link>
           
           <ProgressBar value={progressValue}  showValue={false} style={{
-            background: 'var(--color2)',
+            background: 'var(--color3)',
             borderRadius: '12px',
             flex: '1',
           }}/>
@@ -147,7 +147,7 @@ export function LevelEndContent({nextLevel = null}){
       }
       .end_content h1 {
         font-size: 50px;
-        color: var(--color4);
+        color: var(--color3);
       }
       @keyframes popIn {
         from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
