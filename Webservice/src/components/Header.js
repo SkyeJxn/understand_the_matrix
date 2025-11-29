@@ -13,7 +13,7 @@ export default function Header({children, home=false}){
     return(
         <div className="header" style={{
             width: '100%', height: '50px',
-            background: 'var(--color4)',
+            background: 'var(--color3)',
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',

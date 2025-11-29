@@ -9,7 +9,7 @@ export default async function LevelPage({ params }) {
   const { mode, id } = await params;
   return (
     <div>
-      <Header>{mode}<Badge value={id} style={{background: 'var(--color3)',}}/></Header>
+      <Header>{mode}<Badge value={id} style={{background: 'var(--color4)',}}/></Header>
       {mode === 'tutorial' && (<TutorialLevel level_id={id}/>)}
       {mode === 'challenge' && id == 2 && (<Gauss />) }
     </div>
