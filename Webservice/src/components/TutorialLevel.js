@@ -80,7 +80,7 @@ export function TutorialLevel({ level_id = "1" }) {
         <div className='content'>
           <Content page={page} part={currentPart} tutorialData={tutorialData} />
         </div>
-        <NavigationArrows onBack={back} onNext={next}/>
+        <NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>
         
       </>): (
         <LevelEndContent nextLevel={nextLevel()}/>
