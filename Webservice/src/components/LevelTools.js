@@ -81,23 +81,27 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
 /**
  * Component that Renders a Forward and a Backward Arrow
  * 
- * 
+ * @param {boolean} props.disableBack - if true: backward button disabled
  * @param {function} props.onBack - Callback-function for the backward button
  * @param {function} props.onNext - Callback-function for the forward button
  * @returns {JSX.Element}
  */
-export function NavigationArrows({onBack, onNext}){
+export function NavigationArrows({disableBack, onBack, onNext}){
   return (
     <div className='navigator_btn' style={{
           alignItems: 'center', justifyContent: 'center',
           display: 'flex', gap: '20px',
-          width: '100%',
+          width: '100%', margin: '5px'
           }}>
       <button onClick={onBack}>
-        <i className="pi pi-arrow-left" style={{ fontSize: '2.5rem' }}></i>
+        <i className="pi pi-arrow-left" style={{ 
+          fontSize: '2.5rem',
+          opacity: disableBack ? 0.3 : 1,
+          cursor: disableBack ? 'auto' : "pointer",
+          }}></i>
       </button>
       <button onClick={onNext}>
-        <i className="pi pi-arrow-right" style={{ fontSize: '2.5rem' }}></i>
+        <i className="pi pi-arrow-right" style={{ fontSize: '2.5rem', cursor: 'pointer' }}></i>
       </button>
     </div>
   )
@@ -120,7 +124,7 @@ export function LevelEndContent({nextLevel = null}){
   useEffect(() =>{
     setCongrats(congratsList[Math.floor(Math.random() * congratsList.length)]);
   },[]);
-  
+
   if(congrats) return(
     <div>
     <div style={{height: '70vh'}}>
