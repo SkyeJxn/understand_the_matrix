@@ -34,7 +34,7 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
           }}><i className="pi pi-times" style={{ fontSize: '2.5rem' }}></i></Button></Link>
           
           <ProgressBar value={progressValue}  showValue={false} style={{
-            background: 'var(--color2)',
+            background: 'var(--color3)',
             borderRadius: '12px',
             flex: '1',
           }}/>
@@ -81,23 +81,27 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
 /**
  * Component that Renders a Forward and a Backward Arrow
  * 
- * 
+ * @param {boolean} props.disableBack - if true: backward button disabled
  * @param {function} props.onBack - Callback-function for the backward button
  * @param {function} props.onNext - Callback-function for the forward button
  * @returns {JSX.Element}
  */
-export function NavigationArrows({onBack, onNext}){
+export function NavigationArrows({disableBack, onBack, onNext}){
   return (
     <div className='navigator_btn' style={{
           alignItems: 'center', justifyContent: 'center',
           display: 'flex', gap: '20px',
-          width: '100%',
+          width: '100%', margin: '5px'
           }}>
       <button onClick={onBack}>
-        <i className="pi pi-arrow-left" style={{ fontSize: '2.5rem' }}></i>
+        <i className="pi pi-arrow-left" style={{ 
+          fontSize: '2.5rem',
+          opacity: disableBack ? 0.3 : 1,
+          cursor: disableBack ? 'auto' : "pointer",
+          }}></i>
       </button>
       <button onClick={onNext}>
-        <i className="pi pi-arrow-right" style={{ fontSize: '2.5rem' }}></i>
+        <i className="pi pi-arrow-right" style={{ fontSize: '2.5rem', cursor: 'pointer' }}></i>
       </button>
     </div>
   )
@@ -107,18 +111,22 @@ export function NavigationArrows({onBack, onNext}){
  * Component that renders a congratulation, a repeat level button and a next level buttons
  * 
  * @param {number} nextLevel - next level id, **null** if there is no next level!
+ * @param {String} linkMode - which mode should be linked to ('tutorial','challenge')
+ * @param {String} linkLevel - which level should be linked to ('1','2',...)
  * @returns {JSX.Element}
  */
-export function LevelEndContent({nextLevel = null}){
+export function LevelEndContent({nextLevel = null, linkMode, linkLevel}){
   const congratsList = [
     "Finished!",'Exercise complete!',
     "Completed!",'Lesson complete!',
     "Well done!","Level Done!",
     "You did it!","Level complete!"
   ];
-  const [congrats, setCongrats] = useState(() =>
-    congratsList[Math.floor(Math.random() * congratsList.length)]
-  );
+  const [congrats, setCongrats] = useState(null);
+  useEffect(() =>{
+    setCongrats(congratsList[Math.floor(Math.random() * congratsList.length)]);
+  },[]);
+
   if(congrats) return(
     <div>
     <div style={{height: '70vh'}}>
@@ -127,7 +135,9 @@ export function LevelEndContent({nextLevel = null}){
 
       <ButtonGroup>
         <Button icon='pi pi-arrow-left' label='repeat level' onClick={() => window.location.reload()}></Button>
-
+        <Link href={`/${linkMode}/${linkLevel}`}>
+          <Button label={`${linkMode}`} icon={linkMode === 'challenge' ? ('pi pi-graduation-cap'): ('pi pi-info-circle')} iconPos='right'></Button>
+        </Link>
         {nextLevel && 
         <Link href={`${nextLevel}/`}>
           <Button label='next level' icon='pi pi-arrow-right' iconPos='right'></Button>
@@ -147,7 +157,7 @@ export function LevelEndContent({nextLevel = null}){
       }
       .end_content h1 {
         font-size: 50px;
-        color: var(--color4);
+        color: var(--color3);
       }
       @keyframes popIn {
         from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }

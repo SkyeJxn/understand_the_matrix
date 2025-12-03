@@ -1,4 +1,5 @@
-import "./globals.css";
+import "../styles/globals.css";
+import '../styles/LearningPage.css';
 import { PrimeReactProvider } from "primereact/api";
 import "katex/dist/katex.min.css";
 import "primereact/resources/themes/nano/theme.css";
@@ -13,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className='theme-green'>
         <PrimeReactProvider>
           {children}
         </PrimeReactProvider>

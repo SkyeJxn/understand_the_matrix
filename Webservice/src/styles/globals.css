@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* standard */
+/* colors from bright to dark -> 1 to 5 */
+:root {
+    /* global styles */
+  /* background */
+  --color1: #ffffff;
+
+  /* font-color */
+  --color5: #000000; 
+  --font1: Arial;
+}
+
+.theme-blue{
+  --color2: #7FB3FF;
+  --color3: #1E4FA3;
+  --color4: #152978;
+}
+.theme-green {
+  --color2: #A5D6A7;
+  --color3: #66BB6A;
+  --color4: #2E7D32;
+}
+.theme-red {
+  --color2: #F8BBD0;
+  --color3: #E53935;
+  --color4: #951818;
+}
+/* dark-mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+  /* background */
+  --color1: #000000;
+  /* font-color */
+  --color5: #ffffff;
+  }
+}
+/* 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+} */
+
+
+body {
+  background: var(--color1);
+  color: var(--color5);
+  font-family: var(--font1);
+  overflow: hidden;
+}
+
+button {
+  border-radius: 12px;
+  background-color: none;
+  color: var(--color5);
+  padding: 5px;
+  margin: 10px;
+}
+.main_content{
+  margin: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.start_btn {
+  background: none;
+  border: 3px solid var(--color2);
+  color: var(--color2);
+  padding: 5px;
+}

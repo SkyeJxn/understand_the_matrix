@@ -15,7 +15,7 @@
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background-color: var(--color2);
+  background-color: var(--color4);
   transition: .4s;
 }
 
@@ -26,18 +26,17 @@
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: var(--color5);
+  background-color: var(--color2);
   transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: var(--color3);
 }
 
 input:checked + .slider:before {
   transform: translateX(26px);
+  background-color: var(--color5);
 }
-
+.switch input:active + .slider:before {
+  background-color: var(--color2);
+}
 .slider.round {
   border-radius: 34px;
 }

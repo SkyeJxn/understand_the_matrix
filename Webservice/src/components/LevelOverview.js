@@ -1,5 +1,7 @@
+"use client";
 import Link from 'next/link';
-import './LevelOverview.css'
+import '../styles/LevelOverview.css'
+import { useState, useEffect } from 'react';
 
 /**
  * Component that creates the Level choosing sites
@@ -8,25 +10,27 @@ import './LevelOverview.css'
  * @returns {JSX.Element}
  */
 export default function LevelOverview({mode = "challenge"}){
-    // tutorial content
+  const [metaData, setMetaData] = useState([]);
+  useEffect(() => {
+    fetch("/data/level_meta.json")
+    .then(res => res.json())
+    .then(data => setMetaData(data))
+  }, []);
 
-    //TODO: outsource to JSON files
-    const tutorial_levels = [
-    { number: 1, title: "What's a Matrix?", description: 'system of linear equations, homogeneous LGS' },
-    { number: 2, title: 'Elementary row operations', description: '(ZV, ZM, ZA)' },
-    { number: 3, title: 'Solution sets', description: 'no, one, infinite' },
-    { number: 4, title: 'Gauss-jordan algorithm', description: '(without a strategy)' },
-    { number: 5, title: 'Vector spaces', description: 'Addition and scalar multiplication' },
-  ];
-  // challenge content
-  const challenge_levels = [
-    { number: 1, title: 'Basic definitions' },
-    { number: 2, title: 'Gauss-Jordan algorithm' },
-    { number: 3, title: 'Vector spaces' },
-    { number: 4, title: '' },
-    { number: 5, title: '' },
-  ];
-  const levels = mode === "tutorial" ? tutorial_levels : challenge_levels;
+  let levels = null;
+  if(mode === 'tutorial'){
+    levels = metaData.map(row => ({
+      number: row.id,
+      title: row.title,
+      description: row.description
+    }));
+  } else {
+      levels = metaData.map(row => ({
+      number: row.id,
+      title: row.title
+    }));
+  }
+
   return (
     <div id="level_container">
       {levels.map(level => (
