@@ -111,9 +111,11 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  * Component that renders a congratulation, a repeat level button and a next level buttons
  * 
  * @param {number} nextLevel - next level id, **null** if there is no next level!
+ * @param {String} linkMode - which mode should be linked to ('tutorial','challenge')
+ * @param {String} linkLevel - which level should be linked to ('1','2',...)
  * @returns {JSX.Element}
  */
-export function LevelEndContent({nextLevel = null}){
+export function LevelEndContent({nextLevel = null, linkMode, linkLevel}){
   const congratsList = [
     "Finished!",'Exercise complete!',
     "Completed!",'Lesson complete!',
@@ -133,7 +135,9 @@ export function LevelEndContent({nextLevel = null}){
 
       <ButtonGroup>
         <Button icon='pi pi-arrow-left' label='repeat level' onClick={() => window.location.reload()}></Button>
-
+        <Link href={`/${linkMode}/${linkLevel}`}>
+          <Button label={`${linkMode}`} icon={linkMode === 'challenge' ? ('pi pi-graduation-cap'): ('pi pi-info-circle')} iconPos='right'></Button>
+        </Link>
         {nextLevel && 
         <Link href={`${nextLevel}/`}>
           <Button label='next level' icon='pi pi-arrow-right' iconPos='right'></Button>
