@@ -83,7 +83,7 @@ export function TutorialLevel({ level_id = "1" }) {
         <NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>
         
       </>): (
-        <LevelEndContent nextLevel={nextLevel()}/>
+        <LevelEndContent nextLevel={nextLevel()} linkMode='challenge' linkLevel={level_id} />
         )}
     </div>
   );
