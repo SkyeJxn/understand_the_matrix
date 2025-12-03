@@ -6,17 +6,25 @@ button {
   margin: 0;
 }
 
-.content{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: fit-content;
-    max-width: 100%;
-    gap: 20px;
-    margin: 20px auto;
-    margin-top: 0;
-    height: 70vh;
-    overflow-y: auto;     /* vertical scrolling */
+.content {
+  flex: 1; 
+  min-height: 0;              
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  gap: 20px;
+  margin: 0 auto;
+}
+.scrollable_content{
+    overflow-y: auto;
+    overflow-y: scroll;
+    scrollbar-width: none;     /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge Legacy */
+}
+.scrollable_content::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Edge */
 }
 
 .titel {

@@ -1,7 +1,7 @@
 "use client";
 import '../styles/TutorialLevel.css'
 import { InlineMath } from 'react-katex';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {LevelEndContent, NavigationArrows, Toolbar} from './LevelTools';
 import React from "react";
 
@@ -73,7 +73,7 @@ export function TutorialLevel({ level_id = "1" }) {
   }
 
   return (
-    <div>
+    <div style={{minHeight: 0, flex: '1', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
       <Toolbar mode='tutorial' progressValue={progressValue} />
       {currentPart <= partsOnLevel ? (<>
       
@@ -90,13 +90,24 @@ export function TutorialLevel({ level_id = "1" }) {
 }
 
 function Content({ page, part, tutorialData }) {
+  const containerRef = useRef(null);
+
   // all parts to the current part
   const data = tutorialData.filter(
     row => row.page === page && Number(row.part) <= part
   );
 
+  // scroll down
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [part]);
+
   return (
-    <div>
+    <div className='scrollable_content'
+      ref={containerRef}
+    >
       {data.map((row, i) => (
         <React.Fragment key={i}>
           {row.typ === "title" && <div className='titel'>{row.content}</div>}
