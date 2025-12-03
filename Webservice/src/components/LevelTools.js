@@ -116,9 +116,11 @@ export function LevelEndContent({nextLevel = null}){
     "Well done!","Level Done!",
     "You did it!","Level complete!"
   ];
-  const [congrats, setCongrats] = useState(() =>
-    congratsList[Math.floor(Math.random() * congratsList.length)]
-  );
+  const [congrats, setCongrats] = useState(null);
+  useEffect(() =>{
+    setCongrats(congratsList[Math.floor(Math.random() * congratsList.length)]);
+  },[]);
+  
   if(congrats) return(
     <div>
     <div style={{height: '70vh'}}>
