@@ -14,9 +14,16 @@ import React from "react";
 export function TutorialLevel({ level_id = "1" }) {
 
   const [tutorialData, setTutorialData] = useState([]);
+  const [metaData, setMetaData] = useState([]);
 
   useEffect(() => {
-    fetch("/data/tutorial_data.json")
+    fetch("/data/level_meta.json")
+    .then(res => res.json())
+    .then(data => setMetaData(data))
+  }, []);
+
+  useEffect(() => {
+    fetch(`/data/tutorial/tutorial_data_${Number(level_id)}.json`)
     .then(res => res.json())
     .then(data => setTutorialData(data))
   }, []);
@@ -27,14 +34,13 @@ export function TutorialLevel({ level_id = "1" }) {
 
   // number of parts in the level
   const partsOnLevel = Math.max(0, ...tutorialData
-      .filter(e => e.id === level_id)
       .map(e => Number(e.part))
   );
 
   // number of parts on a page
   function getMaxPart(page) {
     const partsOnPage = tutorialData
-      .filter(row => row.id === level_id && row.page === page)
+      .filter(row => row.page === page)
       .map(row => Number(row.part));
     return Math.max(...partsOnPage, 0);
   }
@@ -61,7 +67,7 @@ export function TutorialLevel({ level_id = "1" }) {
   }
 
   function nextLevel(){
-    const exists = tutorialData.some(row => row.id == (Number(level_id)+1));
+    const exists = metaData.some(row => row.id == (Number(level_id)+1));
     if(exists) return (Number(level_id)+1);
     return null;
   }
@@ -72,7 +78,7 @@ export function TutorialLevel({ level_id = "1" }) {
       {currentPart <= partsOnLevel ? (<>
       
         <div className='content'>
-          <Content id={level_id} page={page} part={currentPart} tutorialData={tutorialData} />
+          <Content page={page} part={currentPart} tutorialData={tutorialData} />
         </div>
         <NavigationArrows onBack={back} onNext={next}/>
         
@@ -83,10 +89,10 @@ export function TutorialLevel({ level_id = "1" }) {
   );
 }
 
-function Content({ id, page, part, tutorialData }) {
+function Content({ page, part, tutorialData }) {
   // all parts to the current part
   const data = tutorialData.filter(
-    row => row.id === id && row.page === page && Number(row.part) <= part
+    row => row.page === page && Number(row.part) <= part
   );
 
   return (
