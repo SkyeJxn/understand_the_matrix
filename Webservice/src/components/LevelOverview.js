@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 export default function LevelOverview({mode = "challenge"}){
   const [metaData, setMetaData] = useState([]);
   useEffect(() => {
-    fetch("/data/level_meta.json")
+    fetch(`/data/${mode}/level_meta.json`)
     .then(res => res.json())
     .then(data => setMetaData(data))
   }, []);
