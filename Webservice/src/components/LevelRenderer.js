@@ -141,7 +141,7 @@ function Content({ page, part, Data, matrix, setMatrix }) {
                 <CalcButtons matrix={matrix} setMatrix={setMatrix} />
               </div>
             )}
-          {row.typ === "EditableM atrix" && (
+          {row.typ === "EditableMatrix" && (
             <EditableMatrix
               rows={Number(row.rows)}
               cols={Number(row.columns)}
