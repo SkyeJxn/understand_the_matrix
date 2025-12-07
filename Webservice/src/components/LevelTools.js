@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
@@ -116,16 +116,18 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  * @returns {JSX.Element}
  */
 export function LevelEndContent({nextLevel = null, linkMode, linkLevel}){
-  const congratsList = [
+
+  const congratsList = useMemo(() => [
     "Finished!",'Exercise complete!',
     "Completed!",'Lesson complete!',
     "Well done!","Level Done!",
     "You did it!","Level complete!"
-  ];
-  const [congrats, setCongrats] = useState(null);
+  ], []);
+
+  const [congrats, setCongrats] = useState([]);
   useEffect(() =>{
     setCongrats(congratsList[Math.floor(Math.random() * congratsList.length)]);
-  },[]);
+  },[congratsList]);
 
   if(congrats) return(
     <div>
