@@ -3,29 +3,18 @@
     "page": "1",
     "part": "1",
     "typ": "title",
-    "content": "Level 2: Solve the given Matrix with a standard Gauss Algorithm"
+    "content": "Placeholder Title"
   },
   {
     "page": "1",
     "part": "1",
     "typ": "text",
-    "content": "This is a testing Paragraph"
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "page": "1",
     "part": "1",
     "typ": "katex",
-    "content": "f(x) = 2x^2"
-  },
-  {
-    "page": "2",
-    "part": "1",
-    "typ": "solution",
-    "content": "[[1,0,0][0,1,0][0,0,1]]"
-  },
-  {
-    "page": "3",
-    "part": "1",
-    "typ": "editMatrix"
+    "content": "ax^2 + bx + c"
   }
 ]
