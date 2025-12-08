@@ -18,8 +18,8 @@
     "content": "ax^2 + bx + c"
   },
   {
-    "page": 4,
-    "part": 1,
+    "page": "1",
+    "part": "1",
     "typ": "StaticMatrix",
     "solution": [
       [1, 0, 0],
