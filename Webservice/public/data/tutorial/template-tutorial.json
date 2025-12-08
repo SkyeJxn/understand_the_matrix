@@ -2,19 +2,19 @@
   {
     "page": 1,
     "part": 1,
-    "type": "title",
+    "typ": "title",
     "content": "Placeholder Title"
   },
   {
     "page": 2,
     "part": 1,
-    "type": "text",
+    "typ": "text",
     "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "page": 3,
     "part": 1,
-    "type": "katex",
+    "typ": "katex",
     "content": "ax^2 + bx + c"
   }
 ]
