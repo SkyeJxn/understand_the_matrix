@@ -16,5 +16,19 @@
     "part": "1",
     "typ": "katex",
     "content": "ax^2 + bx + c"
+  },
+  {
+    "page": 4,
+    "part": 1,
+    "typ": "StaticMatrix",
+    "solution": [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1]
+    ],
+    "resultcol": "False",
+    "determinant": "False",
+    "maxnum": 1,
+    "denominator": [1]
   }
 ]
