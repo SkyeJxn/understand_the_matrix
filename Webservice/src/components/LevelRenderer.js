@@ -6,6 +6,7 @@ import { MatrixCreator } from "./CalcFunctions";
 import React, { useState, useEffect, useRef } from "react";
 import { LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
+import { useKeyMap } from "@/hooks/useKeyboard";
 
 export function LevelRenderer({mode, level_id}){
 
@@ -62,6 +63,8 @@ export function LevelRenderer({mode, level_id}){
         setCurrentPart(getMaxPart(prevPage, levelData)); // View full page
       }
     }
+
+    useKeyMap(next, back, mode)
 
     function nextLevel() {
       const exists = metaData.some((row) => row.id == Number(level_id) + 1);
