@@ -10,8 +10,8 @@
 @media (max-width: 600px) {
   .level-renderer-container {
     overflow: auto;
-    min-height: 100vh;
-    padding-bottom: 70px; /* Space for navigation buttons */
+    min-height: 80vh;
+    padding-bottom: 12vh; /* Space for navigation buttons */
   }
   .NavigationArrows {
     position: fixed;
