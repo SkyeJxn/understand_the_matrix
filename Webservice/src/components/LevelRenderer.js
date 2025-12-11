@@ -70,7 +70,7 @@ export function LevelRenderer({mode, level_id}){
     }
 
     return (
-        <div style={{minHeight: 0, flex: '1', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
+        <div className="level-renderer-container">
           <Toolbar mode={mode} progressValue={progressValue} />
           {currentPart <= partsOnLevel ? (<>
           
