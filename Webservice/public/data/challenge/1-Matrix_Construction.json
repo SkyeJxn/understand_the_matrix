@@ -3,25 +3,41 @@
     "page": "1",
     "part": "1",
     "typ": "title",
-    "content": "Placeholder Title"
+    "content": "Set up the matrix"
   },
   {
     "page": "1",
     "part": "1",
     "typ": "text",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    "content": "There are equations"
   },
   {
     "page": "1",
     "part": "1",
-    "typ": "katex",
-    "content": "ax^2 + bx + c"
+    "typ": "Exercise",
+    "content": "1"
+  },
+  
+  
+
+    {
+    "page": "2",
+    "part": "1",
+    "typ": "title",
+    "content": "Solution sets"
   },
   {
-    "page": "1",
+    "page": "2",
+    "part": "1",
+    "typ": "text",
+    "content": ".."
+  },
+
+  {
+    "page": "2",
     "part": "1",
     "typ": "StaticMatrix",
-    "solution": [
+      "solution": [
       [1, 0, 0],
       [0, 1, 0],
       [0, 0, 1]

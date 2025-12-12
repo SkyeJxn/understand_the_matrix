@@ -4,8 +4,9 @@ import { InlineMath } from "react-katex";
 import { StaticMatrix, EditableMatrix } from "./Matrix";
 import { MatrixCreator } from "./CalcFunctions";
 import React, { useState, useEffect, useRef } from "react";
-import { LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
+import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
+import Exercise from "./Exercise";
 
 export function LevelRenderer({mode, level_id}){
 
@@ -14,6 +15,8 @@ export function LevelRenderer({mode, level_id}){
     const [metaData, setMetaData] = useState([]);
 
     const [matrix, setMatrix] = useState([]);
+
+    const [solutionState, setSolutionState] = useState(false);
 
      useEffect(() => {
         fetch(`/data/${mode}/level_meta.json`)
@@ -75,9 +78,12 @@ export function LevelRenderer({mode, level_id}){
           {currentPart <= partsOnLevel ? (<>
           
             <div className='content'>
-              <Content page={page} part={currentPart} Data={levelData} matrix={matrix} setMatrix={setMatrix} />
-            </div>
-            <NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>
+              <Content page={page} part={currentPart} Data={levelData} matrix={matrix} setMatrix={setMatrix} 
+                      setSolutionState={setSolutionState}/>
+            </div >
+            {mode == 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
+                                : (<ContinueBtn stage={solutionState ? 2: 0}/>)
+            }
             
           </>): (
               <>
@@ -89,8 +95,10 @@ export function LevelRenderer({mode, level_id}){
       );
 }
 
-function Content({ page, part, Data, matrix, setMatrix }) {
+function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
   const containerRef = useRef(null);
+  const [userMatrix, setUserMatrix] = useState([]);
+
 
   // all parts to the current part
   const data = Data.filter(
@@ -148,6 +156,13 @@ function Content({ page, part, Data, matrix, setMatrix }) {
               resultCol={toBool(row.resultcol)}
               det={toBool(row.determinant)}
               onChange={setMatrix}
+            />
+          )}
+          {row.typ === "Exercise" && (
+            <Exercise
+              type={Number(row.content)}
+              correct={(input) => setSolutionState(input)}
+              userMatrixOnChange={(matrix) => setUserMatrix(matrix)}
             />
           )}
         </React.Fragment>

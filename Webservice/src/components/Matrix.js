@@ -16,7 +16,6 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
   const colFormat = resultCol ? 'c'.repeat(cols - 1) + '|c': 'c'.repeat(cols);
 
   function formatCell(cell) {
-    console.log(cell);
     const frac = fraction(cell);
       if(frac.d !== 1n){ return `${frac.s == -1n ? '-': ''}${frac.n}/${frac.d}`;}
       else { return `${frac}`}
