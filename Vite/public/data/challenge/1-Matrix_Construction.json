@@ -1,0 +1,34 @@
+[
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "title",
+    "content": "Placeholder Title"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "text",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "katex",
+    "content": "ax^2 + bx + c"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "StaticMatrix",
+    "solution": [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1]
+    ],
+    "resultcol": "False",
+    "determinant": "False",
+    "maxnum": 1,
+    "denominator": [1]
+  }
+]

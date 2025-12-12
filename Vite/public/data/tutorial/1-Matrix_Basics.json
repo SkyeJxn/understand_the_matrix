@@ -1,0 +1,254 @@
+[
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "title",
+    "content": "What's a Matrix? - System of linear equations"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "text",
+    "content": "There are equations with a number of variables:"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "katex",
+    "content": "5x + 7y = 3x"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "text",
+    "content": ""
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "katex",
+    "content": "3x - 4y = -10"
+  },
+  {
+    "page": "1",
+    "part": "2",
+    "typ": "text",
+    "content": "sorted by variable"
+  },
+  {
+    "page": "1",
+    "part": "2",
+    "typ": "katex",
+    "content": "2x + 7y = 0"
+  },
+  {
+    "page": "1",
+    "part": "2",
+    "typ": "katex",
+    "content": "3x - 4y = -10"
+  },
+  {
+    "page": "1",
+    "part": "3",
+    "typ": "text",
+    "content": "write in matrix"
+  },
+  {
+    "page": "1",
+    "part": "3",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}2 & 7 & 0 \\\\3 & -4 & -10\\end{array}\\right)"
+  },
+  {
+    "page": "2",
+    "part": "4",
+    "typ": "text",
+    "content": "homogeneous LGS: ⇒ LGS with only equations = 0"
+  },
+  {
+    "page": "2",
+    "part": "4",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}3 & 2 & 0 \\\\1 & 1 & 0\\end{array}\\right)=\\begin{pmatrix} 3 & 2 \\\\ 1 & 1 \\end{pmatrix}"
+  },
+  {
+    "page": "3",
+    "part": "5",
+    "typ": "title",
+    "content": "solution sets"
+  },
+  {
+    "page": "3",
+    "part": "5",
+    "typ": "text",
+    "content": "one solution"
+  },
+  {
+    "page": "3",
+    "part": "6",
+    "typ": "text",
+    "content": "example 1"
+  },
+  {
+    "page": "3",
+    "part": "6",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}1 & 0 & 7 \\\\0 & 1 & 2\\end{array}\\right)"
+  },
+  {
+    "page": "3",
+    "part": "6",
+    "typ": "katex",
+    "content": "\\begin{matrix} \\Rightarrow  x_1 = 7 \\\\ \\Rightarrow  x_2 =2 \\end{matrix}"
+  },
+  {
+    "page": "3",
+    "part": "6",
+    "typ": "katex",
+    "content": "\\quad \\Rightarrow \\mathbb L=\\{ \\begin{pmatrix} 7\\\\ 2\\end{pmatrix} \\}"
+  },
+  {
+    "page": "3",
+    "part": "7",
+    "typ": "text",
+    "content": "example 2"
+  },
+  {
+    "page": "3",
+    "part": "7",
+    "typ": "katex",
+    "content": "\\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}"
+  },
+  {
+    "page": "3",
+    "part": "7",
+    "typ": "katex",
+    "content": "\\begin{matrix} \\Rightarrow  x_1 = 0 \\\\ \\Rightarrow  x_2 =0 \\end{matrix}"
+  },
+  {
+    "page": "3",
+    "part": "7",
+    "typ": "katex",
+    "content": "\\quad \\Rightarrow \\mathbb L=\\{\\begin{pmatrix} 0\\\\0\\end{pmatrix}\\}"
+  },
+  {
+    "page": "3",
+    "part": "8",
+    "typ": "text",
+    "content": "no solution"
+  },
+  {
+    "page": "3",
+    "part": "8",
+    "typ": "text",
+    "content": "example 1"
+  },
+  {
+    "page": "3",
+    "part": "8",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}1 & 0 & 7 \\\\0 & 0 & 2\\end{array}\\right)"
+  },
+  {
+    "page": "3",
+    "part": "8",
+    "typ": "katex",
+    "content": "\\begin{matrix} \\Rightarrow  x_1 = 7 \\\\ \\Rightarrow  0 \\neq 2 \\end{matrix}"
+  },
+  {
+    "page": "3",
+    "part": "8",
+    "typ": "katex",
+    "content": "\\quad \\Rightarrow \\mathbb L= \\{ \\varnothing \\}"
+  },
+  {
+    "page": "4",
+    "part": "9",
+    "typ": "text",
+    "content": "infinite solution"
+  },
+  {
+    "page": "4",
+    "part": "9",
+    "typ": "text",
+    "content": "example 1"
+  },
+  {
+    "page": "4",
+    "part": "9",
+    "typ": "katex",
+    "content": "\\left(\\begin{array}{cc|c}1 & 0 & 7 \\\\0 & 0 & 0\\end{array}\\right)"
+  },
+  {
+    "page": "4",
+    "part": "9",
+    "typ": "katex",
+    "content": "\\begin{matrix} \\Rightarrow  x_1 = 7 \\\\ \\leftarrow \\text{no 2. info} \\end{matrix}"
+  },
+  {
+    "page": "4",
+    "part": "9",
+    "typ": "katex",
+    "content": "\\quad \\Rightarrow \\mathbb L=\\{\\begin{pmatrix} 7\\\\ x\\end{pmatrix} | x \\in \\mathbb R \\}"
+  },
+  {
+    "page": "4",
+    "part": "10",
+    "typ": "text",
+    "content": "example 2"
+  },
+  {
+    "page": "4",
+    "part": "10",
+    "typ": "katex",
+    "content": "\\begin{pmatrix} 0 & 1 & 1\\\\ 1 & 0 & 0\\\\ 0 & 0 & 0\\end{pmatrix}"
+  },
+  {
+    "page": "4",
+    "part": "10",
+    "typ": "katex",
+    "content": "\\begin{matrix} \\Rightarrow  x_3 = -x_2 \\\\ \\Rightarrow  x_1 =0 \\\\ \\Rightarrow \\text{no 3. info} \\end{matrix}"
+  },
+  {
+    "page": "4",
+    "part": "10",
+    "typ": "katex",
+    "content": "\\quad x_2 := z"
+  },
+  {
+    "page": "4",
+    "part": "10",
+    "typ": "katex",
+    "content": "\\quad \\Rightarrow \\mathbb L=\\{ \\begin{pmatrix} 0\\\\ z\\\\ -z\\end{pmatrix}| z \\in \\mathbb R\\}"
+  },
+  {
+    "page": "4",
+    "part": "11",
+    "typ": "text",
+    "content": "example 3"
+  },
+  {
+    "page": "4",
+    "part": "11",
+    "typ": "katex",
+    "content": "\\begin{pmatrix} 1 & 1 & 0\\\\ 0 & 0 & 0\\\\ 0 & 0 & 0\\end{pmatrix}"
+  },
+  {
+    "page": "4",
+    "part": "11",
+    "typ": "katex",
+    "content": "\\begin{matrix} \\Rightarrow  x_1 = -x_2 \\\\ \\Rightarrow  \\text{no 2. info} \\\\ \\Rightarrow \\text{no 3. info} \\end{matrix}"
+  },
+  {
+    "page": "4",
+    "part": "11",
+    "typ": "katex",
+    "content": "\\quad \\begin{matrix}  x_2 := a \\\\  x_3 := b  \\end{matrix}"
+  },
+  {
+    "page": "4",
+    "part": "11",
+    "typ": "katex",
+    "content": "\\quad \\Rightarrow \\mathbb L=\\{ \\begin{pmatrix} -a\\\\ a \\\\ b\\end{pmatrix} | a,b \\in \\mathbb R\\}"
+  }
+]
