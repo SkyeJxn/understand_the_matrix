@@ -1,0 +1,11 @@
+[
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "EditableMatrix",
+    "rows": 3,
+    "columns": 3,
+    "resultcol": "false",
+    "determinant": "false"
+  }
+]

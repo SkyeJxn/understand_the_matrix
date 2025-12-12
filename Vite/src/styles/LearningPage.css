@@ -1,0 +1,46 @@
+/* LearningPage.css */
+/* switch mode */
+.switch {
+  position: absolute;
+  left: 20px;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.switch input {
+  opacity: 0;
+  position: absolute;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--color4);
+  transition: .4s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--color2);
+  transition: .4s;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-color: var(--color5);
+}
+.switch input:active + .slider:before {
+  background-color: var(--color2);
+}
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
