@@ -44,23 +44,69 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
  * @param {number} cols - number of columns (including result column if `resultCol` is true)
  * @param {boolean} resultCol - is the last column a results column
  * @param {boolean} det - is the matrix a determinant
- * @param {(matrix: string[][]) => void} onChange - Callback, that returns the current matrix
+ * @param {(matrix: fraction[][]) => void} onChange - Callback, that returns the current matrix as Fractions
  * @returns {JSX.Element}
  */
 export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange }) {
   const [matrix, setMatrix] = React.useState(
     Array.from({ length: rows }, () => Array(cols).fill(""))
   );
-
+  const [fracMatrix, setFracMatrix] = React.useState(
+    Array.from({ length: rows }, () => Array(cols).fill(new fraction(0)))
+  );
+  const [errors, setErrors] = React.useState(
+    Array.from({ length: rows }, () => Array(cols).fill(false))
+  );
+     
   const handleChange = (i, j, value) => {
+    
     const newMatrix = matrix.map((row, ri) =>
       row.map((cell, ci) => (ri === i && ci === j ? value : cell))
     );
     setMatrix(newMatrix);
+
+    let frac = null;
+    try {
+      if(value.includes('/')) {
+        // fraction
+        const [num, den] = value.split('/').map(Number);
+        if(!isNaN(num) && !isNaN(den) && num !== 0 && den !== 0) {
+          frac = fraction(num, den);
+        }
+      } else {
+        // number or decimal
+        const num = Number(value);
+        if (!isNaN(num)) {
+          frac = fraction(num);
+        }
+      }
+    }
+    catch (e) {console.log(e)}
+
+    // errors
+    if (!frac) {
+      const newErrors = errors.map((row, ri) =>
+        row.map((cell, ci) => (ri === i && ci === j ? true : cell))
+      );
+      setErrors(newErrors);
+      return;
+    } else {
+      const newErrors = errors.map((row, ri) =>
+        row.map((cell, ci) => (ri === i && ci === j ? false : cell))
+      );
+      setErrors(newErrors);
+    }
+
+    const newFracMatrix = fracMatrix.map((row, ri) =>
+      row.map((cell, ci) => (ri === i && ci === j ? frac : cell))
+    );
+    setFracMatrix(newFracMatrix);    
     if (onChange) {
-      onChange(newMatrix); // current matrix for the parent
+      onChange(newFracMatrix); // current matrix for the parent
     }
   };
+
+
   const bracketLeft = det ? "|": "("
   const bracketRight = det ? "|": ")"
   
@@ -79,10 +125,11 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
                   resultCol && j === cols - 1 ? "result-col" :
                   resultCol && j === cols - 2 ? "before-result-col" : ""}>
                   <input
-                    type="number"
+                    type="text"
                     value={cell}
                     onChange={(e) => handleChange(i, j, e.target.value)}
                     autoFocus={i === 0 && j === 0}
+                    className={errors[i][j] ? "input-error" : ""}
                   />
                 </td>
               ))}
@@ -90,6 +137,11 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
           ))}
       </tbody></table>
       <InlineMath math={latexRightBracket} />
+      <style>{`
+        .input-error {
+          border: 2px solid red !important;
+        }
+      `}</style>
     </div>
   );
 }
