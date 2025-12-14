@@ -110,9 +110,10 @@ export function NavigationArrows({disableBack, onBack, onNext}){
 /**
  * 
  * @param {Number} stage - 0 (disabled), 1 (clickable), 2 (clickable and congrats)
+ * @param {function} onContinue - Callback-function to continue
  * @returns 
  */
-export function ContinueBtn({stage=0}){
+export function ContinueBtn({stage=0, onContinue}){
   return (
     <div id='continue_container'>
       {stage == 2 && (
@@ -121,7 +122,7 @@ export function ContinueBtn({stage=0}){
         <div>correct</div>
         </div>
       )}
-      <Button label="continue" id={`continue_btn_${stage}`} disabled={stage == 0} />
+      <Button onClick={onContinue} label="continue" id={`continue_btn_${stage}`} disabled={stage == 0} />
       
     </div>
   )
