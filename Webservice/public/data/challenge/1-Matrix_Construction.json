@@ -16,8 +16,8 @@
     "part": "1",
     "typ": "Equations",
     "minRows": "2", "minCols": "3",
-    "maxRows": "4", "maxCols": "6",
-    "maxNum": "-4", "denominator": "1"
+    "maxRows": "4", "maxCols": "4",
+    "maxNum": "-3", "denominator": "1"
     
   },
   {

@@ -98,7 +98,7 @@ export function LevelRenderer({mode, level_id}){
 
 function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
   const containerRef = useRef(null);
-  const [solution, setSolution] = useState([]);
+  const [solution, setSolution] = useState([1]);
   const [userValue, setUserValue] = useState([]);
 
   // compare user value with solution
@@ -169,7 +169,7 @@ function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
             <Equations
               setSolution={setSolution}
               solMatrix={MatrixCreator(
-                matrixStairForm(Number(row.minRows),Number(row.maxRows),Number(row.minCols),Number(row.maxCols)),
+                matrixStairForm(Number(row.minRows),Number(row.maxRows),Number(row.minCols),Number(row.maxCols),3),
                 Number(row.maxNum),[Number(row.denominator)])}
             />
           )}

@@ -4,8 +4,6 @@ import { BlockMath} from "react-katex";
 export function Equations({ solMatrix, setSolution }){
   const [equations, setEquations] = useState(['error']);
 
-  console.log(matrixStairForm(3,3,3,3,2));
-
   useEffect(() => {
     if (!solMatrix || solMatrix.length === 0) return;
 
@@ -17,10 +15,16 @@ export function Equations({ solMatrix, setSolution }){
       // all except last col
       const coeffs = row.slice(0, -1) 
       const terms = coeffs.map((coef, i) => {
+        const value = typeof coef === "bigint" ? coef : BigInt(coef);
+        if (value === 0n) return null; // skip 0
         const sign = coef.s < 0n ? "-" : (i === 0 ? "" : "+");
-        const absVal = coef.abs().toString();
+        const absVal = (value < 0n ? -value : value).toString();
         return `${sign} ${absVal}x_${i + 1}`;
-      })  
+      }).filter(Boolean);
+      // all coeffs = 0
+      if (terms.length === 0) {
+        terms.push("0x_1");
+      }
       return `${terms.join(" ")} = ${rhs.toString()}`;
     });
     setEquations(eq);
