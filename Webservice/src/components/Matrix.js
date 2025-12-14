@@ -3,6 +3,7 @@ import React from "react";
 import '../styles/Matrix.css'
 import { InlineMath } from 'react-katex';
 import { fraction } from "mathjs";
+import { Button } from "primereact/button";
 /**
  * Component that renders a given matrix
  * 
@@ -12,6 +13,7 @@ import { fraction } from "mathjs";
  * @returns {JSX.Element}
  */
 export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
+  if (data.length <= 0) return (<></>);
   const cols = data[0].length;
   const colFormat = resultCol ? 'c'.repeat(cols - 1) + '|c': 'c'.repeat(cols);
 
@@ -48,15 +50,18 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
  * @returns {JSX.Element}
  */
 export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange }) {
-  const [matrix, setMatrix] = React.useState(
-    Array.from({ length: rows }, () => Array(cols).fill(""))
-  );
-  const [fracMatrix, setFracMatrix] = React.useState(
-    Array.from({ length: rows }, () => Array(cols).fill(new fraction(0)))
-  );
-  const [errors, setErrors] = React.useState(
-    Array.from({ length: rows }, () => Array(cols).fill(false))
-  );
+  const [rowState, setRowState] = React.useState(rows);
+  const [colState, setColState] = React.useState(cols);
+
+  const [matrix, setMatrix] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill("")));
+  const [fracMatrix, setFracMatrix] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill(new fraction(0))));
+  const [errors, setErrors] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill(false)));
+
+  React.useEffect(() => {
+    setMatrix(Array.from({ length: rowState }, () => Array(colState).fill("")));
+    setFracMatrix(Array.from({ length: rowState }, () => Array(colState).fill(new fraction(0))));
+    setErrors(Array.from({ length: rowState }, () => Array(colState).fill(false)));
+  }, [rowState, colState]);
      
   const handleChange = (i, j, value) => {
     
@@ -110,11 +115,21 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
   const bracketLeft = det ? "|": "("
   const bracketRight = det ? "|": ")"
   
-  const dummyRows = Array.from({ length: rows }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
+  const dummyRows = Array.from({ length: rowState }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
   const latexLeftBracket = `\\left${bracketLeft}\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right.`;
   const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right${bracketRight}`;
 
   return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center'
+    }}>
+    <div style={{
+      display: 'flex', alignItems: 'center'
+    }}>
+      <div style={{display: 'flex', flexDirection: 'column' }}>
+        <Button icon="pi pi-plus-circle" onClick={() => setColState(p => (p+1))}/>
+        <Button icon="pi pi-minus-circle" onClick={() => setColState(p => Math.max(1, p-1))}/>
+      </div>
     <div className="matrix-container">
       <InlineMath math={latexLeftBracket} />
       <table className="matrix-inputs"><tbody>
@@ -122,8 +137,8 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
             <tr key={i}>
               {row.map((cell, j) => (
                 <td key={j} className={
-                  resultCol && j === cols - 1 ? "result-col" :
-                  resultCol && j === cols - 2 ? "before-result-col" : ""}>
+                  resultCol && j === colState - 1 ? "result-col" :
+                  resultCol && j === colState - 2 ? "before-result-col" : ""}>
                   <input
                     type="text"
                     value={cell}
@@ -137,6 +152,12 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
           ))}
       </tbody></table>
       <InlineMath math={latexRightBracket} />
+    </div>
+    </div>
+    <div style={{display: 'flex' }}>
+        <Button icon="pi pi-plus-circle" onClick={() => setRowState(p => (p+1))}/>
+        <Button icon="pi pi-minus-circle" onClick={() => setRowState(p => Math.max(1, p-1))}/>
+    </div>
       <style>{`
         .input-error {
           border: 2px solid red !important;
