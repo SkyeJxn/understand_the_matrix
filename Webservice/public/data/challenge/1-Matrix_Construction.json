@@ -14,28 +14,37 @@
   {
     "page": "1",
     "part": "1",
-    "typ": "Exercise",
-    "content": "1"
+    "typ": "Equations",
+    "minRows": "2", "minCols": "3",
+    "maxRows": "4", "maxCols": "6",
+    "maxNum": "-4", "denominator": "1"
+    
   },
-  
-  
-
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "EditableMatrix",
+    "rows": 3,
+    "columns": 4,
+    "resultcol": "true",
+    "determinant": "false"
+  },
     {
     "page": "2",
-    "part": "1",
+    "part": "2",
     "typ": "title",
     "content": "Solution sets"
   },
   {
     "page": "2",
-    "part": "1",
+    "part": "2",
     "typ": "text",
     "content": ".."
   },
 
   {
     "page": "2",
-    "part": "1",
+    "part": "2",
     "typ": "StaticMatrix",
       "solution": [
       [1, 0, 0],

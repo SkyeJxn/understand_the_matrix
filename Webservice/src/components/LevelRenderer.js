@@ -6,7 +6,7 @@ import { MatrixCreator } from "./CalcFunctions";
 import React, { useState, useEffect, useRef } from "react";
 import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
-import Exercise from "./Exercise";
+import {SolutionVerifier, matrixStairForm, Equations} from "./Exercise";
 
 export function LevelRenderer({mode, level_id}){
 
@@ -56,6 +56,7 @@ export function LevelRenderer({mode, level_id}){
             setCurrentPart((prev) => prev + 1);
         }
         if (partsOnLevel > 0) setProgressValue((prev) => prev + 100 / partsOnLevel);
+        setSolutionState(false);
     }
 
     function back() {
@@ -82,7 +83,7 @@ export function LevelRenderer({mode, level_id}){
                       setSolutionState={setSolutionState}/>
             </div >
             {mode == 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
-                                : (<ContinueBtn stage={solutionState ? 2: 0}/>)
+                                : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
             }
             
           </>): (
@@ -97,9 +98,15 @@ export function LevelRenderer({mode, level_id}){
 
 function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
   const containerRef = useRef(null);
-  const [userMatrix, setUserMatrix] = useState([]);
+  const [solution, setSolution] = useState([]);
+  const [userValue, setUserValue] = useState([]);
 
-
+  // compare user value with solution
+  useEffect(() => {
+    const isCorrect = SolutionVerifier(3, solution, userValue);
+    setSolutionState(isCorrect);
+  }, [userValue]);
+  
   // all parts to the current part
   const data = Data.filter(
     row => row.page === page && Number(row.part) <= part
@@ -155,14 +162,15 @@ function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
               cols={Number(row.columns)}
               resultCol={toBool(row.resultcol)}
               det={toBool(row.determinant)}
-              onChange={setMatrix}
+              onChange={setUserValue}
             />
           )}
-          {row.typ === "Exercise" && (
-            <Exercise
-              type={Number(row.content)}
-              correct={(input) => setSolutionState(input)}
-              userMatrixOnChange={(matrix) => setUserMatrix(matrix)}
+          {row.typ === "Equations" && (
+            <Equations
+              setSolution={setSolution}
+              solMatrix={MatrixCreator(
+                matrixStairForm(Number(row.minRows),Number(row.maxRows),Number(row.minCols),Number(row.maxCols)),
+                Number(row.maxNum),[Number(row.denominator)])}
             />
           )}
         </React.Fragment>
