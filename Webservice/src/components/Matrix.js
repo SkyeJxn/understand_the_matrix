@@ -7,7 +7,7 @@ import { Button } from "primereact/button";
 /**
  * Component that renders a given matrix
  * 
- * @param {number[][]} data - 2-dim array with the matrix values (each inner list is a row)
+ * @param {number[][] | fraction[][]} data - 2-dim array with the matrix values (each inner list is a row)
  * @param {boolean} resultCol - is the last column a results column
  * @param {boolean} det - is the matrix a determinant
  * @returns {JSX.Element}

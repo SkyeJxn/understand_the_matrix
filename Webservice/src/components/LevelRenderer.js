@@ -9,6 +9,26 @@ import { CalcButtons } from "./CalcButtons";
 import {SolutionVerifier, matrixStairForm, Equations} from "./Exercise";
 import { fraction } from "mathjs";
 
+/**
+ * React component that renders a level (tutorial or challenge).
+ * It loads metadata and level data, manages progress state,
+ * and displays the content along with navigation controls.
+ *
+ * @param {String} mode - Mode of the level ("tutorial" or "challenge").
+ * @param {String} props.level_id - ID of the level to be loaded.
+ *
+ * @returns {JSX.Element} Rendered level view including toolbar, content, and navigation.
+ *
+ * @description
+ * - Fetches metadata from `/data/{mode}/level_meta.json`.
+ * - Loads level data via `getFileData`.
+ * - Tracks progress across pages and parts of the level.
+ * - Provides navigation functions (`next`, `back`, `nextLevel`).
+ * - Renders different navigation controls depending on mode:
+ *   - Tutorial: navigation arrows
+ *   - Challenge: continue button
+ * - At the end of a level, renders `LevelEndContent` with links to the next level.
+ */
 export function LevelRenderer({mode, level_id}){
 
     const [levelData, setLeveldata] = useState([]);
@@ -93,7 +113,32 @@ export function LevelRenderer({mode, level_id}){
         </div>
       );
 }
-
+/**
+ * React component that renders the content of a level.
+ * Dynamically displays text, formulas, matrices, and interactive elements
+ * based on the provided data.
+ *
+ * @param {String} page - Current page of the level
+ * @param {Number} part - Current part within the page
+ * @param {Array<Object>} Data - Level data
+ * @param {Function} setSolutionState - Callback to set whether the user’s solution is correct
+ *
+ * @returns {JSX.Element} Rendered content view for the current page and part.
+ *
+ * @description
+ * - Filters data for the current page and part.
+ * - Automatically scrolls down when a new part is loaded.
+ * - Initializes and compares matrices (solution vs. user input).
+ * - Uses `SolutionVerifier` to check correctness of user input.
+ * - Supports multiple content types:
+ *   - "title": heading text
+ *   - "text": paragraph text
+ *   - "katex": mathematical formulas
+ *   - "StaticMatrix": static matrix display (optional with CalcButtons)
+ *   - "CalcButtons": calculation buttons for matrices
+ *   - "EditableMatrix": editable matrix input
+ *   - "Equations": equation display
+ */
 function Content({ page, part, Data, setSolutionState }) {
   const containerRef = useRef(null);
   const [solutionMatrix, setSolutionMatrix] = useState([]);

@@ -1,6 +1,16 @@
 import React, { useState, useEffect} from "react";
 import { BlockMath} from "react-katex";
-
+/**
+ * React component that renders equations from a matrix.
+ *
+ * @param {number[][] | fraction[][]} solMatrix - The solution matrix.
+ *
+ * @returns {JSX.Element} A rendered list of equations displayed with KaTeX via `BlockMath`.
+ *
+ * @description
+ * - Skips coefficients equal to zero.
+ * - Ensures at least one term is present (defaults to "0x₁" if all coefficients are zero).
+ */
 export function Equations({ solMatrix }){
   const [equations, setEquations] = useState(['error']);
   useEffect(() => {
@@ -43,7 +53,10 @@ export function Equations({ solMatrix }){
  * 0 (equivalent),  
  * 1 (multiples),  
  * 2 (lines swapped),   
- * 3 (line swapped & multiples)  
+ * 3 (line swapped & multiples)
+ * @param {number[][] | fraction[][]} solutionMatrix - The solution matrix.
+ * @param {number[][] | fraction[][]} userMatrix - The user matrix.
+ * 
  * @returns {boolean}
  */
 export function SolutionVerifier(acceptance = 0, solutionMatrix, userMatrix) {
