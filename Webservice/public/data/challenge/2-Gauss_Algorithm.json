@@ -22,8 +22,9 @@
     ],
     "resultcol": "False",
     "determinant": "False",
-    "maxnum": 1,
-    "denominator": [1]
+    "maxnum": -2,
+    "denominator": [1],
+    "acceptance": 1,
+    "calcbtns": "True"
   }
-
 ]

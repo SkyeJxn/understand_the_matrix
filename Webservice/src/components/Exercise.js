@@ -1,9 +1,8 @@
 import React, { useState, useEffect} from "react";
 import { BlockMath} from "react-katex";
 
-export function Equations({ solMatrix, setSolution }){
+export function Equations({ solMatrix }){
   const [equations, setEquations] = useState(['error']);
-
   useEffect(() => {
     if (!solMatrix || solMatrix.length === 0) return;
 
@@ -31,12 +30,6 @@ export function Equations({ solMatrix, setSolution }){
 
   }, [solMatrix]);
 
-  useEffect(() => {
-    if (typeof setSolution === "function") {
-      setSolution(solMatrix);
-    }
-  }, [solMatrix, setSolution]);
-
   return <>
       { equations.map((eq, i) => (
       <BlockMath key={i} className="katex" math={eq} />
@@ -46,7 +39,11 @@ export function Equations({ solMatrix, setSolution }){
 }
 /**
  * 
- * @param {Number} acceptance - 0 (equivalent), 1 (lines swapped), 2 (multiples), 3 (line swapped & multiples)
+ * @param {Number} acceptance - 
+ * 0 (equivalent),  
+ * 1 (multiples),  
+ * 2 (lines swapped),   
+ * 3 (line swapped & multiples)  
  * @returns {boolean}
  */
 export function SolutionVerifier(acceptance = 0, solutionMatrix, userMatrix) {
@@ -54,14 +51,20 @@ export function SolutionVerifier(acceptance = 0, solutionMatrix, userMatrix) {
   if (solutionMatrix.length !== userMatrix.length) return false;
   if (solutionMatrix[0].length !== userMatrix[0].length) return false;
 
-  if (acceptance === 1) return rowsEqual(solutionMatrix, userMatrix);
-  if (acceptance === 2) return rowsMultiples(solutionMatrix, userMatrix);
-  if (acceptance === 3) return rowsEqual(solutionMatrix, userMatrix) || rowsMultiples(solutionMatrix, userMatrix);
-
+  if (acceptance === 0) return rowsEqual(solutionMatrix, userMatrix);
+  if (acceptance === 1) return rowsMultiples(solutionMatrix, userMatrix);
+  if (acceptance === 2) return rowsEqualWithSwap(solutionMatrix, userMatrix);
+  if (acceptance === 3) return rowsMultiplesWithSwap(solutionMatrix, userMatrix);
   return false;
 }
 
 function rowsEqual(solutionMatrix, userMatrix) {
+  const serializeRow = (row) => JSON.stringify(row.map(cell => cell.toString()));
+  const solRows = solutionMatrix.map(serializeRow);
+  const userRows = userMatrix.map(serializeRow);
+  return JSON.stringify(solRows) === JSON.stringify(userRows);
+}
+function rowsEqualWithSwap(solutionMatrix, userMatrix) {
   const serializeRow = (row) => JSON.stringify(row.map(cell => cell.toString()));
   const solRows = solutionMatrix.map(serializeRow).sort();
   const userRows = userMatrix.map(serializeRow).sort();
@@ -70,27 +73,49 @@ function rowsEqual(solutionMatrix, userMatrix) {
 
 function rowsMultiples(solutionMatrix, userMatrix) {
   for (let i = 0; i < solutionMatrix.length; i++) {
-    const solRow = solutionMatrix[i];
-    const userRow = userMatrix[i];
+    if (!rowIsMultiple(solutionMatrix[i], userMatrix[i])) return false;
+  }
+  return true;
+}
 
-    let factor = null;
-    for (let j = 0; j < solRow.length; j++) {
-      if (solRow[j].n !== 0n) {
-        factor = userRow[j].valueOf() / solRow[j].valueOf();
-        break;
-      }
+function rowsMultiplesWithSwap(solutionMatrix, userMatrix) {
+  // sorting both sets
+  const solRows = solutionMatrix.map(row => normalizeRow(row)).sort();
+  const userRows = userMatrix.map(row => normalizeRow(row)).sort();
+  return JSON.stringify(solRows) === JSON.stringify(userRows);
+}
+
+function rowIsMultiple(solRow, userRow) {
+  let factor = null;
+  for (let j = 0; j < solRow.length; j++) {
+    if (solRow[j].valueOf() !== 0) {
+      factor = userRow[j].valueOf() / solRow[j].valueOf();
+      break;
     }
-    if (factor === null || factor === 0) return false;
+  }
+  if (factor === null || factor === 0) return false;
 
-    for (let j = 0; j < solRow.length; j++) {
-      const sVal = solRow[j].valueOf();
-      const uVal = userRow[j].valueOf();
-      if (Math.abs(uVal - factor * sVal) > 1e-12) {
-        return false;
-      }
+  for (let j = 0; j < solRow.length; j++) {
+    const sVal = solRow[j].valueOf();
+    const uVal = userRow[j].valueOf();
+    if (Math.abs(uVal - factor * sVal) > 1e-12) {
+      return false;
     }
   }
   return true;
+}
+
+function normalizeRow(row) {
+  // Normalize to multiples: divide by the first non-zero value
+  let divisor = null;
+  for (let j = 0; j < row.length; j++) {
+    if (row[j].valueOf() !== 0) {
+      divisor = row[j].valueOf();
+      break;
+    }
+  }
+  if (divisor === null) divisor = 1;
+  return JSON.stringify(row.map(cell => (cell.valueOf() / divisor).toFixed(12)));
 }
 /**
  * Generates a random matrix in a staircase shape

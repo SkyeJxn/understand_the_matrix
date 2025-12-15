@@ -15,10 +15,11 @@
     "page": "1",
     "part": "1",
     "typ": "Equations",
+    "solution": "variable",
     "minRows": "2", "minCols": "3",
     "maxRows": "4", "maxCols": "4",
-    "maxNum": "-3", "denominator": "1"
-    
+    "maxnum": "-3", "denominator": "1",
+    "acceptance": "2"
   },
   {
     "page": "1",
@@ -38,22 +39,44 @@
   {
     "page": "2",
     "part": "2",
-    "typ": "text",
-    "content": ".."
+    "typ": "StaticMatrix",
+    "solution": [
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0]
+    ],
+    "resultcol": "True",
+    "determinant": "False"
   },
-
   {
     "page": "2",
     "part": "2",
+    "typ": "text",
+    "content": "How many solutions are there?"
+  },
+      {
+    "page": "3",
+    "part": "3",
+    "typ": "title",
+    "content": "homogeneous matrices"
+  },
+  {
+    "page": "3",
+    "part": "3",
+    "typ": "text",
+    "content": "Which are homogeneous?"
+  },
+  {
+    "page": "3",
+    "part": "3",
     "typ": "StaticMatrix",
-      "solution": [
-      [1, 0, 0],
-      [0, 1, 0],
-      [0, 0, 1]
+    "solution": [
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0]
     ],
-    "resultcol": "False",
-    "determinant": "False",
-    "maxnum": 1,
-    "denominator": [1]
+    "resultcol": "True",
+    "determinant": "False"
   }
+
 ]

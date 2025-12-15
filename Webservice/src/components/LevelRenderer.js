@@ -7,14 +7,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
 import {SolutionVerifier, matrixStairForm, Equations} from "./Exercise";
+import { fraction } from "mathjs";
 
 export function LevelRenderer({mode, level_id}){
 
     const [levelData, setLeveldata] = useState([]);
     const [error, setError] = useState(null);
     const [metaData, setMetaData] = useState([]);
-
-    const [matrix, setMatrix] = useState([]);
 
     const [solutionState, setSolutionState] = useState(false);
 
@@ -79,8 +78,7 @@ export function LevelRenderer({mode, level_id}){
           {currentPart <= partsOnLevel ? (<>
           
             <div className='content'>
-              <Content page={page} part={currentPart} Data={levelData} matrix={matrix} setMatrix={setMatrix} 
-                      setSolutionState={setSolutionState}/>
+              <Content page={page} part={currentPart} Data={levelData} setSolutionState={setSolutionState}/>
             </div >
             {mode == 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
                                 : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
@@ -96,21 +94,26 @@ export function LevelRenderer({mode, level_id}){
       );
 }
 
-function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
+function Content({ page, part, Data, setSolutionState }) {
   const containerRef = useRef(null);
-  const [solution, setSolution] = useState([1]);
-  const [userValue, setUserValue] = useState([]);
-
+  const [solutionMatrix, setSolutionMatrix] = useState([]);
+  const [userMatrix, setUserMatrix] = useState([]);
+  const [acceptance, setAcceptance] = useState(0);
+  const [data, setData] = useState(Data.filter(row => row.page === page && Number(row.part) <= part));
+  
   // compare user value with solution
   useEffect(() => {
-    const isCorrect = SolutionVerifier(3, solution, userValue);
+    const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
     setSolutionState(isCorrect);
-  }, [userValue]);
-  
+  }, [userMatrix, acceptance]);
+ 
   // all parts to the current part
-  const data = Data.filter(
-    row => row.page === page && Number(row.part) <= part
-  );
+  useEffect(() => {
+    const curData = Data.filter(
+      row => row.page === page && Number(row.part) <= part
+    );
+    setData(curData);
+  }, [Data,page,part]);
 
   // scroll down
   useEffect(() => {
@@ -118,15 +121,38 @@ function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [part]);
+  // set solution, set user value, set acceptance
   useEffect(() => {
-    const staticRow = data.find(row => row.typ === "StaticMatrix");
-    if (staticRow) {
-      setMatrix(MatrixCreator(
-        parseMatrix(staticRow.solution),
-        Number(staticRow.maxnum),
-        parseArray(staticRow.denominator)));
+    // element with solution
+    const rowWithSolution = data.find(row => row.solution !== undefined);
+    let solMatrix = solutionMatrix;
+    if (rowWithSolution) {
+      if(rowWithSolution.solution === "variable"){
+        solMatrix = MatrixCreator(
+          matrixStairForm(Number(rowWithSolution.minRows),Number(rowWithSolution.maxRows),Number(rowWithSolution.minCols),Number(rowWithSolution.maxCols),1),
+          Number(rowWithSolution.maxnum),
+          [Number(rowWithSolution.denominator)]);
+        setSolutionMatrix(solMatrix);
+      } else{
+        solMatrix = parseMatrix(rowWithSolution.solution);
+        setSolutionMatrix(solMatrix);
+
+        // element with solution and maxnum and denominator
+        if (rowWithSolution.maxnum !== undefined && rowWithSolution.denominator !== undefined){
+          setUserMatrix(MatrixCreator(
+            solMatrix,
+            Number(rowWithSolution.maxnum),
+            parseArray(rowWithSolution.denominator)));
+        }
+        else {setUserMatrix(solMatrix);}
+
+      }
+      // element with acceptance
+      if (rowWithSolution.acceptance !== undefined){
+        setAcceptance(Number(rowWithSolution.acceptance));
+      }
     }
-  }, [data, setMatrix]);
+  }, [data, setUserMatrix]);
 
   return (
     <div className="scrollable_content" ref={containerRef}>
@@ -138,39 +164,34 @@ function Content({ page, part, Data, matrix, setMatrix, setSolutionState }) {
             <InlineMath className="katex" math={row.content} />
           )}
           {row.typ === "StaticMatrix" &&
-            Array.isArray(matrix) &&
-            matrix.length > 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "20px",
-                }}
-              >
+            Array.isArray(userMatrix) &&
+            userMatrix.length > 0 && (
+              <div style={{display: "flex",alignItems: "center",margin: "20px",}}>
                 <StaticMatrix
-                  data={matrix}
+                  data={userMatrix}
                   resultCol={toBool(row.resultcol)}
                   det={toBool(row.determinant)}
-                  onChange={setMatrix}
                 />
-                <CalcButtons matrix={matrix} setMatrix={setMatrix} />
+                {toBool(row.calcbtns) && (
+                  <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} />
+                )}
               </div>
             )}
+          {row.typ === "CalcButtons" && (
+            <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} />
+          )}
           {row.typ === "EditableMatrix" && (
             <EditableMatrix
               rows={Number(row.rows)}
               cols={Number(row.columns)}
               resultCol={toBool(row.resultcol)}
               det={toBool(row.determinant)}
-              onChange={setUserValue}
+              onChange={setUserMatrix}
             />
           )}
           {row.typ === "Equations" && (
             <Equations
-              setSolution={setSolution}
-              solMatrix={MatrixCreator(
-                matrixStairForm(Number(row.minRows),Number(row.maxRows),Number(row.minCols),Number(row.maxCols),3),
-                Number(row.maxNum),[Number(row.denominator)])}
+              solMatrix={solutionMatrix}
             />
           )}
         </React.Fragment>
@@ -191,7 +212,7 @@ async function getFileData(mode, level_id){
 }
 
 function parseMatrix(matrix){
-  return matrix.map(row => row.map(cell => Number(cell)));
+  return matrix.map(row => row.map(cell => fraction(Number(cell))));
 }
 
 function parseArray(array) {
