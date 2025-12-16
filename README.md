@@ -5,7 +5,7 @@
 
 ## Project Overview
 
-Understand the Matrix is a Next.js project designed to help learning about matrix calculation in a game-like way.
+Understand the Matrix is a React project designed to help learning about matrix calculation in a game-like way.
 
 You can find the application [here](https://understand-the-matrix.netlify.app/).
 
@@ -17,5 +17,5 @@ This project is part of the module "Software-Design"
 
 ## Documentation
 
-The component documentation was created using JSDoc. You can find the is
+The component documentation was created using JSDoc. You can find the link to the docs
 [here](https://skyejxn.github.io/understand_the_matrix/index.html).
