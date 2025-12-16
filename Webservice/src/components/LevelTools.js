@@ -1,4 +1,5 @@
 "use client";
+import "../styles/LevelTools.css"
 import { useState, useEffect, useMemo } from "react";
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
@@ -103,6 +104,26 @@ export function NavigationArrows({disableBack, onBack, onNext}){
       <button onClick={onNext}>
         <i className="pi pi-arrow-right" style={{ fontSize: '2.5rem', cursor: 'pointer' }}></i>
       </button>
+    </div>
+  )
+}
+/**
+ * 
+ * @param {Number} stage - 0 (disabled), 1 (clickable), 2 (clickable and congrats)
+ * @param {function} onContinue - Callback-function to continue
+ * @returns 
+ */
+export function ContinueBtn({stage=0, onContinue}){
+  return (
+    <div id='continue_container'>
+      {stage == 2 && (
+        <div className="feedback">
+        <i className="pi pi-check-circle" ></i>
+        <div>correct</div>
+        </div>
+      )}
+      <Button onClick={onContinue} label="continue" id={`continue_btn_${stage}`} disabled={stage == 0} />
+      
     </div>
   )
 }
