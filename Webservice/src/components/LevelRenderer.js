@@ -8,6 +8,7 @@ import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./Level
 import { CalcButtons } from "./CalcButtons";
 import {SolutionVerifier, matrixStairForm, Equations} from "./Exercise";
 import { fraction } from "mathjs";
+import { useKeyMap } from "@/hooks/useKeyboard";
 
 /**
  * React component that renders a level (tutorial or challenge).
@@ -86,6 +87,8 @@ export function LevelRenderer({mode, level_id}){
       }
     }
 
+    useKeyMap(next, back, mode)
+
     function nextLevel() {
       const exists = metaData.some((row) => row.id == Number(level_id) + 1);
       if (exists) return Number(level_id) + 1;
@@ -93,7 +96,7 @@ export function LevelRenderer({mode, level_id}){
     }
 
     return (
-        <div style={{minHeight: 0, flex: '1', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
+        <div className="level-renderer-container">
           <Toolbar mode={mode} progressValue={progressValue} />
           {currentPart <= partsOnLevel ? (<>
           
