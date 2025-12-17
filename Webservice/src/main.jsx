@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client.js'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { PrimeReactProvider } from "primereact/api";
 import App from './App.js'
