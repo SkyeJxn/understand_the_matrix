@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { PrimeReactProvider } from "primereact/api";
-import App from './App'
+import App from './app.jsx'
 import "./styles/globals.css";
 import './styles/LearningPage.css';
 import "katex/dist/katex.min.css";
