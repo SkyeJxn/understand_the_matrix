@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./routes/Home.jsx";
-import LevelPage from "./routes/LevelPage.jsx";
-import LevelView from "./routes/LevelView.jsx";
+import Home from "./routes/Home";
+import LevelPage from "./routes/LevelPage";
+import LevelView from "./routes/LevelView";
 import { useEffect } from "react";
 
 export default function App() {
