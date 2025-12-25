@@ -110,7 +110,7 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  * 
  * @param {Number} stage - 0 (disabled), 1 (clickable), 2 (clickable and congrats)
  * @param {function} onContinue - Callback-function to continue
- * @returns 
+ * @returns {JSX.Element}
  */
 export function ContinueBtn({stage=0, onContinue}){
   return (
