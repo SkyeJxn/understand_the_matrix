@@ -45,7 +45,7 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
  * @param {number} cols - number of columns (including result column if `resultCol` is true)
  * @param {boolean} resultCol - is the last column a results column
  * @param {boolean} det - is the matrix a determinant
- * @param {(matrix: fraction[][]) => void} onChange - Callback, that returns the current matrix as Fractions
+ * @param {fraction[][]} onChange - Callback, that returns the current matrix as Fractions
  * @returns {JSX.Element}
  */
 export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange }) {
