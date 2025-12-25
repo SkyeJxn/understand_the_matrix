@@ -1,23 +1,28 @@
-name: Generate JSDoc
+name: GitHub pages
 
 on:
   push:
     branches:
       - master
-    paths:
-      - 'Webservice/src/components/*.js'
 
 jobs:
-  jsdoc:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Build
+        uses: andstor/jsdoc-action@v1
         with:
-          node-version: '20'
+          source_dir: ./Webservice/src
+          output_dir: ./docs
+          config_file: conf.json
+          template: minami
+          front_page: README.md
 
-      - name: Generate JSDoc
-        run: npx jsdoc Webservice/src/components -d docs -r
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./docs
