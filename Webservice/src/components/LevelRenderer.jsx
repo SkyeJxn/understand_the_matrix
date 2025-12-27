@@ -123,7 +123,7 @@ export function LevelRenderer(){
             }
             
           </>): (
-              <LevelEndContent nextLevelExists={nextLevelExists} />
+              <LevelEndContent nextLevelExists={nextLevelExists()} />
             )}
         </div>
       );
