@@ -103,6 +103,13 @@ export function LevelRenderer(){
       return null;
     }
 
+    // If loading the level failed, show a clear not-found message.
+    if (error !== null) {
+      return (
+          <div>Level not found</div>
+      );
+    }
+
     return (
         <div className="level-renderer-container">
           <Toolbar progressValue={progressValue} />
@@ -111,10 +118,8 @@ export function LevelRenderer(){
             <div className='content'>
               <Content page={page} part={currentPart} Data={levelData} setSolutionState={setSolutionState}/>
             </div >
-            {error !== null ? (<p>{error}</p>) :
-              (mode == 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
+            {mode == 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
                                 : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
-              )
             }
             
           </>): (
