@@ -1,21 +1,26 @@
 import LevelOverview from "@/components/LevelOverview";
 import Header from "@/components/Header";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function LevelView() {
   let { mode } = useParams();
+  const navigate = useNavigate();
   return (
     <div>
       <Header>
         <label className="switch">
-          <Link to={`/${mode === "tutorial" ? "challenge" : "tutorial"}`}>
-            <input type="checkbox" checked={mode === "challenge"} readOnly></input>
-            <span className="slider round"></span>
-          </Link>
+          <input 
+            type="checkbox" 
+            checked={mode === "challenge"} 
+            onChange={() =>
+              navigate(`/${mode === "tutorial" ? "challenge" : "tutorial"}`)
+            }
+          />
+          <span className="slider round"></span>
         </label>
         <div>{mode}s</div>
       </Header>
-      <LevelOverview mode={`${mode}`}></LevelOverview>
+      <LevelOverview ></LevelOverview>
     </div>
   );
 }

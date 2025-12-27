@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 /**
  * Component that Renders a dynamic progress bar
@@ -14,10 +14,13 @@ import { Link } from "react-router-dom";
  * @param {boolean} isSmallScreen - relevant for heartCount, but should actually be determined automatically
  * @returns {JSX.Element}
  */
-export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmallScreen=true }){
+export function Toolbar({ progressValue, heartCount=5, isSmallScreen=true }){
   // const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 600;
+  const { mode } = useParams();
+  const navigate = useNavigate();
+  const disableProgressTransition = progressValue === 0;
   return(
-      <div>
+      <div className={disableProgressTransition ? 'no-progress-transition' : ''}>
         <div className="toolbar" style={{
           display: 'flex',
           width: '100%',
@@ -27,11 +30,14 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
           padding: '20px',
         }}>
             
-          <Link to={`/${mode}`}><Button style={{
-            background: 'none', border: 'none',
-            color: 'var(--color3)',
-            padding: 0, margin: 0,
-          }}><i className="pi pi-times" style={{ fontSize: '2.5rem' }}></i></Button></Link>
+          <Button 
+            onClick={() => navigate(`/${mode}`)}
+            style={{
+              background: 'none', border: 'none',
+              color: 'var(--color3)',
+              padding: 0, margin: 0,
+            }}
+          ><i className="pi pi-times" style={{ fontSize: '2.5rem' }}></i></Button>
           
           <ProgressBar value={progressValue}  showValue={false} style={{
             background: 'var(--color3)',
@@ -72,6 +78,10 @@ export function Toolbar({mode = 'tutorial', progressValue, heartCount=5, isSmall
           .p-progressbar .p-progressbar-value {
             background-color: var(--color4); 
             border-radius: 12px;      
+          }
+          /* when progress is zero (e.g. after navigation reset) make update instant */
+          .no-progress-transition .p-progressbar .p-progressbar-value {
+            transition: none !important;
           }
         `}</style>
       </div>
@@ -130,12 +140,12 @@ export function ContinueBtn({stage=0, onContinue}){
 /**
  * Component that renders a congratulation, a repeat level button and a next level buttons
  * 
- * @param {number} nextLevel - next level id, **null** if there is no next level!
- * @param {String} linkMode - which mode should be linked to ('tutorial','challenge')
- * @param {String} linkLevel - which level should be linked to ('1','2',...)
+ * @param {boolean} nextLevelExists - if there is a next level
  * @returns {JSX.Element}
  */
-export function LevelEndContent({nextLevel = null, linkMode, linkLevel}){
+export function LevelEndContent({nextLevelExists = false}){
+  const { mode, id } = useParams();
+  const navigate = useNavigate();
 
   const congratsList = useMemo(() => [
     "Finished!",'Exercise complete!',
@@ -145,9 +155,20 @@ export function LevelEndContent({nextLevel = null, linkMode, linkLevel}){
   ], []);
 
   const [congrats, setCongrats] = useState([]);
+
+  const linkMode = mode == 'tutorial' ? 'challenge' : 'tutorial';
+
   useEffect(() =>{
     setCongrats(congratsList[Math.floor(Math.random() * congratsList.length)]);
   },[congratsList]);
+
+  const handleMode = () => {
+    navigate(`/${linkMode}/${id}`);
+  }
+  const handleNextLevel = () => {
+    const nextLevel = Number(id) + 1;
+    navigate(`/${mode}/${nextLevel}`);
+  }
 
   if(congrats) return(
     <div>
@@ -157,13 +178,10 @@ export function LevelEndContent({nextLevel = null, linkMode, linkLevel}){
 
       <ButtonGroup>
         <Button icon='pi pi-arrow-left' label='repeat level' onClick={() => window.location.reload()}></Button>
-        <Link to={`/${linkMode}/${linkLevel}`}>
-          <Button label={`${linkMode}`} icon={linkMode === 'challenge' ? ('pi pi-graduation-cap'): ('pi pi-info-circle')} iconPos='right'></Button>
-        </Link>
-        {nextLevel && 
-        <Link to={`${nextLevel}/`}>
-          <Button label='next level' icon='pi pi-arrow-right' iconPos='right'></Button>
-        </Link>}
+        <Button onClick={handleMode} label={`${linkMode}`} icon={linkMode === 'challenge' ? ('pi pi-graduation-cap'): ('pi pi-info-circle')} iconPos='right'></Button>
+        {nextLevelExists && 
+          <Button onClick={handleNextLevel} label='next level' icon='pi pi-arrow-right' iconPos='right'></Button>
+        }
 
       </ButtonGroup>
       </div>
