@@ -1,6 +1,6 @@
 import '../styles/LevelOverview.css'
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 /**
  * Component that creates the Level choosing sites
@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom';
  * @param {string} mode - defines the chosen game mode 
  * @returns {JSX.Element}
  */
-export default function LevelOverview({mode = "challenge"}){
+export default function LevelOverview(){
+  const { mode } = useParams();
   const [metaData, setMetaData] = useState([]);
   useEffect(() => {
     fetch(`/data/${mode}/level_meta.json`)
@@ -40,14 +41,17 @@ export default function LevelOverview({mode = "challenge"}){
 }
 
 function LevelItem({ number = 1, title = 'no title', description='', mode='challenge' }){
+  const navigate = useNavigate();
   return(
     <div className="level_item">
-      <Link to={`/${mode}/${number}`} >
-        <button id={`level_${number}_btn`} type="button">
-          <div className="level_btn_top">{number}</div>
-          <div className="level_btn_bottom"></div>
-        </button>
-      </Link>
+      <button 
+        onClick={() => navigate(`/${mode}/${number}`)} 
+        id={`level_${number}_btn`} 
+        type="button"
+        >
+        <div className="level_btn_top">{number}</div>
+        <div className="level_btn_bottom"></div>
+      </button>
       <div>
         <h3>{title}</h3>
         <p>{description}</p>
