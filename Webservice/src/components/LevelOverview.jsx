@@ -5,7 +5,6 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 /**
  * Component that creates the Level choosing sites
  * 
- * @param {string} mode - defines the chosen game mode 
  * @returns {JSX.Element}
  */
 export default function LevelOverview(){

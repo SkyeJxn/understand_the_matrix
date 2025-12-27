@@ -8,7 +8,7 @@ export default function LevelPage() {
   return (
     <div style={{height: '100vh',display: 'flex',flexDirection: 'column', overflow: 'hidden'}}>
       <Header>{mode}<Badge value={id} style={{background: 'var(--color4)',}}/></Header>
-      <LevelRenderer mode={mode} level_id={id}/>
+      <LevelRenderer />
     </div>
   );
 }

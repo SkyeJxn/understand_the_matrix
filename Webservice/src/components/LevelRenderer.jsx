@@ -10,14 +10,12 @@ import {SolutionVerifier, matrixStairForm } from "../utilities/matrixCheck";
 import { fraction } from "mathjs";
 import { useKeyMap } from "@/hooks/useKeyboard";
 import {getFile} from "../utilities/getFile";
+import { useParams } from "react-router-dom";
 
 /**
  * React component that renders a level (tutorial or challenge).
  * It loads metadata and level data, manages progress state,
  * and displays the content along with navigation controls.
- *
- * @param {String} mode - Mode of the level ("tutorial" or "challenge").
- * @param {String} props.level_id - ID of the level to be loaded.
  *
  * @returns {JSX.Element} Rendered level view including toolbar, content, and navigation.
  *
@@ -31,7 +29,8 @@ import {getFile} from "../utilities/getFile";
  *   - Challenge: continue button
  * - At the end of a level, renders `LevelEndContent` with links to the next level.
  */
-export function LevelRenderer({mode, level_id}){
+export function LevelRenderer(){
+  const { mode, id } = useParams();
 
     const [levelData, setLevelData] = useState([]);
     const [error, setError] = useState(null);
@@ -46,10 +45,10 @@ export function LevelRenderer({mode, level_id}){
       }, [mode]);
 
     useEffect(() => {
-        getFileData(mode, level_id)
+        getFileData(mode, id)
         .then(setLevelData)
         .catch(err => setError(err.message));
-    }, [mode, level_id]);
+    }, [mode, id]);
     
     const [page, setPage] = useState("1");
     const [currentPart, setCurrentPart] = useState(1);
@@ -59,6 +58,14 @@ export function LevelRenderer({mode, level_id}){
         0,
         ...levelData.map((e) => Number(e.part))
     );
+
+    // Reset view state when navigating to a different mode or level id
+    useEffect(() => {
+      setPage("1");
+      setCurrentPart(1);
+      setProgressValue(0);
+      setSolutionState(false);
+    }, [mode, id]);
 
     function getMaxPart(page, data) {
       const partsOnPage = data
@@ -90,15 +97,15 @@ export function LevelRenderer({mode, level_id}){
 
     useKeyMap(next, back, mode)
 
-    function nextLevel() {
-      const exists = metaData.some((row) => row.id == Number(level_id) + 1);
-      if (exists) return Number(level_id) + 1;
+    function nextLevelExists() {
+      const exists = metaData.some((row) => row.id == Number(id) + 1);
+      if (exists) return true;
       return null;
     }
 
     return (
         <div className="level-renderer-container">
-          <Toolbar mode={mode} progressValue={progressValue} />
+          <Toolbar progressValue={progressValue} />
           {currentPart <= partsOnLevel ? (<>
           
             <div className='content'>
@@ -111,10 +118,7 @@ export function LevelRenderer({mode, level_id}){
             }
             
           </>): (
-              <>
-              {mode == "tutorial" && <LevelEndContent nextLevel={nextLevel()} linkMode='challenge' linkLevel={level_id} />}
-              {mode == "challenge" && <LevelEndContent nextLevel={nextLevel()} linkMode='tutorial' linkLevel={level_id} />}
-              </>
+              <LevelEndContent nextLevelExists={nextLevelExists} />
             )}
         </div>
       );
