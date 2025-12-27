@@ -7,7 +7,7 @@ import { useEffect } from "react";
 export default function App() {
   useEffect(() => {
     document.body.classList.add("theme-green");
-  })
+  },[]);
   
   return (
     <Routes>
