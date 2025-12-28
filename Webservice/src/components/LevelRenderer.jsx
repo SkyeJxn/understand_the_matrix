@@ -100,7 +100,7 @@ export function LevelRenderer(){
     function nextLevelExists() {
       const exists = metaData.some((row) => row.id == Number(id) + 1);
       if (exists) return true;
-      return null;
+      return false;
     }
 
     // If loading the level failed, show a clear not-found message.
