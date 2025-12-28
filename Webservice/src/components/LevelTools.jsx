@@ -156,7 +156,7 @@ export function LevelEndContent({nextLevelExists = false}){
 
   const [congrats, setCongrats] = useState([]);
 
-  const linkMode = mode == 'tutorial' ? 'challenge' : 'tutorial';
+  const linkMode = mode === 'tutorial' ? 'challenge' : 'tutorial';
 
   useEffect(() =>{
     setCongrats(congratsList[Math.floor(Math.random() * congratsList.length)]);
