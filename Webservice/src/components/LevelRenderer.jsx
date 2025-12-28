@@ -118,7 +118,7 @@ export function LevelRenderer(){
             <div className='content'>
               <Content page={page} part={currentPart} Data={levelData} setSolutionState={setSolutionState}/>
             </div >
-            {mode == 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
+            {mode === 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
                                 : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
             }
             
