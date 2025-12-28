@@ -1,6 +1,6 @@
 import '../styles/LevelOverview.css'
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 /**
  * Component that creates the Level choosing sites
