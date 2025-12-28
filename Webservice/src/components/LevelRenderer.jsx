@@ -95,7 +95,7 @@ export function LevelRenderer(){
       }
     }
 
-    useKeyMap(next, back, mode)
+    useKeyMap(next, back, mode);
 
     function nextLevelExists() {
       const exists = metaData.some((row) => Number(row.id) === Number(id) + 1);
