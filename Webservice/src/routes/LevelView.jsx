@@ -10,6 +10,7 @@ export default function LevelView() {
       <Header>
         <label className="switch">
           <input 
+            aria-label="Switch between tutorial and challenge modes"
             type="checkbox" 
             checked={mode === "challenge"} 
             onChange={() =>
