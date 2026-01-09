@@ -1,3 +1,11 @@
+/**
+ * Utility to get the correct Filepath for a Level
+ * 
+ * @param {string} mode pass of level mode
+ * @param {string} id pass of level id
+ * @returns {JSON.Response}
+ */
+
 export async function getFile(mode, id){
     
     const rawMeta = await fetch(`/data/${mode}/level_meta.json`);
