@@ -18,6 +18,7 @@ jobs:
           source_dir: ./Webservice/src
           output_dir: ./docs
           config_file: conf.json
-          template: minami
+          template: ink-docstrap
+          template_dir: template
           front_page: README.md
           recurse: true
