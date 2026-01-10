@@ -11,6 +11,7 @@
  * @returns {boolean}
  */
 export function SolutionVerifier(acceptance = 0, solutionMatrix, userMatrix) {
+  if (!Array.isArray(solutionMatrix) || !Array.isArray(userMatrix)) return false;
   if (JSON.stringify(solutionMatrix) === JSON.stringify(userMatrix))
     return true;
   if (solutionMatrix.length !== userMatrix.length) return false;
@@ -86,45 +87,4 @@ function normalizeRow(row) {
   return JSON.stringify(
     row.map((cell) => (cell.valueOf() / divisor).toFixed(12))
   );
-}
-/**
- * Generates a random matrix in a staircase shape
- * @param {Number} minRows - minimum number of rows
- * @param {Number} maxRows - maximum number of rows
- * @param {Number} minCols - minimum number of columns
- * @param {Number} maxCols - maximum number of columns
- * @param {Number} acceptance - 0 (strict stair shape), 1 (half with 1s), 2 (half without 1s)
- * @returns {number[][]}
- */
-export function matrixStairForm(
-  minRows,
-  maxRows,
-  minCols,
-  maxCols,
-  acceptance = 0
-) {
-  //random dim
-  const rows = Math.floor(Math.random() * (maxRows - minRows + 1)) + minRows;
-  const cols = Math.floor(Math.random() * (maxCols - minCols + 1)) + minCols;
-
-  const matrix = [];
-
-  for (let i = 0; i < rows; i++) {
-    const row = [];
-
-    for (let j = 0; j < cols; j++) {
-      if (j < i) {
-        row.push(0);
-      } else if (j === i) {
-        // pivot
-        if (acceptance === 2) row.push(Math.floor(Math.random() * 11) + -5);
-        else row.push(1);
-      } else {
-        if (acceptance === 0) row.push(0);
-        else row.push(Math.floor(Math.random() * 11) - 5);
-      }
-    }
-    matrix.push(row);
-  }
-  return matrix;
 }

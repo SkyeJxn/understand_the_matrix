@@ -1,5 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { BlockMath} from "react-katex";
+import { SelectButton } from "primereact/selectbutton";
+
 /**
  * React component that renders equations from a matrix.
  *
@@ -12,7 +14,7 @@ import { BlockMath} from "react-katex";
  * - Ensures at least one term is present (defaults to "0x₁" if all coefficients are zero).
  */
 export function Equations({ solMatrix }){
-  const [equations, setEquations] = useState(['error']);
+  const [equations, setEquations] = useState(['']);
   useEffect(() => {
     if (!solMatrix || solMatrix.length === 0) return;
 
@@ -22,7 +24,7 @@ export function Equations({ solMatrix }){
       // last col
       const rhs = row[row.length - 1];
       // all except last col
-      const coeffs = row.slice(0, -1) 
+      const coeffs = row.slice(0, -1);
       const terms = coeffs.map((coef, i) => {
         const value = typeof coef === "bigint" ? coef : BigInt(coef);
         if (value === 0n) return null; // skip 0
@@ -47,3 +49,24 @@ export function Equations({ solMatrix }){
   </>
     
 }
+
+
+export function SelectionButtons({ value , options, onSelect }) {
+
+  const opts = Array.isArray(options) ? options : [];
+
+  return (
+    <div style={{
+      padding: '10px',
+    }}>
+    <SelectButton
+      className="select_btn"
+      value={value}
+      options={opts.map(o => ({ label: o, value: o }))}
+      onChange={(e) => onSelect(e.value)}
+    />
+    </div>
+  );
+}
+
+
