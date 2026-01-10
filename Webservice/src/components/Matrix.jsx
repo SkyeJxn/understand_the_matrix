@@ -12,6 +12,7 @@ import { Button } from "primereact/button";
  * @returns {JSX.Element}
  */
 export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
+  if (!Array.isArray(data)) return (<></>);
   if (data.length <= 0) return (<></>);
   const cols = data[0].length;
   const colFormat = resultCol ? 'c'.repeat(cols - 1) + '|c': 'c'.repeat(cols);
