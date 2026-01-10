@@ -2,6 +2,27 @@
   {
     "page": "1",
     "part": "1",
+    "solution": "matrix",
+    "acceptance": 3,
+   
+    "matrixCreator": {
+      "params":{
+        "resultcol": "true",
+        "changeLevel": 6,
+        "maxNum": 3,
+        "denominator": [1],
+        "rows": "random",
+        "cols": "random"
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"]
+      }
+    }
+
+  },
+  {
+    "page": "1",
+    "part": "1",
     "typ": "title",
     "content": "Set up the matrix"
   },
@@ -14,12 +35,7 @@
   {
     "page": "1",
     "part": "1",
-    "typ": "Equations",
-    "solution": "variable",
-    "minRows": "2", "minCols": "3",
-    "maxRows": "4", "maxCols": "4",
-    "maxnum": "-3", "denominator": "1",
-    "acceptance": "2"
+    "typ": "Equations"
   },
   {
     "page": "1",
@@ -30,7 +46,37 @@
     "resultcol": "true",
     "determinant": "false"
   },
-    {
+
+
+
+  {
+    "page": "2",
+    "part": "2",
+    "solution": "options",
+    
+    "options": {
+      "possibilities": ["no", "one", "infinite"],
+      "solution": "dynamic"
+    },
+
+    "matrixCreator": {
+      "params":{
+        "resultcol": "true",
+        "changeLevel": 3,
+        "maxNum": 3,
+        "denominator": [1],
+        "rows": "random",
+        "cols": "random"
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"],
+        "solution": ["setSolutionOption"]
+      }
+    }
+
+
+  },
+  {
     "page": "2",
     "part": "2",
     "typ": "title",
@@ -40,11 +86,7 @@
     "page": "2",
     "part": "2",
     "typ": "StaticMatrix",
-    "solution": [
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1, 0]
-    ],
+    "data": "solutionMatrix",
     "resultcol": "True",
     "determinant": "False"
   },
@@ -54,7 +96,40 @@
     "typ": "text",
     "content": "How many solutions are there?"
   },
-      {
+  {
+    "page": "2",
+    "part": "2",
+    "typ": "SelectionButtons"
+  },
+
+
+
+  {
+    "page": "3",
+    "part": "3",
+    "solution": "options",
+
+    "options": {
+      "possibilities": ["yes", "no", "not known"],
+      "solution": "yes"
+    },
+
+    "matrixCreator": {
+      "params":{
+        "solMatrix": [
+            [1,1,0],
+            [0,0,0]
+        ],
+        "resultcol": "true",
+        "changeLevel": 0
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"]
+      }
+    }
+
+  },
+  {
     "page": "3",
     "part": "3",
     "typ": "title",
@@ -64,19 +139,20 @@
     "page": "3",
     "part": "3",
     "typ": "text",
-    "content": "Which are homogeneous?"
+    "content": "Is the matrix homogeneous?"
   },
   {
     "page": "3",
     "part": "3",
     "typ": "StaticMatrix",
-    "solution": [
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1, 0]
-    ],
+    "data": "solutionMatrix",
     "resultcol": "True",
     "determinant": "False"
+  },
+  {
+    "page": "3",
+    "part": "3",
+    "typ": "SelectionButtons"
   }
 
 ]

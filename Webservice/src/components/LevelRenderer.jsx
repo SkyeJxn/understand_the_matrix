@@ -1,15 +1,14 @@
 import "../styles/LevelDesign.css"
 import { InlineMath } from "react-katex";
 import { StaticMatrix, EditableMatrix } from "./Matrix";
-import { MatrixCreator } from "../utilities/CalcFunctions";
 import React, { useState, useEffect, useRef } from "react";
 import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
-import {Equations} from "./Exercise";
-import {SolutionVerifier, matrixStairForm } from "../utilities/matrixCheck";
-import { fraction } from "mathjs";
+import { Equations, SelectionButtons } from "./Exercise";
+import SolutionManager from "./SolutionManager";
 import { useKeyMap } from "@/hooks/useKeyboard";
-import {getFile} from "../utilities/getFile";
+import { useSolution } from "@/hooks/SolutionContext";
+import { getFile } from "../utilities/getFile";
 import { useParams } from "react-router-dom";
 
 /**
@@ -114,12 +113,18 @@ export function LevelRenderer(){
         <div className="level-renderer-container">
           <Toolbar progressValue={progressValue} />
           {currentPart <= partsOnLevel ? (<>
-          
-            <div className='content'>
-              <Content page={page} part={currentPart} Data={levelData} setSolutionState={setSolutionState}/>
-            </div >
+              
+            <SolutionManager
+              Data={levelData} page={page} part={currentPart}
+              setSolutionState={setSolutionState}
+            >
+              <div className='content'>
+                <Content part={currentPart} />
+              </div >
+            </SolutionManager>
+
             {mode === 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
-                                : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
+                                : (<ContinueBtn stage={solutionState ? 2: 1} onContinue={next} />)
             }
             
           </>): (
@@ -154,26 +159,18 @@ export function LevelRenderer(){
  *   - "EditableMatrix": editable matrix input
  *   - "Equations": equation display
  */
-function Content({ page, part, Data, setSolutionState }) {
+function Content({ part}) {
   const containerRef = useRef(null);
-  const [solutionMatrix, setSolutionMatrix] = useState([]);
-  const [userMatrix, setUserMatrix] = useState([]);
-  const [acceptance, setAcceptance] = useState(0);
-  const [data, setData] = useState(Data.filter(row => row.page === page && Number(row.part) <= part));
-  
-  // compare user value with solution
-  useEffect(() => {
-    const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
-    setSolutionState(isCorrect);
-  }, [userMatrix, acceptance, setSolutionState, solutionMatrix]);
- 
-  // all parts to the current part
-  useEffect(() => {
-    const curData = Data.filter(
-      row => row.page === page && Number(row.part) <= part
-    );
-    setData(curData);
-  }, [Data,page,part]);
+
+  const {
+    options,
+    setUserOption,
+    userOption,
+    solutionMatrix,
+    userMatrix, 
+    setUserMatrix, 
+    data
+  } = useSolution();
 
   // scroll down
   useEffect(() => {
@@ -181,38 +178,6 @@ function Content({ page, part, Data, setSolutionState }) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [part]);
-  // set solution, set user value, set acceptance
-  useEffect(() => {
-    // element with solution
-    const rowWithSolution = data.find(row => row.solution !== undefined);
-    let solMatrix = solutionMatrix;
-    if (rowWithSolution) {
-      if(rowWithSolution.solution === "variable"){
-        solMatrix = MatrixCreator(
-          matrixStairForm(Number(rowWithSolution.minRows),Number(rowWithSolution.maxRows),Number(rowWithSolution.minCols),Number(rowWithSolution.maxCols),1),
-          Number(rowWithSolution.maxnum),
-          [Number(rowWithSolution.denominator)]);
-        setSolutionMatrix(solMatrix);
-      } else{
-        solMatrix = parseMatrix(rowWithSolution.solution);
-        setSolutionMatrix(solMatrix);
-
-        // element with solution and maxnum and denominator
-        if (rowWithSolution.maxnum !== undefined && rowWithSolution.denominator !== undefined){
-          setUserMatrix(MatrixCreator(
-            solMatrix,
-            Number(rowWithSolution.maxnum),
-            parseArray(rowWithSolution.denominator)));
-        }
-        else {setUserMatrix(solMatrix);}
-
-      }
-      // element with acceptance
-      if (rowWithSolution.acceptance !== undefined){
-        setAcceptance(Number(rowWithSolution.acceptance));
-      }
-    }
-  }, [data, setUserMatrix]);
 
   return (
     <div className="scrollable_content" ref={containerRef}>
@@ -224,11 +189,10 @@ function Content({ page, part, Data, setSolutionState }) {
             <InlineMath className="katex" math={row.content} />
           )}
           {row.typ === "StaticMatrix" &&
-            Array.isArray(userMatrix) &&
-            userMatrix.length > 0 && (
+            (
               <div style={{display: "flex",alignItems: "center",margin: "20px",}}>
                 <StaticMatrix
-                  data={userMatrix}
+                  data={row.data === "userMatrix" ? userMatrix : solutionMatrix }
                   resultCol={toBool(row.resultcol)}
                   det={toBool(row.determinant)}
                 />
@@ -237,7 +201,8 @@ function Content({ page, part, Data, setSolutionState }) {
                 )}
               </div>
             )}
-          {row.typ === "CalcButtons" && (
+          {row.typ === "CalcButtons" && Array.isArray(userMatrix) &&
+            userMatrix.length > 0 && (
             <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} />
           )}
           {row.typ === "EditableMatrix" && (
@@ -252,6 +217,13 @@ function Content({ page, part, Data, setSolutionState }) {
           {row.typ === "Equations" && (
             <Equations
               solMatrix={solutionMatrix}
+            />
+          )}
+          {row.typ === "SelectionButtons" && (
+            <SelectionButtons
+              value={userOption}
+              options={options}
+              onSelect={setUserOption}
             />
           )}
         </React.Fragment>
@@ -271,13 +243,6 @@ async function getFileData(mode, level_id){
 
 }
 
-function parseMatrix(matrix){
-  return matrix.map(row => row.map(cell => fraction(Number(cell))));
-}
-
-function parseArray(array) {
-  return array.map((cell) => Number(cell));
-}
 
 function toBool(val) {
   return val === true || val === "True" || val === "true";
