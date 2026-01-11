@@ -10,9 +10,8 @@ import { equal, smaller, randomInt, unaryMinus } from "mathjs";
  *
  * @returns {JSX.Element} A rendered list of equations displayed with KaTeX via `BlockMath`.
  *
- * @description
- * - Skips coefficients equal to zero.
- * - Ensures at least one term is present (defaults to "0x₁" if all coefficients are zero).
+ * - Skips trivial identities `0 = 0`.
+ * - Randomly moves some terms to the right-hand side (with sign inversion).
  */
 export function Equations({ solMatrix }){
   const [equations, setEquations] = useState(['']);
@@ -33,6 +32,7 @@ export function Equations({ solMatrix }){
     
       // all coeffs = 0
       if (terms.length === 0) {
+        if (equal(rhs, 0)) return null;     // skip 0 = 0
         return `0x_1 = ${rhs.toString()}`;
       }
     
@@ -68,13 +68,13 @@ export function Equations({ solMatrix }){
         
           const sign =
             i === 0
-              ? (negative ? "-" : "")          // erster Term: kein '+' vorne
-              : (negative ? "-" : "+");        // weitere Terme: + oder -
+              ? (negative ? "-" : "")          // first term: no '+'
+              : (negative ? "-" : "+");
         
           return `${sign} ${absStr}x_${term.index + 1}`;
         })
         .join(" ")
-        .replace(/^\s*\+\s*/, ""); // zur Sicherheit führendes '+' entfernen
+        .replace(/^\s*\+\s*/, "");
       
       // string for right side: constant and extra terms
       let rhsParts = [rhs.toString()];
@@ -86,7 +86,7 @@ export function Equations({ solMatrix }){
         rhsParts.push(`${sign} ${absStr}x_${term.index + 1}`);
       });
 
-      // --- 5. Überflüssige 0 entfernen ---
+      // Remove unnecessary constant 0
       const rhsFiltered = rhsParts.filter((part, idx) => {
         const trimmed = part.trim();
         if (idx === 0 && trimmed === "0" && rhsParts.length > 1) {
@@ -95,7 +95,7 @@ export function Equations({ solMatrix }){
         return true;
       });
 
-      // Falls alles entfernt wurde → rechte Seite = 0
+      // If everything has been removed -> right side = 0
       if (rhsFiltered.length === 0) {
         rhsFiltered.push("0");
       }
@@ -103,7 +103,7 @@ export function Equations({ solMatrix }){
       const rhsStr = rhsFiltered.join(" ");
 
       return `${leftStr} = ${rhsStr}`;
-    });
+    }).filter(Boolean); // remove null, undefined, ""
   
     setEquations(eq);
   }, [solMatrix]);

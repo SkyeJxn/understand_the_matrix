@@ -138,18 +138,15 @@ export function LevelRenderer(){
  * Dynamically displays text, formulas, matrices, and interactive elements
  * based on the provided data.
  *
- * @param {String} page - Current page of the level
- * @param {Number} part - Current part within the page
- * @param {Array<Object>} Data - Level data
- * @param {Function} setSolutionState - Callback to set whether the user’s solution is correct
+ * This component consumes the `SolutionContext` and dynamically renders
+ * UI elements based on the `data` structure provided by `SolutionManager`.
  *
- * @returns {JSX.Element} Rendered content view for the current page and part.
+ * @param {Number} part Current part within the page
+ *
+ * @returns {JSX.Element} A scrollable container with all content rows for the current part.
  *
  * @description
- * - Filters data for the current page and part.
  * - Automatically scrolls down when a new part is loaded.
- * - Initializes and compares matrices (solution vs. user input).
- * - Uses `SolutionVerifier` to check correctness of user input.
  * - Supports multiple content types:
  *   - "title": heading text
  *   - "text": paragraph text
@@ -158,6 +155,7 @@ export function LevelRenderer(){
  *   - "CalcButtons": calculation buttons for matrices
  *   - "EditableMatrix": editable matrix input
  *   - "Equations": equation display
+ *   - "SelectionButtons": multiple-choice buttons
  */
 function Content({ part}) {
   const containerRef = useRef(null);
@@ -192,7 +190,9 @@ function Content({ part}) {
             (
               <div style={{display: "flex",alignItems: "center",margin: "20px",}}>
                 <StaticMatrix
-                  data={row.data === "userMatrix" ? userMatrix : solutionMatrix }
+                  data={row.data === "userMatrix" ? userMatrix 
+                          : row.data === "solutionMatrix" ? solutionMatrix
+                          : parseMatrix(row.data) }
                   resultCol={toBool(row.resultcol)}
                   det={toBool(row.determinant)}
                 />
@@ -246,4 +246,7 @@ async function getFileData(mode, level_id){
 
 function toBool(val) {
   return val === true || val === "True" || val === "true";
+}
+function parseMatrix(matrix){
+  return matrix.map(row => row.map(cell => fraction(Number(cell))));
 }

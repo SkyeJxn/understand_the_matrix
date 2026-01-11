@@ -11,8 +11,8 @@
         "transformations": [0,1,2,3],
         "maxNum": 3,
         "denominator": [1],
-        "rows": "random",
-        "cols": "random",
+        "rows": [2,3],
+        "cols": [1,2,2,3,3],
         "zeroCols": "false"
       },
       "return": {
@@ -42,8 +42,8 @@
     "page": "1",
     "part": "1",
     "typ": "EditableMatrix",
-    "rows": 3,
-    "columns": 4,
+    "rows": 2,
+    "columns": 3,
     "resultcol": "true",
     "determinant": "false"
   },
@@ -66,16 +66,14 @@
         "transformations": [0,2,3],
         "maxNum": 3,
         "denominator": [1],
-        "rows": "random",
-        "cols": "random"
+        "rows": [1,2,3,3],
+        "cols": [1,2,3]
       },
       "return": {
         "matrix": ["setSolutionMatrix"],
         "solution": ["setSolutionOption"]
       }
     }
-
-
   },
   {
     "page": "2",
