@@ -15,12 +15,12 @@ export async function solMatrixRREF(
   // ----------------------
   // dimension 
   if (![1, 2, 3].includes(dimension)) {
-    dimension = Math.floor(Math.random() * 3) + 1;
+    dimension = randomInt(1,4);
   }
   // ----------------------
   // solution 
   if (!["no","one","infinite"].includes(solution)){
-    const rand = Math.floor(Math.random() * 3);
+    const rand = randomInt(3);
     solution = ["no", "one", "infinite"][rand];
   }
   // dim 1 + zeroCols false, only possibible with "one"
@@ -29,7 +29,7 @@ export async function solMatrixRREF(
   }
   // no solution only possibible with resultCol
   if (solution === "no" && !resultCol){
-    const rand = Math.floor(Math.random() * 2);
+    const rand = randomInt(2);
     solution = ["infinite", "one"][rand];
   }
 
@@ -38,17 +38,17 @@ export async function solMatrixRREF(
   let matrix;
   if (solution === "one") {
     const list = possibilities[dimension].solution.one;
-    matrix = list[Math.floor(Math.random() * list.length)];
+    matrix = list[randomInt(list.length)];
   }
   else { // no or infinite
     const inf = possibilities[dimension].solution.infinite;
     const list = zeroCols ? inf.withZeroCols : inf.noZeroCols;
-    matrix = list[Math.floor(Math.random() * list.length)];
+    matrix = list[randomInt(list.length)];
   }
   // ----------------------
   // add resultCol
   if (resultCol){
-    matrix = matrix.map(row => [...row, Math.floor(Math.random() * 10)-5]);
+    matrix = matrix.map(row => [...row, randomInt(-5,10)]);
   }
   else {
     return {matrix: matrix, solution: solution}
@@ -74,7 +74,7 @@ export async function solMatrixRREF(
           // must be != 0
           matrix[i][matrix[i].length - 1] = randomFraction(maxNum);
 
-          const rand = Math.floor(Math.random() * 3);
+          const rand = randomInt(3);
           if (rand === 0) break;
         }
       }
@@ -209,12 +209,12 @@ function randomFraction(maxNum, denominator = [1]){
   else return 1;
 
   let num = 1;
-  const rand = randomInt(0,2);
+  const rand = randomInt(2);
   // negative or positive
   if (rand === 0) num = randomInt(1,maxNum+1);
   else num = randomInt(-maxNum,0);
  
-  const den = denominator[randomInt(0, denominator.length)];
+  const den = denominator[randomInt(denominator.length)];
 
   return fraction(num, den);
 }
@@ -223,7 +223,7 @@ function shuffleRows(matrix) {
   let shuffle = matrix.map(row => [...row]);  // deep copy
 
   for (let i = matrix.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = randomInt(i + 1);
     shuffle = SwitchRows(shuffle,i,j);
   }
   return shuffle;
