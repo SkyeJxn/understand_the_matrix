@@ -12,7 +12,8 @@
         "maxNum": 3,
         "denominator": [1],
         "rows": "random",
-        "cols": "random"
+        "cols": "random",
+        "zeroCols": "false"
       },
       "return": {
         "matrix": ["setSolutionMatrix"]

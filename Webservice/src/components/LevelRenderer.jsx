@@ -124,7 +124,7 @@ export function LevelRenderer(){
             </SolutionManager>
 
             {mode === 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
-                                : (<ContinueBtn stage={solutionState ? 2: 1} onContinue={next} />)
+                                : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
             }
             
           </>): (
