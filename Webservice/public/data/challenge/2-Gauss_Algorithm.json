@@ -8,7 +8,7 @@
     "matrixCreator": {
       "params":{
         "resultcol": "False",
-        "changeLevel": 6,
+        "transformations": [0,1,2,3],
         "maxNum": 3,
         "denominator": [1,2,2,2],
         "rows": 3,

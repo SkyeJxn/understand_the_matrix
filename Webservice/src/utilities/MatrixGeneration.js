@@ -99,24 +99,22 @@ export async function solMatrixRREF(
  *
  * @param {boolean} [resultCol=false] Whether the matrix includes a result column (augmented matrix).
  *
- * @param {0 | 1 | 2 | 3 |4|5|6} [changeLevel=0]  -
- *       - 0 → no transformation  
- *       - 1 → upward Gauss
- *       - 2 → upward Gauss + shuffle
- *       - 3 → upward Gauss + shuffle + multiply         ↑ solution still recognizable
- *       - 4 → upward Gauss + downward Gauss             ↓ solution usually not recognizable
- *       - 5 → upward Gauss + downward Gauss + shuffle
- *       - 6 → upward Gauss + downward Gauss + shuffle + multiply
+ * @param {number[]} [transformations=[]] Individual matrix transformation sequence (example: [0,1,2,3])
+ * 
+ * - 0: upward Gauss
+ * - 1: downward Gauss
+ * - 2: shuffle
+ * - 3: multiply
+ * 
+ * solution still recognizable: [0,2,3]
  * 
  * @param {number} [maxNum=1] Maximum absolute value for random scalars used in row operations.
  *
  * @param {number[]} [denominator=[1]] Allowed denominators for random fractions (example: [1,1,2,4]).
  *
- * @param {number} [rows=3] Desired number of rows in the final matrix.
+ * @param {number | "random"} [rows=3] Desired number of rows in the final matrix.
  *
- * @param {number} [cols=3] Desired number of columns in the final matrix. (exclusive result col)
- *
- * @param {boolean} [zeroRows=true] Can there be zero rows?
+ * @param {number | "random"} [cols=3] Desired number of columns in the final matrix. (exclusive result col)
  * 
  * @param {boolean} [zeroCols=true] Can there be zero columns?
  * 
@@ -130,7 +128,7 @@ export async function MatrixCreator({
     solMatrix = "random",
     solution = "random",
     resultCol = false,
-    changeLevel = 0,
+    transformations = [],
     maxNum = 1, 
     denominator = [1],
     rows = 3,
@@ -178,92 +176,32 @@ export async function MatrixCreator({
             });
         }
     }
-    // ---------------------------------------
-    // (0) no transformation
-    // ---------------------------------------
-    if (changeLevel === 0){
-        return {
-            matrix: solMatrix,
-            solMatrix: solMatrix,
-            solution: solution
-        };
+    // -----------------------------------
+    // transformations
+    // -----------------------------------
+    let matrix = solMatrix.map(row => [...row]);  // deep copy
+
+    for (const value of transformations) {
+      switch (value){
+        case 0:
+          matrix = gaussUpward(matrix, maxNum);
+          break;
+        case 1:
+          matrix = gaussDownward(matrix, maxNum);
+          break;
+        case 2:
+          matrix = shuffleRows(matrix);
+          break;
+        case 3:
+          matrix = multiplyRows(matrix, maxNum, denominator);
+          break;
+      }
     }
-    // ---------------------------------------
-    // (1) upward Gauss
-    // ---------------------------------------
-    let matrix = gaussUpward(solMatrix, maxNum);
-    
-    if (changeLevel === 1){
-        return {
+    return {
             matrix: matrix,
             solMatrix: solMatrix,
             solution: solution
-        };    
-    }
-
-    if (changeLevel <= 3) {
-      // ---------------------------------------
-      // (2) upward Gauss + shuffle
-      // ---------------------------------------
-      let shuffle = shuffleRows(matrix);
-
-      if (changeLevel === 2){
-          return {
-              matrix: shuffle,
-              solMatrix: solMatrix,
-              solution: solution
-          };
-      }
-      // ---------------------------------------
-      // (3) upward Gauss + shuffle + multiply
-      // ---------------------------------------
-      let multiply = multiplyRows(shuffle, maxNum, denominator);
-
-      if (changeLevel === 3){
-          return {
-              matrix: multiply,
-              solMatrix: solMatrix,
-              solution: solution
-          };
-      }
-    }
-    // ---------------------------------------
-    // (4) upward Gauss + downward Gauss
-    // ---------------------------------------
-    matrix = gaussDownward(matrix, maxNum);
-        
-    if(changeLevel === 4) {
-      return {
-        matrix: matrix,
-        solMatrix: solMatrix,
-        solution: solution
-      };
-    }
-    // ---------------------------------------
-    // (5) upward Gauss + downward Gauss + shuffle
-    // ---------------------------------------
-    matrix = shuffleRows(matrix);
-        
-    if(changeLevel === 5) {
-      return {
-        matrix: matrix,
-        solMatrix: solMatrix,
-        solution: solution
-      };
-    }
-
-    // ---------------------------------------
-    // (6) upward Gauss + downward Gauss + shuffle + multiply
-    // ---------------------------------------
-    matrix = multiplyRows(matrix, maxNum, denominator);
-        
-    return {
-      matrix: matrix,
-      solMatrix: solMatrix,
-      solution: solution
     };
-    
-
 }
 
 function randomFraction(maxNum, denominator = [1]){
