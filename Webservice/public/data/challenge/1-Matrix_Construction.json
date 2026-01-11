@@ -3,7 +3,7 @@
     "page": "1",
     "part": "1",
     "solution": "matrix",
-    "acceptance": 3,
+    "acceptance": 4,
    
     "matrixCreator": {
       "params":{

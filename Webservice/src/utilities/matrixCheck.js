@@ -1,10 +1,13 @@
+import { equal } from 'mathjs';
+
 /**
  *
  * @param {Number} acceptance -
- * 0 (equivalent),
- * 1 (multiples),
- * 2 (lines swapped),
- * 3 (line swapped & multiples)
+ * - 0 (equivalent),
+ * - 1 (multiples),
+ * - 2 (lines swapped),
+ * - 3 (line swapped & multiples)
+ * - 4 (line swapped & multiples & ignore zero lines)
  * @param {number[][] | fraction[][]} solutionMatrix - The solution matrix.
  * @param {number[][] | fraction[][]} userMatrix - The user matrix.
  *
@@ -12,16 +15,17 @@
  */
 export function SolutionVerifier(acceptance = 0, solutionMatrix, userMatrix) {
   if (!Array.isArray(solutionMatrix) || !Array.isArray(userMatrix)) return false;
-  if (JSON.stringify(solutionMatrix) === JSON.stringify(userMatrix))
-    return true;
-  if (solutionMatrix.length !== userMatrix.length) return false;
-  if (solutionMatrix[0].length !== userMatrix[0].length) return false;
+  if (JSON.stringify(solutionMatrix) === JSON.stringify(userMatrix)) return true;
+
+  if (solutionMatrix.length !== userMatrix.length       && acceptance !== 4) return false;
+  if (solutionMatrix[0].length !== userMatrix[0].length && acceptance !== 4) return false;
 
   if (acceptance === 0) return rowsEqual(solutionMatrix, userMatrix);
   if (acceptance === 1) return rowsMultiples(solutionMatrix, userMatrix);
   if (acceptance === 2) return rowsEqualWithSwap(solutionMatrix, userMatrix);
-  if (acceptance === 3)
-    return rowsMultiplesWithSwap(solutionMatrix, userMatrix);
+  if (acceptance === 3) return rowsMultiplesWithSwap(solutionMatrix, userMatrix);
+  if (acceptance === 4) return rowsMultiplesWithSwap(solutionMatrix, userMatrix, true);
+
   return false;
 }
 
@@ -47,7 +51,13 @@ function rowsMultiples(solutionMatrix, userMatrix) {
   return true;
 }
 
-function rowsMultiplesWithSwap(solutionMatrix, userMatrix) {
+function rowsMultiplesWithSwap(solutionMatrix, userMatrix, ignoreZeroLines = false) {
+  if (ignoreZeroLines) {
+    userMatrix = removeZeroRows(userMatrix);
+    userMatrix = removeZeroCols(userMatrix);
+    solutionMatrix = removeZeroRows(solutionMatrix);
+    solutionMatrix = removeZeroCols(solutionMatrix);
+  }
   // sorting both sets
   const solRows = solutionMatrix.map((row) => normalizeRow(row)).sort();
   const userRows = userMatrix.map((row) => normalizeRow(row)).sort();
@@ -87,4 +97,28 @@ function normalizeRow(row) {
   return JSON.stringify(
     row.map((cell) => (cell.valueOf() / divisor).toFixed(12))
   );
+}
+
+function removeZeroRows(matrix) {
+  return matrix.filter(row => {
+    const isZeroRow = row.every(value => equal(value, 0));
+    return !isZeroRow;
+  });
+}
+
+function removeZeroCols(matrix) {
+  if (matrix.length === 0) return matrix;
+
+  const cols = matrix[0].length;
+  const nonZeroColIndices = [];
+
+  for (let col = 0; col < cols; col++) {
+    const isZeroCol = matrix.every(row => equal(row[col], 0));
+
+    if (!isZeroCol) {
+      nonZeroColIndices.push(col);
+    }
+  }
+
+  return matrix.map(row => nonZeroColIndices.map(i => row[i]));
 }
