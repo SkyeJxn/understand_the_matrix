@@ -57,6 +57,9 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
               case "solMatrix":
                   params.solMatrix = parseMatrix(value);
                   break;
+              case "transformations":
+                  params.transformations = parseArray(value);
+                  break;
               case "denominator":
                   params.denominator = parseArray(value);
                   break;
