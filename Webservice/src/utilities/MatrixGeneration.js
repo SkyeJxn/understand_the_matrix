@@ -4,20 +4,28 @@ import { fraction, randomInt } from "mathjs";
 export async function solMatrixRREF(
   dimension = "random", 
   solution = "random",
-  resultCol = false
+  resultCol = false,
+  zeroCols = true,
+  maxNum = 1, 
 ){
   const rawData = await fetch(`/data/challenge/matrix_rref.json`);
   const data = await rawData.json();
   const possibilities = data[0].dimension;
 
-  // dimension
+  // ----------------------
+  // dimension 
   if (![1, 2, 3].includes(dimension)) {
     dimension = Math.floor(Math.random() * 3) + 1;
   }
-  // solution
+  // ----------------------
+  // solution 
   if (!["no","one","infinite"].includes(solution)){
     const rand = Math.floor(Math.random() * 3);
     solution = ["no", "one", "infinite"][rand];
+  }
+  // dim 1 + zeroCols false, only possibible with "one"
+  if (dimension === 1 && zeroCols === false) { 
+    solution = "one";
   }
   // no solution only possibible with resultCol
   if (solution === "no" && !resultCol){
@@ -25,6 +33,7 @@ export async function solMatrixRREF(
     solution = ["infinite", "one"][rand];
   }
 
+  // ----------------------
   // random matrix
   let matrix;
   if (solution === "one") {
@@ -32,10 +41,11 @@ export async function solMatrixRREF(
     matrix = list[Math.floor(Math.random() * list.length)];
   }
   else { // no or infinite
-    const list= possibilities[dimension].solution.infinite;
+    const inf = possibilities[dimension].solution.infinite;
+    const list = zeroCols ? inf.withZeroCols : inf.noZeroCols;
     matrix = list[Math.floor(Math.random() * list.length)];
   }
-
+  // ----------------------
   // add resultCol
   if (resultCol){
     matrix = matrix.map(row => [...row, Math.floor(Math.random() * 10)-5]);
@@ -44,6 +54,8 @@ export async function solMatrixRREF(
     return {matrix: matrix, solution: solution}
   }
 
+  // ---------------------
+  // no/infinite: handle zero rows
   if (solution === "no" || solution === "infinite") {
 
     for (let i = 0; i < matrix.length; i++) {
@@ -60,7 +72,7 @@ export async function solMatrixRREF(
           matrix[i][matrix[i].length - 1] = 0;
         } else if (solution === "no") {
           // must be != 0
-          matrix[i][matrix[i].length - 1] = randomNonZero();
+          matrix[i][matrix[i].length - 1] = randomFraction(maxNum);
 
           const rand = Math.floor(Math.random() * 3);
           if (rand === 0) break;
@@ -72,15 +84,6 @@ export async function solMatrixRREF(
   return {matrix: matrix, solution: solution}
 }
 
-
-// Helper: random non-zero integer in [-5,5]
-function randomNonZero() {
-  let x = 0;
-  while (x === 0) {
-    x = Math.floor(Math.random() * 11) - 5;
-  }
-  return x;
-}
 
 /**
  * Generates or transforms a matrix using randomized Gauss operations.
@@ -113,6 +116,10 @@ function randomNonZero() {
  *
  * @param {number} [cols=3] Desired number of columns in the final matrix. (exclusive result col)
  *
+ * @param {boolean} [zeroRows=true] Can there be zero rows?
+ * 
+ * @param {boolean} [zeroCols=true] Can there be zero columns?
+ * 
  * @returns {number[][]} return.matrix: The transformed matrix after applying Gauss operations.
  *
  * @returns {number[][]} return.solMatrix: The original (or generated) solution matrix before transformations.
@@ -127,7 +134,8 @@ export async function MatrixCreator({
     maxNum = 1, 
     denominator = [1],
     rows = 3,
-    cols = 3
+    cols = 3,
+    zeroCols = true
 } = {}) {
     if(rows === "random"){
       rows = randomInt(1,4);
@@ -137,7 +145,7 @@ export async function MatrixCreator({
     }
     // solmatrix soll random sein
     if (!Array.isArray(solMatrix)){
-        const result = await solMatrixRREF(Math.min(rows,cols),solution,resultCol);
+        const result = await solMatrixRREF(Math.min(rows,cols),solution,resultCol,zeroCols, maxNum);
         solMatrix = result.matrix;
         solution = result.solution;
     }
@@ -259,12 +267,15 @@ export async function MatrixCreator({
 }
 
 function randomFraction(maxNum, denominator = [1]){
-  maxNum = Math.abs(maxNum);
+  if (maxNum !== 0) maxNum = Math.abs(maxNum);
+  else return 1;
 
-  let num = 0; 
-  while (num === 0) { 
-    num = randomInt(-maxNum, maxNum + 1);
-  }
+  let num = 1;
+  const rand = randomInt(0,2);
+  // negative or positive
+  if (rand === 0) num = randomInt(1,maxNum+1);
+  else num = randomInt(-maxNum,0);
+ 
   const den = denominator[randomInt(0, denominator.length)];
 
   return fraction(num, den);

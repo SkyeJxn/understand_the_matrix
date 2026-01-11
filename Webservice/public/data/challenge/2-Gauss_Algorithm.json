@@ -12,7 +12,8 @@
         "maxNum": 3,
         "denominator": [1,2,2,2],
         "rows": 3,
-        "cols": 3
+        "cols": 3,
+        "zeroCols": "false"
       },
       "return": {
         "matrix": "setUserMatrix",

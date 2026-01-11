@@ -51,6 +51,9 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
               case "resultcol":
                   params.resultCol = toBool(value);
                   break;
+              case "zeroCols":
+                  params.zeroCols = toBool(value);
+                  break;
               case "solMatrix":
                   params.solMatrix = parseMatrix(value);
                   break;
