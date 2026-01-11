@@ -1,9 +1,51 @@
-import { solMatrixRREF, MatrixCreator } from "../utilities/MatrixGeneration";
+import { MatrixCreator } from "../utilities/MatrixGeneration";
 import { SolutionVerifier } from "../utilities/matrixCheck";
 import { useState, useEffect } from "react";
 import { SolutionContext } from "@/hooks/SolutionContext";
 import { fraction } from "mathjs";
 
+/**
+ * Manages the user and solution states.
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children Child components (Content) that consume the solution context.
+ *
+ * @param {Array<Object>} props.Data Full dataset for the current level
+ *
+ * @param {number} props.page current page
+ *
+ * @param {number} props.part urrent part (all parts ≤ this number are active)
+ *
+ * @param {Function} props.setSolutionState Callback to notify the parent whether the user has solved the task.
+ *
+ * @returns {JSX.Element} A context provider wrapping the child components.
+ * 
+ * @description
+ * ### Workflow
+ *
+ * **1. Data Filtering**
+ * Filters all rows belonging to the current page and all parts up to the current part.
+ *
+ * **2. Matrix Creation**
+ * If a row contains `matrixCreator`, its parameters are parsed and passed to `MatrixCreator`.
+ * The returned values (matrix, solMatrix, solution) are assigned to the appropriate state
+ * depending on the `return` mapping.
+ *
+ * **3. Options Handling**
+ * If the row defines multiple-choice options, they are stored and the correct option is set
+ * unless marked as `"dynamic"`.
+ *
+ * **4. Acceptance Handling**
+ * If a tolerance value is defined (only for matrix verification), it is stored for later verification.
+ *
+ * **5. Verification**
+ * - If the user enters a matrix, it is compared to the solution matrix using `SolutionVerifier`.
+ * - If the user selects an option, it is compared to the correct option.
+ * - On success, `setSolutionState(true)` is triggered.
+ *
+ * **6. Context Exposure**
+ * All relevant state values and setters are exposed through `SolutionContext`.
+ */
 export default function SolutionManager({ children, Data, page, part, setSolutionState }) {
   const [options, setOptions] = useState(null);
   const [solutionOption, setSolutionOption] = useState(null);
@@ -106,8 +148,6 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
           } 
         }
       }
-    
-    
     
       // ---------------------------
       // options

@@ -95,11 +95,11 @@ export async function solMatrixRREF(
  *
  * @param {number[][] | "random"} [solMatrix="random"] A predefined matrix or `"random"` to auto‑generate one.
  *
- * @param {"random" | "one" | "no" | "infinite"} [solution="random"] Desired solution type when generating a random matrix.
+ * @param {"random" | "one" | "no" | "infinite"} [solution="random"] solution type (irrelevant for a given solMatrix)
  *
- * @param {boolean} [resultCol=false] Whether the matrix includes a result column (augmented matrix).
+ * @param {boolean} [resultCol=false] matrix includes a result column (augmented matrix)
  *
- * @param {number[]} [transformations=[]] Individual matrix transformation sequence (example: [0,1,2,3])
+ * @param {number[]} [transformations=[]] matrix transformation sequence (example: [0,1,2,3]), no transformation: []
  * 
  * - 0: upward Gauss
  * - 1: downward Gauss
@@ -108,13 +108,13 @@ export async function solMatrixRREF(
  * 
  * solution still recognizable: [0,2,3]
  * 
- * @param {number} [maxNum=1] Maximum absolute value for random scalars used in row operations.
+ * @param {number} [maxNum=1] Maximum absolute value for random scalars used in row operations (from -maxNum to +maxNum).
  *
- * @param {number[]} [denominator=[1]] Allowed denominators for random fractions (example: [1,1,2,4]).
+ * @param {number[]} [denominator=[1]] Allowed denominators for random fractions (example: [1,1,2,4]), used only in multiply tranformation.
  *
- * @param {number | "random"} [rows=3] Desired number of rows in the final matrix.
+ * @param {number[]} [rows=[3]] number of rows (irrelevant for a given solMatrix)
  *
- * @param {number | "random"} [cols=3] Desired number of columns in the final matrix. (exclusive result col)
+ * @param {number[]} [cols=[3]] number of columns (exclusive result col) (irrelevant for a given solMatrix)
  * 
  * @param {boolean} [zeroCols=true] Can there be zero columns?
  * 
@@ -131,50 +131,49 @@ export async function MatrixCreator({
     transformations = [],
     maxNum = 1, 
     denominator = [1],
-    rows = 3,
-    cols = 3,
+    rows = [3],
+    cols = [3],
     zeroCols = true
 } = {}) {
-    if(rows === "random"){
-      rows = randomInt(1,4);
-    }
-    if(cols === "random"){
-      cols = randomInt(1,4);
-    }
+
     // solmatrix soll random sein
     if (!Array.isArray(solMatrix)){
-        const result = await solMatrixRREF(Math.min(rows,cols),solution,resultCol,zeroCols, maxNum);
-        solMatrix = result.matrix;
-        solution = result.solution;
-    }
-    // no square matrix?
-    const diff = cols - rows;
-    // adding rows
-    if(diff < 0){
-        const c = solMatrix[0].length;
-        const newRows = Array.from({ length: Math.abs(diff) }, () => 
-            Array(c).fill(0) ); 
-        solMatrix = [...solMatrix, ...newRows];
-    }
-    // adding cols
-    else if(diff > 0){
-        if(solution === "one") solution = "infinite";
+      const rowsNumber = rows[randomInt(0,rows.length)];
+      const colsNumber = cols[randomInt(0,cols.length)];
+      
+      const result = await solMatrixRREF(Math.min(rowsNumber,colsNumber),solution,resultCol,zeroCols, maxNum);
+      solMatrix = result.matrix;
+      solution = result.solution;
+      
+      // no square matrix?
+      const diff = colsNumber - rowsNumber;
+      // adding rows
+      if(diff < 0){
+          const c = solMatrix[0].length;
+          const newRows = Array.from({ length: Math.abs(diff) }, () => 
+              Array(c).fill(0) ); 
+          solMatrix = [...solMatrix, ...newRows];
+      }
+      // adding cols
+      else if(diff > 0){
+          if(solution === "one") solution = "infinite";
 
-        const r = solMatrix.length;
-        const newCols = Array.from({ length: r }, () => 
-            Array(diff).fill(0) );
-        if (!resultCol){
-            solMatrix = solMatrix.map((row, i) => [...row, ...newCols[i]]);
-        }
-        else {
-            // before resultCol
-            const lastCol = solMatrix[0].length - 1; 
-            solMatrix = solMatrix.map((row, i) => { 
-                const left = row.slice(0, lastCol); 
-                const right = row.slice(lastCol); 
-                return [...left, ...newCols[i], ...right]; 
-            });
-        }
+          const r = solMatrix.length;
+          const newCols = Array.from({ length: r }, () => 
+              Array(diff).fill(0) );
+          if (!resultCol){
+              solMatrix = solMatrix.map((row, i) => [...row, ...newCols[i]]);
+          }
+          else {
+              // before resultCol
+              const lastCol = solMatrix[0].length - 1; 
+              solMatrix = solMatrix.map((row, i) => { 
+                  const left = row.slice(0, lastCol); 
+                  const right = row.slice(lastCol); 
+                  return [...left, ...newCols[i], ...right]; 
+              });
+          }
+      }
     }
     // -----------------------------------
     // transformations
