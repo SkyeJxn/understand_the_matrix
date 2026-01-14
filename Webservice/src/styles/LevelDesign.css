@@ -63,3 +63,12 @@ button {
 .katex {
     display: inline-flex;
 }
+
+.matrix-row {
+  display: flex;
+  flex-wrap: wrap;      /* ⭐ erlaubt Umbruch */
+  align-items: center;
+  justify-content: center;
+  gap: 20px;            /* schöner Abstand */
+  margin: 20px;
+}

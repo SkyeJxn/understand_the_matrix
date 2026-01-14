@@ -189,7 +189,7 @@ function Content({ part}) {
           )}
           {row.typ === "StaticMatrix" &&
             (
-              <div style={{display: "flex",alignItems: "center",margin: "20px",}}>
+              <div className="matrix-row">
                 <StaticMatrix
                   data={row.data === "userMatrix" ? userMatrix 
                           : row.data === "solutionMatrix" ? solutionMatrix
