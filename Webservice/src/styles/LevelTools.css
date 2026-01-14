@@ -15,11 +15,12 @@
     width: fit-content;
     margin: 0 auto;
     padding: 15px;
-    background: rgb(27, 27, 27);
+    background: color-mix(in srgb, var(--color5) 15%, transparent);
+    
     margin-bottom: 5px;
 }
 #continue_btn_0 #continue_btn_2 {
-    background: gray !important;
+    background: color-mix(in srgb, var(--color5) 50%, transparent) !important;
 }
 /* incorrect */
 #continue_btn_5  {

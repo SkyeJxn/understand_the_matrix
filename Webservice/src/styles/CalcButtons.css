@@ -125,6 +125,30 @@ button {
     margin-right: 1px;
 }
 
+.p-dropdown-panel {
+  background: none;
+  box-shadow: none;
+}
+
+/* Normale Items */
+.p-dropdown-item {
+  border: 2px solid var(--color5);
+  background: var(--color1);
+  color: var(--color5);
+  border-radius: 10px;
+}
+/* hover */
+.p-dropdown-item:hover {
+  color: var(--color3);
+  border: 2px solid var(--color3);
+}
+/* ausgewählte item */
+.p-dropdown-item.p-highlight {
+  color: var(--color5);
+  border: 2px solid var(--color5);
+  background-color: var(--color4);
+}
+
 
 .arrow-svg {
   width: 100%;
