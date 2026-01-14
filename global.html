@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#Content">Content</a></li><li><a href="global.html#ContinueBtn">ContinueBtn</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#Equations">Equations</a></li><li><a href="global.html#getFile">getFile</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#LevelRenderer">LevelRenderer</a></li><li><a href="global.html#MatrixCreator">MatrixCreator</a></li><li><a href="global.html#matrixStairForm">matrixStairForm</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#SolutionVerifier">SolutionVerifier</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#ThemeChanger">ThemeChanger</a></li><li><a href="global.html#Toolbar">Toolbar</a></li>
+					<li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#Content">Content</a></li><li><a href="global.html#ContinueBtn">ContinueBtn</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#Equations">Equations</a></li><li><a href="global.html#getFile">getFile</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#LevelRenderer">LevelRenderer</a></li><li><a href="global.html#MatrixCreator">MatrixCreator</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#SolutionVerifier">SolutionVerifier</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#ThemeChanger">ThemeChanger</a></li><li><a href="global.html#Toolbar">Toolbar</a></li>
 				</ul>
 			</li>
 			
@@ -610,7 +610,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="Content"><span class="type-signature"></span>Content(page, part, Data, setSolutionState)</h4>
+    <h4 class="name" id="Content"><span class="type-signature"></span>Content(part)</h4>
     
     
 </dt>
@@ -619,10 +619,7 @@
     
     <div class="description">
         <ul>
-<li>Filters data for the current page and part.</li>
 <li>Automatically scrolls down when a new part is loaded.</li>
-<li>Initializes and compares matrices (solution vs. user input).</li>
-<li>Uses <code>SolutionVerifier</code> to check correctness of user input.</li>
 <li>Supports multiple content types:
 <ul>
 <li>&quot;title&quot;: heading text</li>
@@ -632,6 +629,7 @@
 <li>&quot;CalcButtons&quot;: calculation buttons for matrices</li>
 <li>&quot;EditableMatrix&quot;: editable matrix input</li>
 <li>&quot;Equations&quot;: equation display</li>
+<li>&quot;SelectionButtons&quot;: multiple-choice buttons</li>
 </ul>
 </li>
 </ul>
@@ -669,30 +667,6 @@
 
         <tr>
             
-                <td class="name"><code>page</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current page of the level</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>part</code></td>
             
 
@@ -711,54 +685,6 @@
             
 
             <td class="description last"><p>Current part within the page</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>Data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;Object></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Level data</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>setSolutionState</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback to set whether the user’s solution is correct</p></td>
         </tr>
 
     
@@ -822,7 +748,7 @@
     
             
 <div class="param-desc">
-    <p>Rendered content view for the current page and part.</p>
+    <p>A scrollable container with all content rows for the current part.</p>
 </div>
 
 
@@ -1270,10 +1196,7 @@
 
     
     <div class="description">
-        <ul>
-<li>Skips coefficients equal to zero.</li>
-<li>Ensures at least one term is present (defaults to &quot;0x₁&quot; if all coefficients are zero).</li>
-</ul>
+        <p>React component that renders equations from a matrix.</p>
     </div>
     
 
@@ -1393,6 +1316,10 @@
             
 <div class="param-desc">
     <p>A rendered list of equations displayed with KaTeX via <code>BlockMath</code>.</p>
+<ul>
+<li>Skips trivial identities <code>0 = 0</code>.</li>
+<li>Randomly moves some terms to the right-hand side (with sign inversion).</li>
+</ul>
 </div>
 
 
@@ -1854,7 +1781,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="MatrixCreator"><span class="type-signature"></span>MatrixCreator(result, maxNum, denominator)</h4>
+    <h4 class="name" id="MatrixCreator"><span class="type-signature"></span>MatrixCreator( [solMatrix] [, solution] [, resultCol] [, transformations] [, maxNum] [, denominator] [, rows] [, cols] [, zeroCols])</h4>
     
     
 </dt>
@@ -1862,7 +1789,11 @@
 
     
     <div class="description">
-        <p>Help component that Transforms a Matrix with a reverse gauss algorithm</p>
+        <p>Generates or transforms a matrix using randomized Gauss operations.</p>
+<p>It returns
+the transformed matrix,
+the original solution matrix and
+the solution (&quot;one&quot;, &quot;no&quot;, &quot;infinite&quot;).</p>
     </div>
     
 
@@ -1885,7 +1816,11 @@
         <th>Type</th>
 
         
+        <th>Argument</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1897,13 +1832,16 @@
 
         <tr>
             
-                <td class="name"><code>result</code></td>
+                <td class="name"><code>solMatrix</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">Array.&lt;Array.&lt;number>></span>
+|
+
+<span class="param-type">"random"</span>
 
 
 
@@ -1911,10 +1849,162 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>Starting Matrix</p></td>
+            
+                <td class="default">
+                
+                    "random"
+                
+                </td>
+            
+
+            <td class="description last"><p>A predefined matrix or <code>&quot;random&quot;</code> to auto‑generate one.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>solution</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">"random"</span>
+|
+
+<span class="param-type">"one"</span>
+|
+
+<span class="param-type">"no"</span>
+|
+
+<span class="param-type">"infinite"</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "random"
+                
+                </td>
+            
+
+            <td class="description last"><p>solution type (irrelevant for a given solMatrix)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>resultCol</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>matrix includes a result column (augmented matrix)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transformations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>matrix transformation sequence (example: [0,1,2,3]), no transformation: []</p>
+<ul>
+<li>0: upward Gauss</li>
+<li>1: downward Gauss</li>
+<li>2: shuffle</li>
+<li>3: multiply</li>
+</ul>
+<p>solution still recognizable: [0,2,3]</p></td>
         </tr>
 
     
@@ -1935,10 +2025,26 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>Maximum number in scalar</p></td>
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last"><p>Maximum absolute value for random scalars used in row operations (from -maxNum to +maxNum).</p></td>
         </tr>
 
     
@@ -1959,10 +2065,146 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>array of possible denominators, default is [1]</p></td>
+            
+                <td class="default">
+                
+                    [1]
+                
+                </td>
+            
+
+            <td class="description last"><p>Allowed denominators for random fractions (example: [1,1,2,4]), used only in multiply tranformation.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rows</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    [3]
+                
+                </td>
+            
+
+            <td class="description last"><p>number of rows (irrelevant for a given solMatrix)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cols</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    [3]
+                
+                </td>
+            
+
+            <td class="description last"><p>number of columns (exclusive result col) (irrelevant for a given solMatrix)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>zeroCols</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last"><p>Can there be zero columns?</p></td>
         </tr>
 
     
@@ -2023,8 +2265,12 @@
 
     
     <h5>Returns:</h5>
-    
-            
+    <ul>
+            <li>
+<div class="param-desc">
+    <p>return.matrix: The transformed matrix after applying Gauss operations.</p>
+</div>
+
 
 
 <dl>
@@ -2040,235 +2286,13 @@
     </dd>
 </dl>
 
-
+</li>
         
+            <li>
+<div class="param-desc">
+    <p>return.solMatrix: The original (or generated) solution matrix before transformations.</p>
+</div>
 
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="matrixStairForm"><span class="type-signature"></span>matrixStairForm(minRows, maxRows, minCols, maxCols, acceptance)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Generates a random matrix in a staircase shape</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>minRows</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>minimum number of rows</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>maxRows</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>maximum number of rows</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>minCols</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>minimum number of columns</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>maxCols</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>maximum number of columns</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>acceptance</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>0 (strict stair shape), 1 (half with 1s), 2 (half without 1s)</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
 
 
 <dl>
@@ -2284,8 +2308,36 @@
     </dd>
 </dl>
 
-
+</li>
         
+            <li>
+<div class="param-desc">
+    <p>return.solution: The solution type of the generated matrix.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">"one"</span>
+|
+
+<span class="param-type">"no"</span>
+|
+
+<span class="param-type">"infinite"</span>
+
+
+
+    </dd>
+</dl>
+
+</li>
+        </ul>
 
     
 </dd>
@@ -2871,10 +2923,13 @@ and adding the new one.</p>
 
             
 
-            <td class="description last"><p>0 (equivalent),
-1 (multiples),
-2 (lines swapped),
-3 (line swapped &amp; multiples)</p></td>
+            <td class="description last"><ul>
+<li>0 (equivalent),</li>
+<li>1 (multiples),</li>
+<li>2 (lines swapped),</li>
+<li>3 (line swapped &amp; multiples)</li>
+<li>4 (line swapped &amp; multiples &amp; ignore zero lines)</li>
+</ul></td>
         </tr>
 
     
@@ -3781,7 +3836,7 @@ CSS class to the document body when selected.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
 	
-		on 2026-01-09T11:47:23+00:00
+		on 2026-01-14T10:38:14+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
