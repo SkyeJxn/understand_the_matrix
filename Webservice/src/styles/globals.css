@@ -73,7 +73,12 @@ button {
   padding: 5px;
 }
 
-.p-button:focus {
-  box-shadow: none !important;
-  outline: none !important;
+/* removes the blue frame from primereact */
+.p-button:focus,
+.p-dropdown:focus,
+.p-dropdown.p-focus,
+.p-inputtext:focus,
+.p-inputtext.p-focus {
+    box-shadow: none !important;
+    outline: none !important;
 }
