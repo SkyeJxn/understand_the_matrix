@@ -35,7 +35,7 @@ export function LevelRenderer(){
     const [error, setError] = useState(null);
     const [metaData, setMetaData] = useState([]);
 
-    const [solutionState, setSolutionState] = useState(false);
+    const [solutionState, setSolutionState] = useState(0);
 
      useEffect(() => {
         fetch(`/data/${mode}/level_meta.json`)
@@ -121,11 +121,12 @@ export function LevelRenderer(){
               <div className='content'>
                 <Content part={currentPart} />
               </div >
+
+              {mode === 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
+                                  : (<ContinueBtn stage={solutionState} onContinue={next} />)
+              }
             </SolutionManager>
 
-            {mode === 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
-                                : (<ContinueBtn stage={solutionState ? 2: 0} onContinue={next} />)
-            }
             
           </>): (
               <LevelEndContent nextLevelExists={nextLevelExists()} />

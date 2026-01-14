@@ -4,6 +4,8 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { useParams, useNavigate } from "react-router-dom";
+import { useSolution } from "@/hooks/SolutionContext";
+import { Badge } from "primereact/badge";
 
 /**
  * Component that Renders a dynamic progress bar
@@ -14,8 +16,7 @@ import { useParams, useNavigate } from "react-router-dom";
  * @param {boolean} isSmallScreen - relevant for heartCount, but should actually be determined automatically
  * @returns {JSX.Element}
  */
-export function Toolbar({ progressValue, heartCount=5, isSmallScreen=true }){
-  // const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 600;
+export function Toolbar({ progressValue, heartCount=5 }){
   const { mode } = useParams();
   const navigate = useNavigate();
   const disableProgressTransition = progressValue === 0;
@@ -47,20 +48,20 @@ export function Toolbar({ progressValue, heartCount=5, isSmallScreen=true }){
 
           {/* hearts */}
           {mode == 'challenge' ? (<div>
-            {isSmallScreen ? (
-              // small screen
-              <div style={{ position: 'relative', display: 'inline-block' }}>
+
+              {/* small screen */}
+              <div className="hearts-small">
                 <i className='pi pi-heart-fill' style={{ fontSize: '2.5rem', color: 'var(--color3)' }}></i>
                 <span style={{
                   position: 'absolute', top: '50%', left: '50%', 
                   transform: 'translate(-50%, -50%)',
-                  color: 'var(--color2)', fontSize: '1.4rem', fontWeight: 'bold',
+                  color: 'var(--color1)', fontSize: '1.4rem',
                   }}>{heartCount}</span>
               </div>
-              )
-              :(
-              // big screen
-              <div>
+              
+              
+              {/* big screen */}
+              <div className="hearts-big">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <i key={i} className={i+1 > heartCount ? "pi pi-heart": "pi pi-heart-fill"} style={{
                     fontSize: '2.5rem', padding: '5px',
@@ -68,8 +69,8 @@ export function Toolbar({ progressValue, heartCount=5, isSmallScreen=true }){
                   />
                 ))}
               </div>
-            )}
-          </div>): (<div></div>)}
+            
+          </div>): (<></>)}
 
         </div>
         
@@ -117,21 +118,57 @@ export function NavigationArrows({disableBack, onBack, onNext}){
   )
 }
 /**
- * 
- * @param {Number} stage - 0 (disabled), 1 (clickable), 2 (clickable and congrats)
+ * proceeds:  
+ * check, disabled (2) -> check, clickable (3) -> continue, clickable and (in)correct (4/5)
+ *
+ * @param {Number} stage -
+ * - 0 continue, disabled
+ * - 1 continue, clickable
+ * - 2 check,    disabled
+ * - 3 ckeck,    clickable
+ * - 4 continue, clickable and correct
+ * - 5 continue, clickable and incorrect
  * @param {function} onContinue - Callback-function to continue
+ * 
+ * @param {String} solution - solution for incorrect input (stage 5)
+ * 
  * @returns {JSX.Element}
  */
 export function ContinueBtn({stage=0, onContinue}){
+  const { solutionOption } = useSolution();
+  
+  const label = [2, 3].includes(stage) ? 'check' : 'continue';
   return (
     <div id='continue_container'>
-      {stage == 2 && (
-        <div className="feedback">
-        <i className="pi pi-check-circle" ></i>
-        <div>correct</div>
+      {stage >= 4 && (
+        <div className="feedback" style={{color: stage === 4 ? '#66BB6A' : '#E53935',}}>
+          <div className="feedback_row">
+            <Badge
+              value={<i className={stage === 4 ? "pi pi-check" : "pi pi-times"} style={{ fontSize: "0.8rem", color: 'var(--color1)', fontWeight: 'bold' }} />}
+              style={{
+                background: stage === 4 ? '#66BB6A' : '#E53935',
+                borderRadius: '50%',
+                display: "flex", alignItems: "center", justifyContent: "center", 
+                padding: 0
+              }}
+            />
+            <strong>{stage == 4 ? 'correct' : 'incorrect'}</strong>
+          </div>
+
+          {stage === 5 && (
+            <div className="feedback_row">
+              <div>solution:</div>
+              <div>{solutionOption}</div>
+          </div>)}
         </div>
       )}
-      <Button onClick={onContinue} label="continue" id={`continue_btn_${stage}`} disabled={stage == 0} />
+      <Button
+          onClick={onContinue} 
+          label={label} 
+          id={`continue_btn_${stage}`} 
+          disabled={[0, 2].includes(stage)}
+          style={{margin: 0}}
+      />
       
     </div>
   )

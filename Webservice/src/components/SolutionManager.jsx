@@ -68,7 +68,7 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
     setUserOption(null);
     setSolutionOption(null);
     setOptions(null);
-    setSolutionState(false);
+    setSolutionState(0);
 
   }, [Data, page, part, setSolutionState]);
 
@@ -177,17 +177,18 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
     if (userMatrix === null) return;
 
     const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
-    if (isCorrect) setSolutionState(true);
+    if (isCorrect) setSolutionState(4);
 
-  }, [userMatrix, acceptance, solutionMatrix, setSolutionState]);
+  }, [userMatrix, acceptance, solutionMatrix]);
 
   useEffect(() => {
     if (userOption === null) return;
 
     if (userOption === solutionOption){
-      setSolutionState(true);
+      setSolutionState(4);
     }
-  }, [userOption, solutionOption, setSolutionState]);
+    else setSolutionState(5);
+  }, [userOption, solutionOption]);
 
 
   return (
@@ -196,6 +197,7 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
         options,
         setUserOption,
         userOption,
+        solutionOption,
         solutionMatrix,
         setSolutionMatrix,
         userMatrix,
