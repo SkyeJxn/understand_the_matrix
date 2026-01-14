@@ -70,7 +70,7 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
     setOptions(null);
     setSolutionState(false);
 
-  }, [Data, page, part]);
+  }, [Data, page, part, setSolutionState]);
 
   // set solution, set user value, set acceptance
   useEffect(() => {
@@ -179,7 +179,7 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
     const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
     if (isCorrect) setSolutionState(true);
 
-  }, [userMatrix, acceptance, solutionMatrix]);
+  }, [userMatrix, acceptance, solutionMatrix, setSolutionState]);
 
   useEffect(() => {
     if (userOption === null) return;
@@ -187,7 +187,7 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
     if (userOption === solutionOption){
       setSolutionState(true);
     }
-  }, [userOption, solutionOption]);
+  }, [userOption, solutionOption, setSolutionState]);
 
 
   return (
