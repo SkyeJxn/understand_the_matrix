@@ -17,6 +17,13 @@ export function useKeyMap( onNext, onBack, mode) {
         };
 
         function handleKeyDown(e) {
+            const isInput = 
+                e.target.tagName === "INPUT" || 
+                e.target.tagName === "TEXTAREA" || 
+                e.target.isContentEditable; 
+            
+            if (isInput) return;    // input
+
             const handler = keyMappings[e.key];
             if (typeof handler === "function") {
                 e.preventDefault();
