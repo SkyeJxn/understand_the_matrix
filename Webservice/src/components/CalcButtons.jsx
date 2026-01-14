@@ -18,6 +18,8 @@ import { SwitchRows, MultiplyRow, AddRows } from "../utilities/CalcFunctions";
  * @returns {JSX.Element}
  */
 export function CalcButtons({DisableZV = false, DisableZA = false, DisableZM = false, matrix, setMatrix}) {
+  if (!Array.isArray(matrix)) return <></>;
+  if(matrix.length === 0) return <></>;
   return (
     <div className="calc_btns" >
         <MultButton deactivate={DisableZM} matrix={matrix} setMatrix={setMatrix} />

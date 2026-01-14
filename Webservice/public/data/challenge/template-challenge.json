@@ -21,11 +21,17 @@
     "page": "4",
     "part": "1",
     "typ": "StaticMatrix",
-    "solution": [[1,0,0], [0,1,0], [0,0,1]],
+    "data": [[1,0,0], [0,1,0], [0,0,1]],
     "resultcol": "False",
-    "determinant": "False",
-    "maxnum": 1,
-    "denominator": [1]
+    "determinant": "False"
+  },
+  {
+    "page": "2",
+    "part": "2",
+    "typ": "StaticMatrix",
+    "data": "solutionMatrix",
+    "resultcol": "True",
+    "determinant": "False"
   },
   {
     "page": "5",
@@ -35,5 +41,73 @@
     "columns": 3,
     "resultcol": "false",
     "determinant": "false"
+    },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "Equations"
+  },
+  {
+    "page": "2",
+    "part": "2",
+    "typ": "SelectionButtons"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "solution": "matrix",
+    "acceptance": 4,
+   
+    "matrixCreator": {
+      "params":{
+        "resultcol": "true",
+        "transformations": [0,1,2,3],
+        "maxNum": 3,
+        "denominator": [1],
+        "rows": [2,3],
+        "cols": [1,2,2,3,3],
+        "zeroCols": "false"
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"],
+        "solution": ["setSolutionOption"]
+
+      }
     }
+  },
+  {
+    "page": "3",
+    "part": "3",
+    "solution": "options",
+
+    "options": {
+      "possibilities": ["yes", "no", "not known"],
+      "solution": "yes"
+    },
+
+    "matrixCreator": {
+      "params":{
+        "solMatrix": [
+            [1,1,0],
+            [0,0,0]
+        ],
+        "resultcol": "true",
+        "changeLevel": 0
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"]
+      }
+    }
+  },
+  {
+    "page": "2",
+    "part": "2",
+    "solution": "options",
+    
+    "options": {
+      "possibilities": ["no", "one", "infinite"],
+      "solution": "no"
+    }
+
+  }
 ]

@@ -1,5 +1,30 @@
 [
-    {
+  {
+    "page": "1",
+    "part": "1",
+    "solution": "matrix",
+    "acceptance": 3,
+
+    "matrixCreator": {
+      "params":{
+        "resultcol": "False",
+        "transformations": [0,1,2,3],
+        "maxNum": 3,
+        "denominator": [1,2,2,2],
+        "rows": [3],
+        "cols": [3],
+        "zeroCols": "false"
+      },
+      "return": {
+        "matrix": "setUserMatrix",
+        "solMatrix": "setSolutionMatrix",
+        "solution": "setSolutionOption"
+      }
+    }
+
+    
+  },
+  {
     "page": "1",
     "part": "1",
     "typ": "title",
@@ -15,16 +40,9 @@
     "page": "1",
     "part": "1",
     "typ": "StaticMatrix",
-    "solution": [
-      [1, 0, 0],
-      [0, 1, 0],
-      [0, 0, 1]
-    ],
+    "data": "userMatrix",
     "resultcol": "False",
     "determinant": "False",
-    "maxnum": -2,
-    "denominator": [1],
-    "acceptance": 1,
     "calcbtns": "True"
   }
 ]
