@@ -11,24 +11,8 @@ button {
     margin: 0;
     background: none;
 }
-.dialog {
-    /* background: var(--color3); */
-    border-radius: 12px;
-    padding: 20px;
-    height: fit-content;
-    width: fit-content;
-}
 
 .p-icon{color: var(--color5);}
-.dialog :only-child {
-    border-radius: 12px;
-    text-align: center;
-}
-
-.matrix-table th, .dialog_table td {
-    padding: 10px;
-    width: 80px;
-}
 
 
 .select_btn{
@@ -130,7 +114,7 @@ button {
   box-shadow: none;
 }
 
-/* Normale Items */
+/* normal items */
 .p-dropdown-item {
   border: 2px solid var(--color5);
   background: var(--color1);
@@ -142,7 +126,7 @@ button {
   color: var(--color3);
   border: 2px solid var(--color3);
 }
-/* ausgewählte item */
+/* selected item */
 .p-dropdown-item.p-highlight {
   color: var(--color5);
   border: 2px solid var(--color5);
