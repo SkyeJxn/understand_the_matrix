@@ -11,6 +11,7 @@
   .level-renderer-container {
     overflow: auto;
     min-height: 80vh;
+    padding-bottom: 12vh; /*Space for navigation buttons*/
   }
   .NavigationArrows {
     position: fixed;
