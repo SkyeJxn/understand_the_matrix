@@ -66,9 +66,9 @@ button {
 
 .matrix-row {
   display: flex;
-  flex-wrap: wrap;      /* ⭐ erlaubt Umbruch */
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 20px;            /* schöner Abstand */
+  gap: 20px;
   margin: 20px;
 }
