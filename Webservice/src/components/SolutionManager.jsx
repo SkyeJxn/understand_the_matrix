@@ -46,7 +46,7 @@ import { fraction } from "mathjs";
  * **6. Context Exposure**
  * All relevant state values and setters are exposed through `SolutionContext`.
  */
-export default function SolutionManager({ children, Data, page, part, setSolutionState }) {
+export default function SolutionManager({ children, Data, page, part, continueStage, setSolutionState, setContinueStage }) {
   const [options, setOptions] = useState(null);
   const [solutionOption, setSolutionOption] = useState(null);
   const [userOption, setUserOption] = useState(null);
@@ -68,7 +68,7 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
     setUserOption(null);
     setSolutionOption(null);
     setOptions(null);
-    setSolutionState(0);
+    setSolutionState(false);
 
   }, [Data, page, part, setSolutionState]);
 
@@ -165,6 +165,12 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
       if (rowWithSolution.acceptance !== undefined) {
         setAcceptance(Number(rowWithSolution.acceptance));
       }
+      // --------------------------
+      // navigation (Continue_Btn)
+      // -------------------------
+      if (rowWithSolution.navigation === 'check'){
+        setContinueStage(2);
+      }
     
     }
   
@@ -175,19 +181,29 @@ export default function SolutionManager({ children, Data, page, part, setSolutio
   // compare user value with solution
   useEffect(() => {
     if (userMatrix === null) return;
+    // (2) check, disabled -> (3) ckeck, clickable
+    if(continueStage === 2) setContinueStage(3);
 
     const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
-    if (isCorrect) setSolutionState(4);
+    if (isCorrect) {
+      setSolutionState(true);
+      // (0) continue, disabled -> (1) continue, clickable
+      if(continueStage === 0) setContinueStage(1);
+    }
 
   }, [userMatrix, acceptance, solutionMatrix]);
 
   useEffect(() => {
     if (userOption === null) return;
+    // (2) check, disabled -> (3) ckeck, clickable
+    if(continueStage === 2) setContinueStage(3);
 
     if (userOption === solutionOption){
-      setSolutionState(4);
+      setSolutionState(true);
+      // (0) continue, disabled -> (1) continue, clickable
+      if(continueStage === 0) setContinueStage(1);
     }
-    else setSolutionState(5);
+    else setSolutionState(false);
   }, [userOption, solutionOption]);
 
 

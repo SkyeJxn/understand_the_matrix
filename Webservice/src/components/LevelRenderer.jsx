@@ -35,7 +35,8 @@ export function LevelRenderer(){
     const [error, setError] = useState(null);
     const [metaData, setMetaData] = useState([]);
 
-    const [solutionState, setSolutionState] = useState(0);
+    const [solutionState, setSolutionState] = useState(false);
+    const [continueStage, setContinueStage] = useState(0);
 
      useEffect(() => {
         fetch(`/data/${mode}/level_meta.json`)
@@ -64,6 +65,7 @@ export function LevelRenderer(){
       setCurrentPart(1);
       setProgressValue(0);
       setSolutionState(false);
+      setContinueStage(0);
     }, [mode, id]);
 
     function getMaxPart(page, data) {
@@ -74,6 +76,13 @@ export function LevelRenderer(){
     }
     
     function next() {
+        // 3 ckeck, clickable -> (4/5) continue, clickable and correct/incorrect
+        if(continueStage === 3){
+          if(solutionState) setContinueStage(4);
+          else setContinueStage(5);
+          return;
+        }
+
         const maxPart = getMaxPart(page, levelData);
         if (currentPart < maxPart) {
             setCurrentPart((prev) => prev + 1);
@@ -84,6 +93,7 @@ export function LevelRenderer(){
         }
         if (partsOnLevel > 0) setProgressValue((prev) => prev + 100 / partsOnLevel);
         setSolutionState(false);
+        setContinueStage(0);
     }
 
     function back() {
@@ -115,15 +125,15 @@ export function LevelRenderer(){
           {currentPart <= partsOnLevel ? (<>
               
             <SolutionManager
-              Data={levelData} page={page} part={currentPart}
-              setSolutionState={setSolutionState}
+              Data={levelData} page={page} part={currentPart} continueStage={continueStage}
+              setSolutionState={setSolutionState} setContinueStage={setContinueStage}
             >
               <div className='content'>
-                <Content part={currentPart} />
+                <Content part={currentPart} continueStage={continueStage} />
               </div >
 
               {mode === 'tutorial' ? (<NavigationArrows disableBack={page < 2} onBack={back} onNext={next}/>)
-                                  : (<ContinueBtn stage={solutionState} onContinue={next} />)
+                                  : (<ContinueBtn stage={continueStage} onContinue={next} />)
               }
             </SolutionManager>
 
@@ -158,7 +168,7 @@ export function LevelRenderer(){
  *   - "Equations": equation display
  *   - "SelectionButtons": multiple-choice buttons
  */
-function Content({ part}) {
+function Content({ part, continueStage }) {
   const containerRef = useRef(null);
 
   const {
@@ -198,13 +208,19 @@ function Content({ part}) {
                   det={toBool(row.determinant)}
                 />
                 {toBool(row.calcbtns) && (
-                  <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} />
+                  <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} 
+                                DisableZV={[1,4,5].includes(continueStage)} 
+                                DisableZA={[1,4,5].includes(continueStage)} 
+                                DisableZM={[1,4,5].includes(continueStage)} />
                 )}
               </div>
             )}
           {row.typ === "CalcButtons" && Array.isArray(userMatrix) &&
             userMatrix.length > 0 && (
-            <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} />
+            <CalcButtons matrix={userMatrix} setMatrix={setUserMatrix} 
+                        DisableZV={[1,4,5].includes(continueStage)} 
+                        DisableZA={[1,4,5].includes(continueStage)} 
+                        DisableZM={[1,4,5].includes(continueStage)} />
           )}
           {row.typ === "EditableMatrix" && (
             <EditableMatrix
@@ -213,6 +229,7 @@ function Content({ part}) {
               resultCol={toBool(row.resultcol)}
               det={toBool(row.determinant)}
               onChange={setUserMatrix}
+              disabled={[1,4,5].includes(continueStage)}
             />
           )}
           {row.typ === "Equations" && (
@@ -225,6 +242,7 @@ function Content({ part}) {
               value={userOption}
               options={options}
               onSelect={setUserOption}
+              disabled={[4,5].includes(continueStage)}
             />
           )}
         </React.Fragment>
