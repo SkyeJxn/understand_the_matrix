@@ -4,6 +4,7 @@
     "part": "1",
     "solution": "matrix",
     "acceptance": 3,
+    "navigation": "continue",
 
     "matrixCreator": {
       "params":{

@@ -4,6 +4,7 @@
     "part": "1",
     "solution": "matrix",
     "acceptance": 4,
+    "navigation": "continue",
    
     "matrixCreator": {
       "params":{
@@ -54,6 +55,7 @@
     "page": "2",
     "part": "2",
     "solution": "options",
+    "navigation": "check",
     
     "options": {
       "possibilities": ["no", "one", "infinite"],
@@ -107,6 +109,7 @@
     "page": "3",
     "part": "3",
     "solution": "options",
+    "navigation": "check",
 
     "options": {
       "possibilities": ["yes", "no", "not known"],
