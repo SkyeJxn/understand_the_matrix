@@ -12,8 +12,7 @@ import { Badge } from "primereact/badge";
  * 
  * @param {String} mode - 'tutorial' or 'challenge'
  * @param {function} progressValue - progress bar value (0 - 100) 
- * @param {function} heartCount - only challenge: number of hearts (5 - 0) 
- * @param {boolean} isSmallScreen - relevant for heartCount, but should actually be determined automatically
+ * @param {function} heartCount - only challenge: number of hearts (5 - 0) (is not yet in use)
  * @returns {JSX.Element}
  */
 export function Toolbar({ progressValue, heartCount=5 }){
@@ -46,8 +45,8 @@ export function Toolbar({ progressValue, heartCount=5 }){
             flex: '1',
           }}/>
 
-          {/* hearts */}
-          {mode == 'challenge' ? (<div>
+          {/* hearts (is not yet in use)*/}
+          {mode == 'challenge' && false ? (<div>
 
               {/* small screen */}
               <div className="hearts-small">
@@ -123,7 +122,7 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  *
  * @param {Number} stage -
  * - 0 continue, disabled
- * - 1 continue, clickable
+ * - 1 continue, clickable and correct
  * - 2 check,    disabled
  * - 3 ckeck,    clickable
  * - 4 continue, clickable and correct
@@ -140,19 +139,19 @@ export function ContinueBtn({stage=0, onContinue}){
   const label = [2, 3].includes(stage) ? 'check' : 'continue';
   return (
     <div id='continue_container'>
-      {stage >= 4 && (
-        <div className="feedback" style={{color: stage === 4 ? '#66BB6A' : '#E53935',}}>
+      {(stage >= 4 || stage === 1) && (
+        <div className="feedback" style={{color: stage === 5 ? '#E53935' : '#66BB6A',}}>
           <div className="feedback_row">
             <Badge
-              value={<i className={stage === 4 ? "pi pi-check" : "pi pi-times"} style={{ fontSize: "0.8rem", color: 'var(--color1)', fontWeight: 'bold' }} />}
+              value={<i className={stage === 5 ? "pi pi-times" : "pi pi-check"} style={{ fontSize: "0.8rem", color: 'var(--color1)', fontWeight: 'bold' }} />}
               style={{
-                background: stage === 4 ? '#66BB6A' : '#E53935',
+                background: stage === 5 ? '#E53935' : '#66BB6A',
                 borderRadius: '50%',
                 display: "flex", alignItems: "center", justifyContent: "center", 
                 padding: 0
               }}
             />
-            <strong>{stage == 4 ? 'correct' : 'incorrect'}</strong>
+            <strong>{stage == 5 ? 'incorrect' : 'correct'}</strong>
           </div>
 
           {stage === 5 && (

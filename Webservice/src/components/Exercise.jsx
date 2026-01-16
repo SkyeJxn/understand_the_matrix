@@ -118,7 +118,7 @@ export function Equations({ solMatrix }){
 }
 
 
-export function SelectionButtons({ value , options, onSelect }) {
+export function SelectionButtons({ value , options, onSelect, disabled=false }) {
 
   const opts = Array.isArray(options) ? options : [];
 
@@ -131,6 +131,7 @@ export function SelectionButtons({ value , options, onSelect }) {
       value={value}
       options={opts.map(o => ({ label: o, value: o }))}
       onChange={(e) => onSelect(e.value)}
+      disabled={disabled}
     />
     </div>
   );

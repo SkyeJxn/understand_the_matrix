@@ -49,14 +49,13 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
  * @param {fraction[][]} onChange - Callback, that returns the current matrix as Fractions
  * @returns {JSX.Element}
  */
-export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange }) {
+export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange, disabled=false }) {
   const [rowState, setRowState] = React.useState(rows);
   const [colState, setColState] = React.useState(cols);
 
   const [matrix, setMatrix] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill("")));
   const [fracMatrix, setFracMatrix] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill(new fraction(0))));
   const [errors, setErrors] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill(false)));
-
   React.useEffect(() => {
     setMatrix(Array.from({ length: rowState }, () => Array(colState).fill("")));
     setFracMatrix(Array.from({ length: rowState }, () => Array(colState).fill(new fraction(0))));
@@ -127,8 +126,8 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
       display: 'flex', alignItems: 'center'
     }}>
       <div style={{display: 'flex', flexDirection: 'column' }}>
-        <Button icon="pi pi-plus-circle" onClick={() => setColState(p => (p+1))}/>
-        <Button icon="pi pi-minus-circle" onClick={() => setColState(p => Math.max(1, p-1))}/>
+        <Button icon="pi pi-plus-circle" onClick={() => setColState(p => (p+1))} disabled={disabled} />
+        <Button icon="pi pi-minus-circle" onClick={() => setColState(p => Math.max(1, p-1))} disabled={disabled} />
       </div>
     <div className="matrix-container">
       <InlineMath math={latexLeftBracket} />
@@ -145,6 +144,7 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
                     onChange={(e) => handleChange(i, j, e.target.value)}
                     autoFocus={i === 0 && j === 0}
                     className={errors[i][j] ? "input-error" : ""}
+                    disabled={disabled}
                   />
                 </td>
               ))}
@@ -155,8 +155,8 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
     </div>
     </div>
     <div style={{display: 'flex' }}>
-        <Button icon="pi pi-plus-circle" onClick={() => setRowState(p => (p+1))}/>
-        <Button icon="pi pi-minus-circle" onClick={() => setRowState(p => Math.max(1, p-1))}/>
+        <Button icon="pi pi-plus-circle" onClick={() => setRowState(p => (p+1))} disabled={disabled} />
+        <Button icon="pi pi-minus-circle" onClick={() => setRowState(p => Math.max(1, p-1))} disabled={disabled} />
     </div>
       <style>{`
         .input-error {
