@@ -101,7 +101,7 @@ export function NavigationArrows({disableBack, onBack, onNext}){
     <div className='navigator_btn' style={{
           alignItems: 'center', justifyContent: 'center',
           display: 'flex', gap: '20px',
-          width: '100%', margin: '5px'
+          width: '100%', margin: '5px', marginBottom: '25px'
           }}>
       <button onClick={onBack}>
         <i className="pi pi-arrow-left" style={{ 
