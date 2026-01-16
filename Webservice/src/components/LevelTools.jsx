@@ -117,7 +117,12 @@ export function NavigationArrows({disableBack, onBack, onNext}){
   )
 }
 /**
- * proceeds:  
+ * Component that Renders a Continue/Check button, disabled/clickable with correct/inccorecct feedback
+ * 
+ * proceed 1 ('continue'):  
+ * continue, disabled (0) -> continue, clickable and correct (1)
+ * 
+ * proceed 2 ('check'):  
  * check, disabled (2) -> check, clickable (3) -> continue, clickable and (in)correct (4/5)
  *
  * @param {Number} stage -

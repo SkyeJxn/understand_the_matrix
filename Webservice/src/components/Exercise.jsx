@@ -117,7 +117,14 @@ export function Equations({ solMatrix }){
     
 }
 
-
+/**
+ * Renders a group of selectable buttons based on the provided options.
+ *
+ * @param {string} value - the currently selected value
+ * @param {string[]} options - a list of option labels to display as buttons
+ * @param {(value: string) => void} onSelect - Callback fired when a new option is selected
+ * @param {boolean} [disabled=false] - disables all buttons when true
+ */
 export function SelectionButtons({ value , options, onSelect, disabled=false }) {
 
   const opts = Array.isArray(options) ? options : [];
