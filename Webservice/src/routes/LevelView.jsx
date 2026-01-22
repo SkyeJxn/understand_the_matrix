@@ -1,6 +1,7 @@
 import LevelOverview from "@/components/LevelOverview";
 import Header from "@/components/Header";
 import { useParams, useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer";
 
 export default function LevelView() {
   let { mode } = useParams();
@@ -22,6 +23,7 @@ export default function LevelView() {
         <div>{mode}s</div>
       </Header>
       <LevelOverview ></LevelOverview>
+      <Footer/>
     </div>
   );
 }

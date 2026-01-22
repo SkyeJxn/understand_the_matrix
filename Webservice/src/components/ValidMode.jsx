@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import Header from "./Header";
+import { Footer } from "./Footer";
 
 export default function ValidMode({ children }) {
   const { mode } = useParams();
@@ -9,6 +10,7 @@ export default function ValidMode({ children }) {
     return <div>
       <Header />
       <div>Page not found</div>
+      <Footer/>
     </div>;
   }
 
