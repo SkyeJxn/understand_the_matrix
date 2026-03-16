@@ -17,7 +17,7 @@
     padding: 15px;
     background: color-mix(in srgb, var(--color5) 15%, transparent);
     
-    margin-bottom: 5px;
+    margin-bottom: 45px;
 }
 #continue_btn_0 #continue_btn_2 {
     background: color-mix(in srgb, var(--color5) 50%, transparent) !important;
