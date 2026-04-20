@@ -122,7 +122,7 @@ export function Equations({ solMatrix }){
  *
  * @param {string} value - the currently selected value
  * @param {string[]} options - a list of option labels to display as buttons
- * @param {(value: string) => void} onSelect - Callback fired when a new option is selected
+ * @param {function(string): void} onSelect - Callback fired when a new option is selected
  * @param {boolean} [disabled=false] - disables all buttons when true
  */
 export function SelectionButtons({ value , options, onSelect, disabled=false }) {
