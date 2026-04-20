@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#Content">Content</a></li><li><a href="global.html#ContinueBtn">ContinueBtn</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#Equations">Equations</a></li><li><a href="global.html#getFile">getFile</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#LevelRenderer">LevelRenderer</a></li><li><a href="global.html#MatrixCreator">MatrixCreator</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#SolutionVerifier">SolutionVerifier</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#ThemeChanger">ThemeChanger</a></li><li><a href="global.html#Toolbar">Toolbar</a></li>
+					<li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#Content">Content</a></li><li><a href="global.html#ContinueBtn">ContinueBtn</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#Equations">Equations</a></li><li><a href="global.html#getFile">getFile</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#LevelRenderer">LevelRenderer</a></li><li><a href="global.html#MatrixCreator">MatrixCreator</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#SelectionButtons">SelectionButtons</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#SolutionVerifier">SolutionVerifier</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#ThemeChanger">ThemeChanger</a></li><li><a href="global.html#Toolbar">Toolbar</a></li>
 				</ul>
 			</li>
 			
@@ -610,7 +610,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="Content"><span class="type-signature"></span>Content(part)</h4>
+    <h4 class="name" id="Content"><span class="type-signature"></span>Content(part, continueStage)</h4>
     
     
 </dt>
@@ -685,6 +685,30 @@
             
 
             <td class="description last"><p>Current part within the page</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>continueStage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Current continueStage to disable elements if the continueStage is 1,4 or 5 (part is completed)</p></td>
         </tr>
 
     
@@ -776,12 +800,20 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="ContinueBtn"><span class="type-signature"></span>ContinueBtn(stage, onContinue)</h4>
+    <h4 class="name" id="ContinueBtn"><span class="type-signature"></span>ContinueBtn(stage, onContinue, solution)</h4>
     
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        <p>Component that Renders a Continue/Check button, disabled/clickable with correct/inccorecct feedback</p>
+<p>proceed 1 ('continue'):<br>
+continue, disabled (0) -&gt; continue, clickable and correct (1)</p>
+<p>proceed 2 ('check'):<br>
+check, disabled (2) -&gt; check, clickable (3) -&gt; continue, clickable and (in)correct (4/5)</p>
+    </div>
     
 
     
@@ -832,7 +864,14 @@
 
             
 
-            <td class="description last"><p>0 (disabled), 1 (clickable), 2 (clickable and congrats)</p></td>
+            <td class="description last"><ul>
+<li>0 continue, disabled</li>
+<li>1 continue, clickable and correct</li>
+<li>2 check,    disabled</li>
+<li>3 ckeck,    clickable</li>
+<li>4 continue, clickable and correct</li>
+<li>5 continue, clickable and incorrect</li>
+</ul></td>
         </tr>
 
     
@@ -857,6 +896,30 @@
             
 
             <td class="description last"><p>Callback-function to continue</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>solution</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>solution for incorrect input (stage 5)</p></td>
         </tr>
 
     
@@ -944,7 +1007,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="EditableMatrix"><span class="type-signature"></span>EditableMatrix(rows, cols, resultCol, det, onChange)</h4>
+    <h4 class="name" id="EditableMatrix"><span class="type-signature"></span>EditableMatrix(rows, cols, resultCol, det, onChange [, disabled])</h4>
     
     
 </dt>
@@ -975,7 +1038,11 @@
         <th>Type</th>
 
         
+        <th>Argument</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1001,7 +1068,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>number of rows</p></td>
@@ -1025,7 +1104,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>number of columns (including result column if <code>resultCol</code> is true)</p></td>
@@ -1049,7 +1140,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>is the last column a results column</p></td>
@@ -1073,7 +1176,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>is the matrix a determinant</p></td>
@@ -1097,10 +1212,62 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>Callback, that returns the current matrix as Fractions</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>disabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>disables all user inputs when true</p></td>
         </tr>
 
     
@@ -2738,6 +2905,262 @@ the solution (&quot;one&quot;, &quot;no&quot;, &quot;infinite&quot;).</p>
             
 <hr>
 <dt>
+    <h4 class="name" id="SelectionButtons"><span class="type-signature"></span>SelectionButtons(value, options, onSelect [, disabled])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Renders a group of selectable buttons based on the provided options.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>the currently selected value</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>a list of option labels to display as buttons</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onSelect</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Callback fired when a new option is selected</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>disabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>disables all buttons when true</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="setTheme"><span class="type-signature"></span>setTheme(themeName)</h4>
     
     
@@ -3570,7 +3993,7 @@ CSS class to the document body when selected.</p>
             
 <hr>
 <dt>
-    <h4 class="name" id="Toolbar"><span class="type-signature"></span>Toolbar(mode, progressValue, heartCount, isSmallScreen)</h4>
+    <h4 class="name" id="Toolbar"><span class="type-signature"></span>Toolbar(mode, progressValue, heartCount)</h4>
     
     
 </dt>
@@ -3678,31 +4101,7 @@ CSS class to the document body when selected.</p>
 
             
 
-            <td class="description last"><p>only challenge: number of hearts (5 - 0)</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isSmallScreen</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>relevant for heartCount, but should actually be determined automatically</p></td>
+            <td class="description last"><p>only challenge: number of hearts (5 - 0) (is not yet in use)</p></td>
         </tr>
 
     
@@ -3836,7 +4235,7 @@ CSS class to the document body when selected.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
 	
-		on 2026-01-16T11:17:26+00:00
+		on 2026-04-20T20:34:33+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
