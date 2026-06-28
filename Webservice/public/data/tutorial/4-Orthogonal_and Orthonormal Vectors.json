@@ -1,0 +1,193 @@
+[
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "title",
+    "content": "Orthogonal and Orthonormal Systems"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "text",
+    "content": "Two vectors are called orthogonal if their dot product is zero."
+  },
+  {
+    "page": "1",
+    "part": "2",
+    "typ": "text",
+    "content": "Condition for orthogonality"
+  },
+  {
+    "page": "1",
+    "part": "2",
+    "typ": "katex",
+    "content": "u\\cdot v=0"
+  },
+  {
+    "page": "1",
+    "part": "3",
+    "typ": "text",
+    "content": "The dot product is calculated by multiplying the corresponding components and adding the results."
+  },
+  {
+    "page": "1",
+    "part": "3",
+    "typ": "katex",
+    "content": "\\begin{pmatrix}a\\\\b\\end{pmatrix}\\cdot\\begin{pmatrix}c\\\\d\\end{pmatrix}=ac+bd"
+  },
+
+  {
+    "page": "2",
+    "part": "1",
+    "typ": "title",
+    "content": "Example of Orthogonality"
+  },
+  {
+    "page": "2",
+    "part": "2",
+    "typ": "text",
+    "content": "Consider the following vectors."
+  },
+  {
+    "page": "2",
+    "part": "2",
+    "typ": "katex",
+    "content": "u=\\begin{pmatrix}2\\\\1\\end{pmatrix},\\qquad v=\\begin{pmatrix}1\\\\-2\\end{pmatrix}"
+  },
+  {
+    "page": "2",
+    "part": "3",
+    "typ": "text",
+    "content": "Compute the dot product."
+  },
+  {
+    "page": "2",
+    "part": "3",
+    "typ": "katex",
+    "content": "u\\cdot v=2\\cdot1+1\\cdot(-2)=0"
+  },
+  {
+    "page": "2",
+    "part": "4",
+    "typ": "text",
+    "content": "Since the dot product equals zero, the vectors are orthogonal."
+  },
+
+  {
+    "page": "3",
+    "part": "1",
+    "typ": "title",
+    "content": "Vector Norm"
+  },
+  {
+    "page": "3",
+    "part": "2",
+    "typ": "text",
+    "content": "The norm represents the length of a vector."
+  },
+  {
+    "page": "3",
+    "part": "2",
+    "typ": "katex",
+    "content": "\\|v\\|=\\sqrt{v_1^2+v_2^2}"
+  },
+  {
+    "page": "3",
+    "part": "3",
+    "typ": "text",
+    "content": "Example"
+  },
+  {
+    "page": "3",
+    "part": "3",
+    "typ": "katex",
+    "content": "\\left\\|\\begin{pmatrix}3\\\\4\\end{pmatrix}\\right\\|=\\sqrt{3^2+4^2}=5"
+  },
+
+  {
+    "page": "4",
+    "part": "1",
+    "typ": "title",
+    "content": "Orthonormal Systems"
+  },
+  {
+    "page": "4",
+    "part": "2",
+    "typ": "text",
+    "content": "A system is orthonormal if all vectors are orthogonal and every vector has norm 1."
+  },
+  {
+    "page": "4",
+    "part": "3",
+    "typ": "katex",
+    "content": "\\|v\\|=1"
+  },
+  {
+    "page": "4",
+    "part": "4",
+    "typ": "text",
+    "content": "Example of an orthonormal system"
+  },
+  {
+    "page": "4",
+    "part": "4",
+    "typ": "katex",
+    "content": "\\left\\{\\begin{pmatrix}1\\\\0\\end{pmatrix},\\begin{pmatrix}0\\\\1\\end{pmatrix}\\right\\}"
+  },
+
+  {
+    "page": "5",
+    "part": "1",
+    "typ": "title",
+    "content": "Orthogonal and Orthonormal Basis"
+  },
+  {
+    "page": "5",
+    "part": "2",
+    "typ": "text",
+    "content": "An orthogonal basis is a basis whose vectors are pairwise orthogonal."
+  },
+  {
+    "page": "5",
+    "part": "3",
+    "typ": "katex",
+    "content": "\\left\\{\\begin{pmatrix}2\\\\0\\end{pmatrix},\\begin{pmatrix}0\\\\3\\end{pmatrix}\\right\\}"
+  },
+  {
+    "page": "5",
+    "part": "4",
+    "typ": "text",
+    "content": "An orthonormal basis is an orthogonal basis where every vector has norm 1."
+  },
+  {
+    "page": "5",
+    "part": "5",
+    "typ": "katex",
+    "content": "\\left\\{\\begin{pmatrix}1\\\\0\\end{pmatrix},\\begin{pmatrix}0\\\\1\\end{pmatrix}\\right\\}"
+  },
+
+  {
+    "page": "6",
+    "part": "1",
+    "typ": "title",
+    "content": "Summary"
+  },
+  {
+    "page": "6",
+    "part": "2",
+    "typ": "text",
+    "content": "Orthogonal vectors have a dot product of zero."
+  },
+  {
+    "page": "6",
+    "part": "3",
+    "typ": "text",
+    "content": "Orthonormal vectors are orthogonal and have norm 1."
+  },
+  {
+    "page": "6",
+    "part": "4",
+    "typ": "text",
+    "content": "An orthonormal basis is both orthogonal and normalized."
+  }
+]
