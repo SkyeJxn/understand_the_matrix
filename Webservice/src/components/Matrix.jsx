@@ -41,33 +41,38 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
  * Component to render Clickable Determinants
  * 
  * @param {number[][] | fraction[][]} data - 2-dim array with the matrix values (each inner list is a row)
- * @param {boolean} laplace - whether the determinant should use laplace or not
+ * @param {function} setNext - Callback Function to update the Calculation Formula
  */
-export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]]}){ //laplace = false}){
-  if (!Array.isArray(data)) return (<></>);
-  if (data.length <= 0) return (<></>);
-  const height = Array.from({ length: data.length }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
-
+export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext}){
+  const height = Array.from({ length: data.length }, () => "\\rule{0pt}{2.5em}").join(" \\\\ ");
   const latexLeftBracket = `\\left|\\vphantom{\\begin{array}{c}${height}\\end{array}}\\right.`;
   const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${height}\\end{array}}\\right|`;
   
+  if (data.length <= 0) return (<></>);
+  if (!Array.isArray(data)) return (<></>);
   return (
     <div className='matrix-container'>
-        <InlineMath math={latexLeftBracket} />
-        <table className="matrix-inputs"><tbody>
+        <InlineMath math={latexLeftBracket} style={{"zIndex": "0"}} />
+        <table style={{"zIndex": "1"}}>
+          <tbody>
           {data.map((row, i) => (
             <tr key={i}>
               {row.map((cell, j) => (
-                <td key={j} className="size-0 m-0 p-0">
-                  <button id={j} type="button" className="m-0 p-0">
-                    <div className="size-1 m-0 p-0">{String(cell)}</div>
+                <td key={j}>
+                  <button type="button" style={{"border": "1px solid #ffffff"}} onClick={() => {
+                    setNext(prev => {
+                      const next = [...prev, { type: "cell", data: cell}];
+                      return next;
+                    });
+                  }}>
+                    {String(cell)}
                   </button>
                 </td>
               ))}
             </tr>
           ))}
       </tbody></table>
-        <InlineMath math={latexRightBracket} />     
+        <InlineMath math={latexRightBracket} /> 
     </div>
   );
 }
@@ -108,6 +113,7 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, userMatr
     const r = userMatrix.length;
     const c = userMatrix[0].length;
     
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMatrix(userMatrix.map(row => row.map(cell => cell.toString())));
     setFracMatrix(userMatrix.map(row => row.map(cell => fraction(cell))));
     setErrors(Array.from({ length: r }, () => Array(c).fill(false)));

@@ -1,5 +1,23 @@
  [
-    {
+{
+    "page": "1",
+    "part": "1",
+    "solution": "matrix",
+    "navigation": "check",
+
+    "matrixCreator": {
+      "params":{
+        "solMatrix": 1,
+        "resultcol": "true",
+        "changeLevel": 0
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"]
+      }
+    }
+
+  },
+  {
     "page": "1",
     "part": "1",
     "typ": "ClickableDeterminant",

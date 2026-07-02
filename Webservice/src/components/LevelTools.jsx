@@ -6,6 +6,8 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSolution } from "@/hooks/SolutionContext";
 import { Badge } from "primereact/badge";
+import { BlockMath, InlineMath } from "react-katex";
+import { Determinant } from "../utilities/CalcFunctions";
 
 /**
  * Component that Renders a dynamic progress bar
@@ -253,6 +255,55 @@ export function LevelEndContent({nextLevelExists = false}){
 
     `}</style>
     
+    </div>
+  )
+}
+
+export function DeterminantFormula({detArr, setDetArr, setUserMatrix}){
+
+  const lines = [];
+  let currentLine = [];
+
+  detArr.forEach((item, index) => {
+    if (item.type === "operation" && item.data === "-") {
+      if (currentLine.length > 0) {
+        lines.push(currentLine);
+      }
+      currentLine = [];
+      return;
+    }
+
+    if (item.type === "cell") {
+      currentLine.push(item.data);
+      const nextItem = detArr[index + 1];
+      if (!nextItem || nextItem.type === "operation" && nextItem.data === "-") {
+        lines.push(currentLine);
+        currentLine = [];
+      }
+    }
+  });
+
+  if (currentLine.length > 0) {
+    lines.push(currentLine);
+  }
+
+  const prettyText = lines
+    .map((line, index) => {
+      const prefix = index === 0 ? "" : "\\\\-";
+      return `${prefix}${line.join("&")}`;
+    })
+    .join("\n");
+
+  const Text = `\\begin{align*}${prettyText}\\end{align*}`
+
+  return(
+    <div>
+      <Button onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "-"}];return next;});}}>
+        minus
+      </Button>
+      <BlockMath math={Text}/>
+      <Button onClick={() => {
+        setUserMatrix(Determinant(detArr))}}>Calculate</Button>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { fraction, randomInt } from "mathjs";
+import { fraction } from "mathjs";
 
 /**
  * Help component that Switches given Rows in a Matrix
@@ -56,4 +56,74 @@ export function MultiplyRow(matrix, Row, scalar) {
   }
 
   return newMatrix;
+}
+
+function toFractionValue(value) {
+  return fraction(value).simplify();
+}
+
+function getOperationSymbol(item) {
+  if (!item || item.type !== "operation") return null;
+
+  if (typeof item.data === "string") return item.data;
+  if (item.data && typeof item.data === "object" && "operand" in item.data) {
+    return item.data.operand;
+  }
+
+  return null;
+}
+
+function formatCellValue(item) {
+  return toFractionValue(item.data).toString();
+}
+
+export function Determinant(matrix) {
+  if (!Array.isArray(matrix) || matrix.length === 0) {
+    return {
+      formula: "",
+      value: fraction(0),
+      valueText: "0",
+      lines: [],
+    };
+  }
+
+  const lines = [];
+  const values = [];
+  let currentLine = [];
+  let currentValue = fraction(1);
+
+  const flushLine = () => {
+    if (currentLine.length === 0) return;
+
+    lines.push(currentLine);
+    values.push(currentValue);
+    currentLine = [];
+    currentValue = fraction(1);
+  };
+
+  matrix.forEach((item) => {
+    if (item?.type === "operation") {
+      const op = getOperationSymbol(item);
+      if (op === "-") {
+        flushLine();
+      }
+      return;
+    }
+
+    if (item?.type === "cell") {
+      currentLine.push(formatCellValue(item));
+      currentValue = currentValue.mul(toFractionValue(item.data));
+    }
+  });
+
+  flushLine();
+
+  const value = values.reduce((accumulator, lineValue, index) => {
+    if (index === 0) return accumulator.add(lineValue);
+    return accumulator.sub(lineValue);
+  }, fraction(0));
+
+  console.log("det:",String(value))
+
+  return value;
 }

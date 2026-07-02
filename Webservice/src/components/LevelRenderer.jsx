@@ -3,7 +3,7 @@ import { InlineMath } from "react-katex";
 import { StaticMatrix, EditableMatrix, MatrixHistory, ClickableDeterminant } from "./Matrix";
 import { fraction } from "mathjs";
 import React, { useState, useEffect, useRef } from "react";
-import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
+import { ContinueBtn, DeterminantFormula, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
 import { Equations, SelectionButtons } from "./Exercise";
 import SolutionManager from "./SolutionManager";
@@ -186,6 +186,8 @@ function Content({ part, continueStage }) {
     setUserMatrixHistory,
     rowOperationHistory,
     setRowOperationHistory,
+    detArr,
+    setDetArr,
     data
   } = useSolution();
 
@@ -258,7 +260,8 @@ function Content({ part, continueStage }) {
           )}
           {row.typ === "ClickableDeterminant" && (
             <div className="matrix-row wrap-group">
-              <ClickableDeterminant data={parseMatrix(row.data)}/>
+              <ClickableDeterminant data={parseMatrix(row.data)} setNext={setDetArr}/>
+              <DeterminantFormula detArr={detArr} setDetArr={setDetArr} setUserMatrix={setUserMatrix}/>
             </div>
           )}
           {row.typ === "Equations" && (
