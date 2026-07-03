@@ -76,7 +76,7 @@ export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext,
               <tr key={i}>
                 {row.map((cell, j) => (
                   <td key={j}>
-                    <button type="button" style={{"border": "1px solid #ffffff"}} onClick={() => {
+                    <button type="button" onClick={() => {
                       setNext(prev => {
                         const next = [...prev, { type: "cell", data: cell}];
                         return next;

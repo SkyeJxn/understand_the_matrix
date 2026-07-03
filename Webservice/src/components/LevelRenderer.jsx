@@ -261,7 +261,7 @@ function Content({ part, continueStage }) {
           {row.typ === "ClickableDeterminant" && (
             <div className="matrix-row wrap-group">
               <ClickableDeterminant data={parseMatrix(row.data)} setNext={setDetArr}/>
-              <DeterminantFormula detArr={detArr} setDetArr={setDetArr} setUserMatrix={setUserMatrix}/>
+              <DeterminantFormula detArr={detArr} setDetArr={setDetArr} setUserMatrix={setUserMatrix} matrixRows={parseMatrix(row.data).length}/>
             </div>
           )}
           {row.typ === "Equations" && (
