@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#Content">Content</a></li><li><a href="global.html#ContinueBtn">ContinueBtn</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#Equations">Equations</a></li><li><a href="global.html#getFile">getFile</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#LevelRenderer">LevelRenderer</a></li><li><a href="global.html#MatrixCreator">MatrixCreator</a></li><li><a href="global.html#MatrixHistory">MatrixHistory</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#RowOperation">RowOperation</a></li><li><a href="global.html#SelectionButtons">SelectionButtons</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#SolutionVerifier">SolutionVerifier</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#ThemeChanger">ThemeChanger</a></li><li><a href="global.html#Toolbar">Toolbar</a></li>
+					<li><a href="global.html#AddRows">AddRows</a></li><li><a href="global.html#CalcButtons">CalcButtons</a></li><li><a href="global.html#Content">Content</a></li><li><a href="global.html#ContinueBtn">ContinueBtn</a></li><li><a href="global.html#EditableMatrix">EditableMatrix</a></li><li><a href="global.html#Equations">Equations</a></li><li><a href="global.html#getFile">getFile</a></li><li><a href="global.html#LevelEndContent">LevelEndContent</a></li><li><a href="global.html#LevelRenderer">LevelRenderer</a></li><li><a href="global.html#MatrixCreator">MatrixCreator</a></li><li><a href="global.html#MatrixHistory">MatrixHistory</a></li><li><a href="global.html#MultiplyRow">MultiplyRow</a></li><li><a href="global.html#NavigationArrows">NavigationArrows</a></li><li><a href="global.html#RowOperation">RowOperation</a></li><li><a href="global.html#ScalarInput">ScalarInput</a></li><li><a href="global.html#SelectionButtons">SelectionButtons</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#SolutionVerifier">SolutionVerifier</a></li><li><a href="global.html#StaticMatrix">StaticMatrix</a></li><li><a href="global.html#SwitchRows">SwitchRows</a></li><li><a href="global.html#ThemeChanger">ThemeChanger</a></li><li><a href="global.html#Toolbar">Toolbar</a></li>
 				</ul>
 			</li>
 			
@@ -862,6 +862,8 @@
 continue, disabled (0) -&gt; continue, clickable and correct (1)</p>
 <p>proceed 2 ('check'):<br>
 check, disabled (2) -&gt; check, clickable (3) -&gt; continue, clickable and (in)correct (4/5)</p>
+<p>proceed 3 ('repeatedCheck'):<br>
+check, disabled (6) -&gt; check, clickable (7) -&gt; continue, clickable and correct (4) oder try again, incorrect (8) -&gt; check, clickable (7) -&gt; usw.</p>
     </div>
     
 
@@ -919,7 +921,10 @@ check, disabled (2) -&gt; check, clickable (3) -&gt; continue, clickable and (in
 <li>2 check,    disabled</li>
 <li>3 ckeck,    clickable</li>
 <li>4 continue, clickable and correct</li>
-<li>5 continue, clickable and incorrect</li>
+<li>5 continue, clickable and incorrect (with solution)</li>
+<li>6 check, disabled (without solution/repeated check)</li>
+<li>7 check, clickable (without solution/repeated check)</li>
+<li>8 try again, clickable and incorrect (without solution/repeated check)</li>
 </ul></td>
         </tr>
 
@@ -3588,6 +3593,270 @@ Allows undoing the last operation and toggling the history view.</p>
             
 <hr>
 <dt>
+    <h4 class="name" id="ScalarInput"><span class="type-signature"></span>ScalarInput(value, onChange [, disabled] [, placeholder])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Simple scalar input component for entering a single number.
+No size controls like EditableMatrix - just a clean input field.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Current input value</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Callback when value changes</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>disabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Disables input when true</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>placeholder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "Enter value"
+                
+                </td>
+            
+
+            <td class="description last"><p>Placeholder text</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="SelectionButtons"><span class="type-signature"></span>SelectionButtons(value, options, onSelect [, disabled])</h4>
     
     
@@ -4918,7 +5187,7 @@ CSS class to the document body when selected.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
 	
-		on 2026-06-25T10:14:57+00:00
+		on 2026-07-03T14:24:06+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
