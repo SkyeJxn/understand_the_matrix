@@ -19,12 +19,17 @@
     
     margin-bottom: 45px;
 }
-#continue_btn_0 #continue_btn_2 {
+/* disabled */
+#continue_btn_0 #continue_btn_2 #continue_btn_6 {
     background: color-mix(in srgb, var(--color5) 50%, transparent) !important;
 }
 /* incorrect */
 #continue_btn_5  {
     background: #E53935 !important;
+}
+/* next try */
+#continue_btn_8  {
+    background: #cda41e !important;
 }
 /* correct */
 #continue_btn_4  {

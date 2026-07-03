@@ -200,6 +200,9 @@ export default function SolutionManager({ children, Data, page, part, continueSt
       if (rowWithSolution.navigation === 'check'){
         setContinueStage(2);
       }
+      if (rowWithSolution.navigation === 'repeatedCheck'){
+        setContinueStage(6);
+      }
     
     }
   
@@ -207,24 +210,22 @@ export default function SolutionManager({ children, Data, page, part, continueSt
   }, [data]);
 
 
-  // Stage 0 -> 2: User enters first data
+  // compare user value with solution
   useEffect(() => {
-    if (userMatrix === null || continueStage !== 0) return;
-    setContinueStage(2);
-  }, [userMatrix, continueStage]);
+    if (userMatrix === null) return;
+    // (2) check, disabled -> (3) ckeck, clickable
+    if(continueStage === 2) setContinueStage(3);
+    // (6) check, disabled -> (7) check, clickable 
+    if(continueStage === 6) setContinueStage(7);
 
-  // Stage 2 -> 3: Enable check button (triggered separately)
-  useEffect(() => {
-    if (continueStage !== 2) return;
-    setContinueStage(3);
-  }, [continueStage]);
-
-  // Verify solution when user clicks "check" (stage 3)
-  useEffect(() => {
-    if (userMatrix === null || continueStage !== 3) return;
     const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
-    setSolutionState(isCorrect);
-  }, [userMatrix, acceptance, solutionMatrix, continueStage]);
+    if (isCorrect) {
+      setSolutionState(true);
+      // (0) continue, disabled -> (1) continue, clickable
+      if(continueStage === 0) setContinueStage(1);
+    }
+
+  }, [userMatrix, acceptance, solutionMatrix]);
 
   // add to userMatrixHistory 
   useEffect(() => {

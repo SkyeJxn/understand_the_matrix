@@ -4,7 +4,7 @@
     "part": "1",
     "solution": "number",
     "acceptance": 0,
-    "navigation": "continue",
+    "navigation": "repeatedCheck",
 
     "staticData": {
       "vectorA": [1, 2, 3],
@@ -59,7 +59,7 @@
     "part": "2",
     "solution": "number",
     "acceptance": 0,
-    "navigation": "continue",
+    "navigation": "repeatedCheck",
 
     "staticData": {
       "vector": [3, 4],
@@ -112,8 +112,8 @@
     "page": "3",
     "part": "3",
     "solution": "number",
-    "acceptance": 1,
-    "navigation": "continue",
+    "acceptance": 0,
+    "navigation": "repeatedCheck",
 
     "staticData": {
       "vectorA": [1, 0],

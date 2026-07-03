@@ -42,7 +42,6 @@ export function LevelRenderer(){
   const [continueStage, setContinueStage] = useState(0);
   const [currentPart, setCurrentPart] = useState(1);
   const [progressValue, setProgressValue] = useState(0);
-  const [userMatrix, setUserMatrix] = useState(null);
   
   const partsOnLevel = Math.max(
       0,
@@ -86,34 +85,31 @@ export function LevelRenderer(){
           else setContinueStage(5);
           return;
         }
-
-        // Stage 4: Correct - move to next part
-        if(continueStage === 4){
-          const maxPart = getMaxPart(page, levelData);
-          if (currentPart < maxPart) {
-              setCurrentPart((prev) => prev + 1);
-          } else {
-              // next page
-              setPage(String(Number(page) + 1));
-              setCurrentPart((prev) => prev + 1);
-          }
-          if (partsOnLevel > 0) setProgressValue((prev) => prev + 100 / partsOnLevel);
-          setSolutionState(false);
-          setContinueStage(0);
-          setUserMatrix(null);
+        // check, clickable (7) -> continue, clickable and correct (4) oder try again, incorrect (8)
+        if(continueStage === 7){
+          if(solutionState) setContinueStage(4);
+          else setContinueStage(8);
           return;
         }
-    }
+        // try again, incorrect (8) -> check, clickable (7)
+        if(continueStage === 8){
+          if(solutionState) setContinueStage(4);
+          else setContinueStage(7);
+          return;
+        }
 
-    // Auto-reset stage 5 (incorrect) to stage 2 after 3 seconds
-    useEffect(() => {
-      if (continueStage === 5) {
-        const timer = setTimeout(() => {
-          setContinueStage(2);
-        }, 3000);
-        return () => clearTimeout(timer);
-      }
-    }, [continueStage]);
+        const maxPart = getMaxPart(page, levelData);
+        if (currentPart < maxPart) {
+            setCurrentPart((prev) => prev + 1);
+        } else {
+            // next page
+            setPage(String(Number(page) + 1));
+            setCurrentPart((prev) => prev + 1);
+        }
+        if (partsOnLevel > 0) setProgressValue((prev) => prev + 100 / partsOnLevel);
+        setSolutionState(false);
+        setContinueStage(0);
+    }
 
     function back() {
       const prevPage = String(Number(page) - 1);
