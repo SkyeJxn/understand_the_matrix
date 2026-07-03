@@ -262,13 +262,23 @@ export function LevelEndContent({nextLevelExists = false}){
 export function DeterminantFormula({detArr, setDetArr, setUserMatrix}){
 
   const lines = [];
+  const lineSigns = [];
   let currentLine = [];
+  let currentSign = null;
+  let resultItem = null;
 
   detArr.forEach((item, index) => {
-    if (item.type === "operation" && item.data === "-") {
+    if (item.type === "result") {
+      resultItem = item;
+      return;
+    }
+
+    if (item.type === "operation") {
       if (currentLine.length > 0) {
         lines.push(currentLine);
+        lineSigns.push(currentSign ?? "");
       }
+      currentSign = item.data;
       currentLine = [];
       return;
     }
@@ -276,8 +286,9 @@ export function DeterminantFormula({detArr, setDetArr, setUserMatrix}){
     if (item.type === "cell") {
       currentLine.push(item.data);
       const nextItem = detArr[index + 1];
-      if (!nextItem || nextItem.type === "operation" && nextItem.data === "-") {
+      if (!nextItem || nextItem.type === "operation") {
         lines.push(currentLine);
+        lineSigns.push(currentSign ?? "");
         currentLine = [];
       }
     }
@@ -285,25 +296,42 @@ export function DeterminantFormula({detArr, setDetArr, setUserMatrix}){
 
   if (currentLine.length > 0) {
     lines.push(currentLine);
+    lineSigns.push(currentSign ?? "");
   }
 
   const prettyText = lines
     .map((line, index) => {
-      const prefix = index === 0 ? "" : "\\\\-";
+      const prefix = index === 0 ? "" : `\\\\${lineSigns[index] === "+" ? "+" : "-"}`;
       return `${prefix}${line.join("&")}`;
     })
     .join("");
 
-  const Text = `\\begin{align*}${prettyText}\\end{align*}`
+  const Text = `\\begin{align*}${prettyText}\\end{align*}`;
+  const resultText = resultItem
+    ? String(resultItem.data[0][0])
+    : "";
 
   return(
     <div style={{"zIndex": "1"}}>
       <Button onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "-"}];return next;});}}>
         minus
       </Button>
+      <Button onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "+"}];return next;});}}>
+        plus
+      </Button>
       <BlockMath math={Text}/>
+      {resultItem && (
+        <>
+          <hr style={{ border: "none", borderTop: "2px solid var(--color3)", margin: "16px 0" }} />
+          <BlockMath math={resultText}/>
+        </>
+      )}
       <Button onClick={() => {
-        setUserMatrix(Determinant(detArr))}}>Calculate</Button>
+        const result = Determinant(detArr);
+        setDetArr(prev => [...prev.filter(item => item.type !== "result"), { type: "result", data: result }]);
+        setUserMatrix(result);
+        console.log(detArr);
+      }}>Calculate</Button>
     </div>
   )
 }

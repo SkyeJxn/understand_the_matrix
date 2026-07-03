@@ -80,23 +80,21 @@ function formatCellValue(item) {
 export function Determinant(matrix) {
   if (!Array.isArray(matrix) || matrix.length === 0) {
     return {
-      formula: "",
       value: fraction(0),
-      valueText: "0",
-      lines: [],
     };
   }
 
-  const lines = [];
   const values = [];
+  const signs = [];
   let currentLine = [];
   let currentValue = fraction(1);
+  let currentSign = "+";
 
   const flushLine = () => {
     if (currentLine.length === 0) return;
 
-    lines.push(currentLine);
     values.push(currentValue);
+    signs.push(currentSign);
     currentLine = [];
     currentValue = fraction(1);
   };
@@ -104,8 +102,9 @@ export function Determinant(matrix) {
   matrix.forEach((item) => {
     if (item?.type === "operation") {
       const op = getOperationSymbol(item);
-      if (op === "-") {
+      if (op === "-" || op === "+") {
         flushLine();
+        currentSign = op;
       }
       return;
     }
@@ -119,11 +118,13 @@ export function Determinant(matrix) {
   flushLine();
 
   const value = values.reduce((accumulator, lineValue, index) => {
-    if (index === 0) return accumulator.add(lineValue);
-    return accumulator.sub(lineValue);
+    if (signs[index] === "-") {
+      return accumulator.sub(lineValue);
+    }
+    return accumulator.add(lineValue);
   }, fraction(0));
 
   console.log("det:",String(value))
 
-  return value;
+  return [[value]];
 }

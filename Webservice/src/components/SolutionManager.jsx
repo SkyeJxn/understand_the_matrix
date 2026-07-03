@@ -201,6 +201,8 @@ export default function SolutionManager({ children, Data, page, part, continueSt
     if(continueStage === 2) setContinueStage(3);
 
     const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
+    console.log("sol: ", solutionMatrix);
+    console.log("user: ", userMatrix);
     if (isCorrect) {
       setSolutionState(true);
       // (0) continue, disabled -> (1) continue, clickable

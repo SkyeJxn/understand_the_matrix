@@ -7,8 +7,10 @@
 
     "matrixCreator": {
       "params":{
-        "solMatrix": 1,
-        "resultcol": "true",
+        "solMatrix": [[64]],
+        "rows": 1,
+        "cols": 1,
+        "resultcol": "false",
         "changeLevel": 0
       },
       "return": {
@@ -21,6 +23,6 @@
     "page": "1",
     "part": "1",
     "typ": "ClickableDeterminant",
-    "data": [[1,0,0],[0,1,0],[0,0,1]]
+    "data": [[1,4,6],[6,2,5],[3,2,1]]
   }
 ]

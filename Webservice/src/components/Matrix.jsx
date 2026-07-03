@@ -43,36 +43,54 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
  * @param {number[][] | fraction[][]} data - 2-dim array with the matrix values (each inner list is a row)
  * @param {function} setNext - Callback Function to update the Calculation Formula
  */
-export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext}){
+export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext, laplace = false}){
   const height = Array.from({ length: data.length }, () => "\\rule{0pt}{2.5em}").join(" \\\\ ");
   const latexLeftBracket = `\\left|\\vphantom{\\begin{array}{c}${height}\\end{array}}\\right.`;
   const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${height}\\end{array}}\\right|`;
   
+  const [layer, setLayer] = useState("formula"); //"crossout" or "formula"
+  const [chosenCells, setChosenCells] = useState([]);
+
   if (data.length <= 0) return (<></>);
   if (!Array.isArray(data)) return (<></>);
   return (
-    <div className='matrix-container'>
-        <InlineMath math={latexLeftBracket} style={{"zIndex": "0"}} />
-        <table style={{"zIndex": "1"}}>
-          <tbody>
-          {data.map((row, i) => (
-            <tr key={i}>
-              {row.map((cell, j) => (
-                <td key={j}>
-                  <button type="button" style={{"border": "1px solid #ffffff"}} onClick={() => {
-                    setNext(prev => {
-                      const next = [...prev, { type: "cell", data: cell}];
-                      return next;
-                    });
-                  }}>
-                    {String(cell)}
-                  </button>
-                </td>
-              ))}
-            </tr>
-          ))}
-      </tbody></table>
-        <InlineMath math={latexRightBracket} style={{"zIndex": "0"}}/> 
+    <div>
+      {/* not in use yet */}
+      {laplace && 
+      <div>
+        <label className="switch">
+          <input 
+            aria-label="Switch between formula and crossout layer"
+            type="checkbox" 
+            checked={layer === "crossout"} 
+            onChange={() => setLayer((layer == 'formula') ? "crossout" : "formula")}
+          />
+          <span className="slider round"/>
+        </label>
+      </div>}
+      <div className='matrix-container'>
+          <InlineMath math={latexLeftBracket} style={{"zIndex": "0"}} />
+          <table style={{"zIndex": "1"}}>
+            <tbody>
+            {data.map((row, i) => (
+              <tr key={i}>
+                {row.map((cell, j) => (
+                  <td key={j}>
+                    <button type="button" style={{"border": "1px solid #ffffff"}} onClick={() => {
+                      setNext(prev => {
+                        const next = [...prev, { type: "cell", data: cell}];
+                        return next;
+                      });
+                    }}>
+                      {String(cell)}
+                    </button>
+                  </td>
+                ))}
+              </tr>
+            ))}
+        </tbody></table>
+          <InlineMath math={latexRightBracket} style={{"zIndex": "0"}}/> 
+      </div>
     </div>
   );
 }
