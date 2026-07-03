@@ -10,9 +10,10 @@ import { RowOperation } from "./CalcButtons";
  * 
  * @param {number[][] | fraction[][]} data - 2-dim array with the matrix values (each inner list is a row)
  * @param {boolean} resultCol - is the last column a results column
+ *  @param {boolean} det - is the matrix a determinant
  * @returns {JSX.Element}
  */
-export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false}){
+export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
   if (!Array.isArray(data)) return (<></>);
   if (data.length <= 0) return (<></>);
   const cols = data[0].length;
@@ -29,7 +30,10 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
     else {return row.map(formatCell).join(' & ');}
   }).join(' \\\\ ');
 
-  const latexMatrix = `\\left(\\begin{array}{${colFormat}}${rows}\\end{array}\\right)`;
+  const bracketLeft = det ? "|": "("
+  const bracketRight = det ? "|": ")"
+
+  const latexMatrix = `\\left${bracketLeft}\\begin{array}{${colFormat}}${rows}\\end{array}\\right${bracketRight}`;
   
   return (
     <div className='matrix-container'>
