@@ -214,7 +214,7 @@ export default function SolutionManager({ children, Data, page, part, continueSt
       }
       if (rowWithSolution.solutionMatrix !== undefined){
         setSolutionMatrix(rowWithSolution.solutionMatrix);
-    
+      }
     }
   
     run();
