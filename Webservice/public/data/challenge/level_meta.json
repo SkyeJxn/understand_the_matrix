@@ -10,6 +10,11 @@
       "description": "elementary row operations"
     },
     {
+      "id": 3,
+      "title": "Dot Product",
+      "description": "scalar product, orthogonality, vector length, angles"
+    },
+    {
       "id": 10,
       "title": "Eigenvalues & Eigenvectors",
       "description": "finding eigenvalues and eigenvectors"
