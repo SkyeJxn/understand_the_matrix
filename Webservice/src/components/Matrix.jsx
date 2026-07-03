@@ -72,7 +72,7 @@ export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext}
             </tr>
           ))}
       </tbody></table>
-        <InlineMath math={latexRightBracket} /> 
+        <InlineMath math={latexRightBracket} style={{"zIndex": "0"}}/> 
     </div>
   );
 }

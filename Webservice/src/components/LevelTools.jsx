@@ -292,12 +292,12 @@ export function DeterminantFormula({detArr, setDetArr, setUserMatrix}){
       const prefix = index === 0 ? "" : "\\\\-";
       return `${prefix}${line.join("&")}`;
     })
-    .join("\n");
+    .join("");
 
   const Text = `\\begin{align*}${prettyText}\\end{align*}`
 
   return(
-    <div>
+    <div style={{"zIndex": "1"}}>
       <Button onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "-"}];return next;});}}>
         minus
       </Button>
