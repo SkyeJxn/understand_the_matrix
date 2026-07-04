@@ -1,8 +1,9 @@
 import "../styles/LevelDesign.css"
 import { InlineMath } from "react-katex";
-import { StaticMatrix, EditableMatrix, MatrixHistory } from "./Matrix";
+import { StaticMatrix, EditableMatrix, MatrixHistory, ClickableDeterminant } from "./Matrix";
+import { fraction } from "mathjs";
 import React, { useState, useEffect, useRef } from "react";
-import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
+import { ContinueBtn, DeterminantFormula, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
 import { Equations, SelectionButtons, ScalarInput } from "./Exercise";
 import SolutionManager from "./SolutionManager";
@@ -63,6 +64,7 @@ export function LevelRenderer(){
 
     // Reset view state when navigating to a different mode or level id
     useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPage("1");
       setLevelData([]);
       setCurrentPart(1);
@@ -200,6 +202,8 @@ function Content({ part, continueStage }) {
     setUserMatrixHistory,
     rowOperationHistory,
     setRowOperationHistory,
+    detArr,
+    setDetArr,
     data
   } = useSolution();
 
@@ -271,6 +275,12 @@ function Content({ part, continueStage }) {
               enableText={toBool(row.enableText)}
               textSymbols={row.textSymbols}
             />
+          )}
+          {row.typ === "ClickableDeterminant" && (
+            <div className="matrix-row wrap-group">
+              <ClickableDeterminant data={parseMatrix(row.data)} setNext={setDetArr}/>
+              <DeterminantFormula detArr={detArr} setDetArr={setDetArr} setUserMatrix={setUserMatrix} matrixRows={parseMatrix(row.data).length}/>
+            </div>
           )}
           {row.typ === "ScalarInput" && (
             // Render scalar input for exercises like Dot Product (Challenge Level 3)

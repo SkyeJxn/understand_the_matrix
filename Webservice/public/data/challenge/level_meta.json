@@ -15,6 +15,11 @@
       "description": "scalar product, orthogonality, vector length, angles"
     },
     {
+      "id": 6,
+      "title": "Determinants",
+      "description": "leibniz-formula"
+    },
+    {
       "id": 10,
       "title": "Eigenvalues & Eigenvectors",
       "description": "finding eigenvalues and eigenvectors"
