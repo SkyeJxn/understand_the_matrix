@@ -161,7 +161,7 @@ export function ContinueBtn({stage=0, onContinue}){
             <strong>{stage == 5 ? 'incorrect' : 'correct'}</strong>
           </div>
 
-          {stage === 5 && (
+          {stage === 5 && solutionOption !== null && (
             <div className="feedback_row">
               <div>solution:</div>
               <div>{solutionOption}</div>
@@ -266,7 +266,6 @@ export function DeterminantFormula({detArr, setDetArr, setUserMatrix, matrixRows
   let currentLine = [];
   let currentSign = null;
   let resultItem = null;
-  const formulaRef = useRef(null);
 
   detArr.forEach((item, index) => {
     if (item.type === "result") {
@@ -303,7 +302,7 @@ export function DeterminantFormula({detArr, setDetArr, setUserMatrix, matrixRows
   const prettyText = lines
     .map((line, index) => {
       const prefix = index === 0 ? "" : `\\\\${lineSigns[index] === "+" ? "+" : "-"}`;
-      return `${prefix}${line.join("&")}`;
+      return `${prefix}${line.join(" \\cdot ")}`;
     })
     .join("");
 
@@ -312,27 +311,22 @@ export function DeterminantFormula({detArr, setDetArr, setUserMatrix, matrixRows
     ? String(resultItem.data[0][0])
     : "";
 
-  const formulaHeight = Math.max(1, matrixRows) * 2.5;
-
-  useEffect(() => {
-    if (!formulaRef.current) return;
-    formulaRef.current.scrollTop = formulaRef.current.scrollHeight;
-  }, [detArr, matrixRows]);
-
   return(
-    <div style={{"zIndex": "1"}}>
+    <div className="column-group">
+      <div>
       <Button icon="pi pi-minus-circle" onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "-"}];return next;});}}/>
       <Button icon="pi pi-plus-circle" onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "+"}];return next;});}}/>
-      <div ref={formulaRef} style={{"display": "relative",height: `${formulaHeight}em`, overflowY: "auto", overflowX: "hidden", scrollbarWidth: "thin", scrollbarColor: "var(--color4) var(--color1)", scrollbarGutter: "stable" }}>
+      </div>
+      <div >
         <BlockMath math={Text}/>
         {resultItem && (
           <>
             <hr style={{ border: "none", borderTop: "2px solid var(--color3)", margin: "16px 0" }} />
-            <BlockMath math={resultText}/>
+            <BlockMath math={`= ${resultText}`}/>
           </>
         )}
       </div>
-      <Button style={{ background: "var(--color3)", padding: "5px", width: "auto", color: "var(--color1)", "align-self": "center"}} onClick={() => {
+      <Button className="outline-button" onClick={() => {
         const result = Determinant(detArr);
         setDetArr(prev => [...prev.filter(item => item.type !== "result"), { type: "result", data: result }]);
         setUserMatrix(result);

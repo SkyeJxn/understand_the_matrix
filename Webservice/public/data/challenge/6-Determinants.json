@@ -4,7 +4,7 @@
     "part": "1",
     "solution": "matrix",
     "navigation": "check",
-    "acceptance": 3,
+    "acceptance": 0,
 
     "matrixCreator": {
       "params":{
@@ -19,6 +19,18 @@
       }
     }
 
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "title",
+    "content": "Solve the Determinant"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "text",
+    "content": "Click the numbers to build the formula and use the plus/minus buttons."
   },
   {
     "page": "1",

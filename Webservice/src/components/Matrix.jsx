@@ -10,7 +10,7 @@ import { RowOperation } from "./CalcButtons";
  * 
  * @param {number[][] | fraction[][]} data - 2-dim array with the matrix values (each inner list is a row)
  * @param {boolean} resultCol - is the last column a results column
- *  @param {boolean} det - is the matrix a determinant
+ * @param {boolean} det - is the matrix a determinant
  * @returns {JSX.Element}
  */
 export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = false, det = false}){
@@ -80,14 +80,16 @@ export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext,
               <tr key={i}>
                 {row.map((cell, j) => (
                   <td key={j}>
-                    <button type="button" onClick={() => {
+                    <Button type="button" onClick={() => {
                       setNext(prev => {
                         const next = [...prev, { type: "cell", data: cell}];
                         return next;
                       });
-                    }}>
+                      }}
+                      className="cell-button"
+                    >
                       {String(cell)}
-                    </button>
+                    </Button>
                   </td>
                 ))}
               </tr>
@@ -104,6 +106,7 @@ export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext,
  * @param {number} rows - number of rows 
  * @param {number} cols - number of columns (including result column if `resultCol` is true)
  * @param {boolean} resultCol - is the last column a results column
+ * @param {boolean} det - is the matrix a determinant
  * @param {(number|fraction)[][]} userMatrix - Optional initial matrix to prefill the inputs.
  * @param {boolean} initialMatrixValue - If true, the component prefill the inputs with the `userMatrix` once.
  * @param {fraction[][]} onChange - Callback, that returns the current matrix as Fractions
@@ -111,7 +114,7 @@ export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext,
  * @param {boolean} [fixedDimension=false] - shows the buttons to change the matrix dimension when false
  * @returns {JSX.Element} 
  */
-export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, userMatrix, initialMatrixValue=false, onChange, disabled=false, fixedDimension=false }) {
+export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, userMatrix, initialMatrixValue=false, onChange, disabled=false, fixedDimension=false }) {
   const [rowState, setRowState] = React.useState(rows);
   const [colState, setColState] = React.useState(cols);
 
@@ -223,10 +226,13 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, userMatr
     setErrors(prev => prev.map(row => row.slice(0, -1)));
     setColState(c => c - 1);
   }
+
+  const bracketLeft = det ? "|": "("
+  const bracketRight = det ? "|": ")"
   
   const dummyRows = Array.from({ length: rowState }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
-  const latexLeftBracket = `\\left(\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right.`;
-  const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right)`;
+  const latexLeftBracket = `\\left${bracketLeft}\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right.`;
+  const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right${bracketRight}`;
   console.log(fixedDimension);
   return (
     <div style={{
@@ -278,6 +284,7 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, userMatr
     </div>
   );
 }
+
 /**
  * Displays the history of matrices and row operations.
  * Allows undoing the last operation and toggling the history view.
