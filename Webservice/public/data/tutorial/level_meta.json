@@ -10,6 +10,11 @@
       "description": "elementary row operations"
     },
     {
+      "id": 3,
+      "title": "Dot Product",
+      "description": "scalar product, vector operations, orthogonality"
+    },
+    {
       "id": 6,
       "title": "Determinants",
       "description": "leibniz-formula"
