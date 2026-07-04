@@ -194,6 +194,7 @@ function Content({ part, continueStage }) {
     options,
     setUserOption,
     userOption,
+    optionTyp,
     solutionMatrix,
     userMatrix, 
     setUserMatrix, 
@@ -271,6 +272,8 @@ function Content({ part, continueStage }) {
               onChange={setUserMatrix}
               disabled={[1,4,5].includes(continueStage)}
               fixedDimension={toBool(row.fixedDimension)}
+              enableText={toBool(row.enableText)}
+              textSymbols={row.textSymbols}
             />
           )}
           {row.typ === "ClickableDeterminant" && (
@@ -310,6 +313,7 @@ function Content({ part, continueStage }) {
               options={options}
               onSelect={setUserOption}
               disabled={[4,5].includes(continueStage)}
+              optionTyp={optionTyp}
             />
           )}
         </React.Fragment>

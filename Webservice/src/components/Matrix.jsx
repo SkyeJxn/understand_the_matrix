@@ -112,9 +112,13 @@ export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext,
  * @param {fraction[][]} onChange - Callback, that returns the current matrix as Fractions
  * @param {boolean} [disabled=false] - disables all user inputs when true
  * @param {boolean} [fixedDimension=false] - shows the buttons to change the matrix dimension when false
+ * @param {boolean} [enableText = false] - allows text input when true, userMatrix is ​​then a matrix of Strings
+ * @param {String[]} [textSymbols = []] - list of symbols that can be inserted as input, when enableText = true
  * @returns {JSX.Element} 
  */
-export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, userMatrix, initialMatrixValue=false, onChange, disabled=false, fixedDimension=false }) {
+export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, userMatrix, initialMatrixValue=false, onChange, disabled=false, fixedDimension=false, enableText = false, textSymbols = [] }) {
+  const [activeCell, setActiveCell] = React.useState({ i: null, j: null });
+  
   const [rowState, setRowState] = React.useState(rows);
   const [colState, setColState] = React.useState(cols);
 
@@ -154,6 +158,15 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
     );
     setMatrix(newMatrix);
 
+    if (!enableText){
+      handleFracMatrixChange(i, j, value);
+    }
+    else {
+      onChange(newMatrix);
+    }
+  };
+
+  const handleFracMatrixChange = (i, j, value) => {
     let frac = null;
     try {
       if(value.includes('/')) {
@@ -227,13 +240,22 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
     setColState(c => c - 1);
   }
 
+  function insertSymbol(symbol) {
+    if (activeCell.i === null || activeCell.j === null) return;
+
+    const { i, j } = activeCell;
+    const newValue = matrix[i][j] + symbol;
+
+    handleChange(i, j, newValue);
+  }
+
   const bracketLeft = det ? "|": "("
   const bracketRight = det ? "|": ")"
   
   const dummyRows = Array.from({ length: rowState }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
   const latexLeftBracket = `\\left${bracketLeft}\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right.`;
   const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right${bracketRight}`;
-  console.log(fixedDimension);
+
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center'
@@ -259,6 +281,7 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
                     type="text"
                     value={cell}
                     onChange={(e) => handleChange(i, j, e.target.value)}
+                    onFocus={() => setActiveCell({ i, j })}
                     autoFocus={i === 0 && j === 0}
                     className={errors[i][j] ? "input-error" : ""}
                     disabled={disabled}
@@ -270,6 +293,17 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
       </tbody></table>
       <InlineMath math={latexRightBracket} />
     </div>
+      {enableText && textSymbols !== [] && ( 
+      <div className="outline-button-group column-group">
+        {textSymbols.map((symbol, i) => (
+          <Button key={i} 
+                  label={"Insert "+symbol}
+                  onClick={() => insertSymbol(symbol)} 
+                  disabled={disabled}
+                  style={{border: '2px solid var(--color3)', fontSize: "1rem"}}
+          />
+        ))}
+      </div>)}
     </div>
     {!fixedDimension && ( 
     <div style={{display: 'flex' }}>

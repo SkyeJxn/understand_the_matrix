@@ -148,7 +148,7 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  * @returns {JSX.Element}
  */
 export function ContinueBtn({stage=0, onContinue}){
-  const { solutionOption } = useSolution();
+  const { solutionOption, optionTyp } = useSolution();
   
   const label = [2, 3, 6, 7].includes(stage) ? 'check' : stage == 8 ? 'try again' : 'continue';
   return (
@@ -171,7 +171,10 @@ export function ContinueBtn({stage=0, onContinue}){
           {stage === 5 && solutionOption !== null && (
             <div className="feedback_row">
               <div>solution:</div>
-              <div>{solutionOption}</div>
+              <div>{optionTyp == "katex" 
+                      ? <InlineMath math={solutionOption} />
+                      : solutionOption
+              }</div>
           </div>)}
         </div>
       )}
