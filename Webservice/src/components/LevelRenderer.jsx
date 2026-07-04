@@ -1,10 +1,11 @@
 import "../styles/LevelDesign.css"
 import { InlineMath } from "react-katex";
-import { StaticMatrix, EditableMatrix, MatrixHistory } from "./Matrix";
+import { StaticMatrix, EditableMatrix, MatrixHistory, ClickableDeterminant } from "./Matrix";
+import { fraction } from "mathjs";
 import React, { useState, useEffect, useRef } from "react";
-import { ContinueBtn, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
+import { ContinueBtn, DeterminantFormula, LevelEndContent, NavigationArrows, Toolbar } from "./LevelTools";
 import { CalcButtons } from "./CalcButtons";
-import { Equations, SelectionButtons } from "./Exercise";
+import { Equations, SelectionButtons, ScalarInput } from "./Exercise";
 import SolutionManager from "./SolutionManager";
 import { useKeyMap } from "@/hooks/useKeyboard";
 import { useSolution } from "@/hooks/SolutionContext";
@@ -28,6 +29,9 @@ import { ProgressSpinner } from 'primereact/progressspinner';
  *   - Tutorial: navigation arrows
  *   - Challenge: continue button
  * - At the end of a level, renders `LevelEndContent` with links to the next level.
+ * 
+ * @note Challenge Level 3 (Dot Product) uses ScalarInput components for vector calculations.
+ * Supports both matrix-based and scalar-based exercises through conditional rendering.
 */
 export function LevelRenderer(){
   const { mode, id } = useParams();
@@ -60,6 +64,7 @@ export function LevelRenderer(){
 
     // Reset view state when navigating to a different mode or level id
     useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPage("1");
       setLevelData([]);
       setCurrentPart(1);
@@ -80,6 +85,18 @@ export function LevelRenderer(){
         if(continueStage === 3){
           if(solutionState) setContinueStage(4);
           else setContinueStage(5);
+          return;
+        }
+        // check, clickable (7) -> continue, clickable and correct (4) oder try again, incorrect (8)
+        if(continueStage === 7){
+          if(solutionState) setContinueStage(4);
+          else setContinueStage(8);
+          return;
+        }
+        // try again, incorrect (8) -> check, clickable (7)
+        if(continueStage === 8){
+          if(solutionState) setContinueStage(4);
+          else setContinueStage(7);
           return;
         }
 
@@ -184,6 +201,8 @@ function Content({ part, continueStage }) {
     setUserMatrixHistory,
     rowOperationHistory,
     setRowOperationHistory,
+    detArr,
+    setDetArr,
     data
   } = useSolution();
 
@@ -247,8 +266,37 @@ function Content({ part, continueStage }) {
               cols={Number(row.columns)}
               resultCol={toBool(row.resultcol)}
               det={toBool(row.determinant)}
+              userMatrix = {userMatrix}
+              initialMatrixValue = {toBool(row.initialMatrixValue)}
               onChange={setUserMatrix}
               disabled={[1,4,5].includes(continueStage)}
+              fixedDimension={toBool(row.fixedDimension)}
+            />
+          )}
+          {row.typ === "ClickableDeterminant" && (
+            <div className="matrix-row wrap-group">
+              <ClickableDeterminant data={parseMatrix(row.data)} setNext={setDetArr}/>
+              <DeterminantFormula detArr={detArr} setDetArr={setDetArr} setUserMatrix={setUserMatrix} matrixRows={parseMatrix(row.data).length}/>
+            </div>
+          )}
+          {row.typ === "ScalarInput" && (
+            // Render scalar input for exercises like Dot Product (Challenge Level 3)
+            // Value stored as 1x1 matrix [[scalar]] for unified solution verification
+            <ScalarInput
+              value={userMatrix && userMatrix[0] && userMatrix[0][0] ? userMatrix[0][0].toString() : ""}
+              onChange={(val) => {
+                // Convert input to 1x1 matrix format for SolutionManager verification
+                try {
+                  const numVal = parseFloat(val);
+                  if (!isNaN(numVal) || val === "") {
+                    setUserMatrix([[val]]);
+                  }
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
+              disabled={[1,4,5].includes(continueStage)}
+              placeholder={row.placeholder || "Enter value"}
             />
           )}
           {row.typ === "Equations" && (

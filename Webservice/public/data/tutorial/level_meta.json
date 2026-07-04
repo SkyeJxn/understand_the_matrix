@@ -10,8 +10,18 @@
       "description": "elementary row operations"
     },
     {
+      "id": 3,
+      "title": "Dot Product",
+      "description": "scalar product, vector operations, orthogonality"
+    },
+    {
       "id": 4,
       "title": "Orthogonal and Orthonormal Vectors",
       "description": "orthogonal and orthonormal vectors, Gram-Schmidt process"
+    },
+    {
+      "id": 6,
+      "title": "Determinants",
+      "description": "leibniz-formula"
     }
 ]
