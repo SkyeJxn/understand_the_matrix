@@ -42,28 +42,110 @@ export function StaticMatrix({data = [[1,2,3],[4,5,6],[7,8,9]], resultCol = fals
   );
 }
 /**
+ * Component to render Clickable Determinants
+ * 
+ * @param {number[][] | fraction[][]} data - 2-dim array with the matrix values (each inner list is a row)
+ * @param {function} setNext - Callback Function to update the Calculation Formula
+ */
+export function ClickableDeterminant({data = [[1,0,0],[0,1,0],[0,0,1]], setNext, laplace = false}){
+  const height = Array.from({ length: data.length }, () => "\\rule{0pt}{2.5em}").join(" \\\\ ");
+  const latexLeftBracket = `\\left|\\vphantom{\\begin{array}{c}${height}\\end{array}}\\right.`;
+  const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${height}\\end{array}}\\right|`;
+  
+  const [layer, setLayer] = useState("formula"); //"crossout" or "formula"
+  const [chosenCells, setChosenCells] = useState([]);
+
+  if (data.length <= 0) return (<></>);
+  if (!Array.isArray(data)) return (<></>);
+  return (
+    <div>
+      {/* not in use yet */}
+      {laplace && 
+      <div>
+        <label className="switch">
+          <input 
+            aria-label="Switch between formula and crossout layer"
+            type="checkbox" 
+            checked={layer === "crossout"} 
+            onChange={() => setLayer((layer == 'formula') ? "crossout" : "formula")}
+          />
+          <span className="slider round"/>
+        </label>
+      </div>}
+      <div className='matrix-container'>
+          <InlineMath math={latexLeftBracket} style={{"zIndex": "0"}} />
+          <table style={{"zIndex": "1"}}>
+            <tbody>
+            {data.map((row, i) => (
+              <tr key={i}>
+                {row.map((cell, j) => (
+                  <td key={j}>
+                    <Button type="button" onClick={() => {
+                      setNext(prev => {
+                        const next = [...prev, { type: "cell", data: cell}];
+                        return next;
+                      });
+                      }}
+                      className="cell-button"
+                    >
+                      {String(cell)}
+                    </Button>
+                  </td>
+                ))}
+              </tr>
+            ))}
+        </tbody></table>
+          <InlineMath math={latexRightBracket} style={{"zIndex": "0"}}/> 
+      </div>
+    </div>
+  );
+}
+/**
  * Component that renders an empty matrix with room for user inputs
  * 
  * @param {number} rows - number of rows 
  * @param {number} cols - number of columns (including result column if `resultCol` is true)
  * @param {boolean} resultCol - is the last column a results column
  * @param {boolean} det - is the matrix a determinant
+ * @param {(number[][] |fraction[][] )} userMatrix - Optional initial matrix to prefill the inputs.
+ * @param {boolean} initialMatrixValue - If true, the component prefill the inputs with the `userMatrix` once.
  * @param {fraction[][]} onChange - Callback, that returns the current matrix as Fractions
  * @param {boolean} [disabled=false] - disables all user inputs when true
+ * @param {boolean} [fixedDimension=false] - shows the buttons to change the matrix dimension when false
  * @returns {JSX.Element} 
  */
-export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, onChange, disabled=false }) {
+export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = false, userMatrix, initialMatrixValue=false, onChange, disabled=false, fixedDimension=false }) {
   const [rowState, setRowState] = React.useState(rows);
   const [colState, setColState] = React.useState(cols);
 
   const [matrix, setMatrix] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill("")));
   const [fracMatrix, setFracMatrix] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill(new fraction(0))));
   const [errors, setErrors] = React.useState(Array.from({ length: rowState }, () => Array(colState).fill(false)));
+
+  const initialMatrixRef = React.useRef(initialMatrixValue);
+
   React.useEffect(() => {
-    setMatrix(Array.from({ length: rowState }, () => Array(colState).fill("")));
-    setFracMatrix(Array.from({ length: rowState }, () => Array(colState).fill(new fraction(0))));
-    setErrors(Array.from({ length: rowState }, () => Array(colState).fill(false)));
-  }, [rowState, colState]);
+    if (!initialMatrixRef.current) return;
+    if (
+      !userMatrix || 
+      !Array.isArray(userMatrix) || 
+      userMatrix.length === 0 || 
+      !Array.isArray(userMatrix[0])
+    ) return;
+
+    initialMatrixRef.current = false;
+
+    const r = userMatrix.length;
+    const c = userMatrix[0].length;
+    
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMatrix(userMatrix.map(row => row.map(cell => cell.toString())));
+    setFracMatrix(userMatrix.map(row => row.map(cell => fraction(cell))));
+    setErrors(Array.from({ length: r }, () => Array(c).fill(false)));
+    setRowState(r);
+    setColState(c);
+
+  }, [userMatrix]);
      
   const handleChange = (i, j, value) => {
     
@@ -113,6 +195,37 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
     }
   };
 
+  function addRow() {
+    setMatrix(prev => [...prev, Array(colState).fill("")]);
+    setFracMatrix(prev => [...prev, Array(colState).fill(fraction(0))]);
+    setErrors(prev => [...prev, Array(colState).fill(false)]);
+    setRowState(r => r + 1);
+  }
+
+  function removeRow() {
+    if (rowState <= 1) return;
+
+    setMatrix(prev => prev.slice(0, -1));
+    setFracMatrix(prev => prev.slice(0, -1));
+    setErrors(prev => prev.slice(0, -1));
+    setRowState(r => r - 1);
+  }
+
+  function addCol() {
+    setMatrix(prev => prev.map(row => [...row, ""]));
+    setFracMatrix(prev =>prev.map(row => [...row, fraction(0)]));
+    setErrors(prev => prev.map(row => [...row, false]));
+    setColState(c => c + 1);
+  }
+
+  function removeCol() {
+    if (colState <= 1) return;
+
+    setMatrix(prev => prev.map(row => row.slice(0, -1)));
+    setFracMatrix(prev => prev.map(row => row.slice(0, -1)));
+    setErrors(prev => prev.map(row => row.slice(0, -1)));
+    setColState(c => c - 1);
+  }
 
   const bracketLeft = det ? "|": "("
   const bracketRight = det ? "|": ")"
@@ -120,7 +233,7 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
   const dummyRows = Array.from({ length: rowState }, () => "\\rule{0pt}{2em}").join(" \\\\ ");
   const latexLeftBracket = `\\left${bracketLeft}\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right.`;
   const latexRightBracket = `\\left.\\vphantom{\\begin{array}{c}${dummyRows}\\end{array}}\\right${bracketRight}`;
-
+  console.log(fixedDimension);
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center'
@@ -128,10 +241,11 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
     <div style={{
       display: 'flex', alignItems: 'center'
     }}>
+      {!fixedDimension && ( 
       <div style={{display: 'flex', flexDirection: 'column' }}>
-        <Button icon="pi pi-plus-circle" onClick={() => setColState(p => (p+1))} disabled={disabled} />
-        <Button icon="pi pi-minus-circle" onClick={() => setColState(p => Math.max(1, p-1))} disabled={disabled} />
-      </div>
+        <Button icon="pi pi-plus-circle" onClick={() => addCol()} disabled={disabled} />
+        <Button icon="pi pi-minus-circle" onClick={() => removeCol()} disabled={disabled} />
+      </div>)}
     <div className="matrix-container">
       <InlineMath math={latexLeftBracket} />
       <table className="matrix-inputs"><tbody>
@@ -157,10 +271,11 @@ export function EditableMatrix({ rows = 3, cols = 3, resultCol = false, det = fa
       <InlineMath math={latexRightBracket} />
     </div>
     </div>
+    {!fixedDimension && ( 
     <div style={{display: 'flex' }}>
-        <Button icon="pi pi-plus-circle" onClick={() => setRowState(p => (p+1))} disabled={disabled} />
-        <Button icon="pi pi-minus-circle" onClick={() => setRowState(p => Math.max(1, p-1))} disabled={disabled} />
-    </div>
+        <Button icon="pi pi-plus-circle" onClick={() => addRow()} disabled={disabled} />
+        <Button icon="pi pi-minus-circle" onClick={() => removeRow()} disabled={disabled} />
+    </div>)}
       <style>{`
         .input-error {
           border: 2px solid red !important;

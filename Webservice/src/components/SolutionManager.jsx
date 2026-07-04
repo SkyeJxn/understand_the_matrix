@@ -53,6 +53,10 @@ import { fraction } from "mathjs";
  * 
  * **8. Context Exposure**
  * All relevant state values and setters are exposed through `SolutionContext`.
+ * 
+ * @note Supports both matrix-based exercises (Levels 1-2) and scalar exercises like 
+ * Dot Product (Challenge Level 3). Scalar values are stored as 1x1 matrices for 
+ * unified verification logic through `SolutionVerifier`.
  */
 export default function SolutionManager({ children, Data, page, part, continueStage, setSolutionState, setContinueStage }) {
   const [options, setOptions] = useState(null);
@@ -63,6 +67,8 @@ export default function SolutionManager({ children, Data, page, part, continueSt
   const [userMatrix, setUserMatrix] = useState(null);
   const [userMatrixHistory, setUserMatrixHistory] = useState([]);
   const [acceptance, setAcceptance] = useState(null);
+
+  const [detArr, setDetArr] = useState([]);
 
   const [rowOperationHistory, setRowOperationHistory] = useState([]);
 
@@ -164,6 +170,17 @@ export default function SolutionManager({ children, Data, page, part, continueSt
       }
     
       // ---------------------------
+      // Static Data (for scalar inputs)
+      // ---------------------------
+      if (rowWithSolution.staticData !== undefined) {
+        const staticData = rowWithSolution.staticData;
+        // Set solution as 1x1 matrix
+        if (staticData.solution !== undefined) {
+          setSolutionMatrix([[staticData.solution]]);
+        }
+      }
+    
+      // ---------------------------
       // options
       // ---------------------------
       if (rowWithSolution.options !== undefined) {
@@ -185,6 +202,9 @@ export default function SolutionManager({ children, Data, page, part, continueSt
       if (rowWithSolution.navigation === 'check'){
         setContinueStage(2);
       }
+      if (rowWithSolution.navigation === 'repeatedCheck'){
+        setContinueStage(6);
+      }
     
     }
   
@@ -197,6 +217,8 @@ export default function SolutionManager({ children, Data, page, part, continueSt
     if (userMatrix === null) return;
     // (2) check, disabled -> (3) ckeck, clickable
     if(continueStage === 2) setContinueStage(3);
+    // (6) check, disabled -> (7) check, clickable 
+    if(continueStage === 6) setContinueStage(7);
 
     const isCorrect = SolutionVerifier(acceptance, solutionMatrix, userMatrix);
     if (isCorrect) {
@@ -246,6 +268,8 @@ export default function SolutionManager({ children, Data, page, part, continueSt
         acceptance,
         rowOperationHistory,
         setRowOperationHistory,
+        detArr,
+        setDetArr,
         data
       }}
     >

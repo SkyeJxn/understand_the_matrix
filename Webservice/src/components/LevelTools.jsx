@@ -1,11 +1,13 @@
 import "../styles/LevelTools.css"
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSolution } from "@/hooks/SolutionContext";
 import { Badge } from "primereact/badge";
+import { BlockMath, InlineMath } from "react-katex";
+import { Determinant } from "../utilities/CalcFunctions";
 
 /**
  * Component that Renders a dynamic progress bar
@@ -124,6 +126,9 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  * 
  * proceed 2 ('check'):  
  * check, disabled (2) -> check, clickable (3) -> continue, clickable and (in)correct (4/5)
+ * 
+ * proceed 3 ('repeatedCheck'):  
+ * check, disabled (6) -> check, clickable (7) -> continue, clickable and correct (4) oder try again, incorrect (8) -> check, clickable (7) -> usw.
  *
  * @param {Number} stage -
  * - 0 continue, disabled
@@ -131,7 +136,11 @@ export function NavigationArrows({disableBack, onBack, onNext}){
  * - 2 check,    disabled
  * - 3 ckeck,    clickable
  * - 4 continue, clickable and correct
- * - 5 continue, clickable and incorrect
+ * - 5 continue, clickable and incorrect (with solution)
+ * - 6 check, disabled (without solution/repeated check)
+ * - 7 check, clickable (without solution/repeated check)
+ * - 8 try again, clickable and incorrect (without solution/repeated check)
+ * 
  * @param {function} onContinue - Callback-function to continue
  * 
  * @param {String} solution - solution for incorrect input (stage 5)
@@ -141,25 +150,25 @@ export function NavigationArrows({disableBack, onBack, onNext}){
 export function ContinueBtn({stage=0, onContinue}){
   const { solutionOption } = useSolution();
   
-  const label = [2, 3].includes(stage) ? 'check' : 'continue';
+  const label = [2, 3, 6, 7].includes(stage) ? 'check' : stage == 8 ? 'try again' : 'continue';
   return (
     <div id='continue_container'>
-      {(stage >= 4 || stage === 1) && (
-        <div className="feedback" style={{color: stage === 5 ? '#E53935' : '#66BB6A',}}>
+      {([1,4,5,8].includes(stage)) && (
+        <div className="feedback" style={{color: stage == 5 ? '#E53935' : stage == 8 ? '#cda41e' : '#66BB6A',}}>
           <div className="feedback_row">
             <Badge
-              value={<i className={stage === 5 ? "pi pi-times" : "pi pi-check"} style={{ fontSize: "0.8rem", color: 'var(--color1)', fontWeight: 'bold' }} />}
+              value={<i className={[5,8].includes(stage) ? "pi pi-times" : "pi pi-check"} style={{ fontSize: "0.8rem", color: 'var(--color1)', fontWeight: 'bold' }} />}
               style={{
-                background: stage === 5 ? '#E53935' : '#66BB6A',
+                background: stage === 5 ? '#E53935' : stage == 8 ? '#cda41e' : '#66BB6A',
                 borderRadius: '50%',
                 display: "flex", alignItems: "center", justifyContent: "center", 
                 padding: 0
               }}
             />
-            <strong>{stage == 5 ? 'incorrect' : 'correct'}</strong>
+            <strong>{[5,8].includes(stage) ? 'incorrect' : 'correct'}</strong>
           </div>
 
-          {stage === 5 && (
+          {stage === 5 && solutionOption !== null && (
             <div className="feedback_row">
               <div>solution:</div>
               <div>{solutionOption}</div>
@@ -170,7 +179,7 @@ export function ContinueBtn({stage=0, onContinue}){
           onClick={onContinue} 
           label={label} 
           id={`continue_btn_${stage}`} 
-          disabled={[0, 2].includes(stage)}
+          disabled={[0, 2, 6].includes(stage)}
           style={{margin: 0}}
       />
       
@@ -253,6 +262,83 @@ export function LevelEndContent({nextLevelExists = false}){
 
     `}</style>
     
+    </div>
+  )
+}
+
+export function DeterminantFormula({detArr, setDetArr, setUserMatrix, matrixRows = 3}){
+
+  const lines = [];
+  const lineSigns = [];
+  let currentLine = [];
+  let currentSign = null;
+  let resultItem = null;
+
+  detArr.forEach((item, index) => {
+    if (item.type === "result") {
+      resultItem = item;
+      return;
+    }
+
+    if (item.type === "operation") {
+      if (currentLine.length > 0) {
+        lines.push(currentLine);
+        lineSigns.push(currentSign ?? "");
+      }
+      currentSign = item.data;
+      currentLine = [];
+      return;
+    }
+
+    if (item.type === "cell") {
+      currentLine.push(item.data);
+      const nextItem = detArr[index + 1];
+      if (!nextItem || nextItem.type === "operation") {
+        lines.push(currentLine);
+        lineSigns.push(currentSign ?? "");
+        currentLine = [];
+      }
+    }
+  });
+
+  if (currentLine.length > 0) {
+    lines.push(currentLine);
+    lineSigns.push(currentSign ?? "");
+  }
+
+  const prettyText = lines
+    .map((line, index) => {
+      const prefix = index === 0 ? "" : `\\\\${lineSigns[index] === "+" ? "+" : "-"}`;
+      return `${prefix}${line.join(" \\cdot ")}`;
+    })
+    .join("");
+
+  const Text = `\\begin{align*}${prettyText}\\end{align*}`;
+  const resultText = resultItem
+    ? String(resultItem.data[0][0])
+    : "";
+
+  return(
+    <div className="column-group">
+      <div>
+      <Button icon="pi pi-minus-circle" onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "-"}];return next;});}}/>
+      <Button icon="pi pi-plus-circle" onClick={() => {setDetArr(prev => {const next = [...prev, { type: "operation", data: "+"}];return next;});}}/>
+      </div>
+      <div >
+        <BlockMath math={Text}/>
+        {resultItem && (
+          <>
+            <hr style={{ border: "none", borderTop: "2px solid var(--color3)", margin: "16px 0" }} />
+            <BlockMath math={`= ${resultText}`}/>
+          </>
+        )}
+      </div>
+      <Button className="outline-button" onClick={() => {
+        const result = Determinant(detArr);
+        setDetArr(prev => [...prev.filter(item => item.type !== "result"), { type: "result", data: result }]);
+        setUserMatrix(result);
+        console.log(detArr);
+      }}>Calculate</Button>
     </div>
   )
 }

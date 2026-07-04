@@ -38,3 +38,12 @@ input[type=number]::-webkit-outer-spin-button {
   padding-left: 15px;
 }
 .matrix-inputs td.before-result-col {padding-right: 15px;}
+
+.cell-button {
+  border: 2px solid transparent;
+}
+
+.cell-button:hover {
+  border: 2px solid var(--color3);
+}
+

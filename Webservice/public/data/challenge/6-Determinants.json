@@ -1,0 +1,41 @@
+ [
+{
+    "page": "1",
+    "part": "1",
+    "solution": "matrix",
+    "navigation": "check",
+    "acceptance": 0,
+
+    "matrixCreator": {
+      "params":{
+        "solMatrix": [[64]],
+        "rows": 1,
+        "cols": 1,
+        "resultcol": "false",
+        "changeLevel": 0
+      },
+      "return": {
+        "matrix": ["setSolutionMatrix"]
+      }
+    }
+
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "title",
+    "content": "Solve the Determinant"
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "text",
+    "content": "Click the numbers to build the formula and use the plus/minus buttons."
+  },
+  {
+    "page": "1",
+    "part": "1",
+    "typ": "ClickableDeterminant",
+    "data": [[1,4,6],[6,2,5],[3,2,1]]
+  }
+]
