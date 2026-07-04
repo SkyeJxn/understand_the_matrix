@@ -68,6 +68,8 @@ export default function SolutionManager({ children, Data, page, part, continueSt
   const [userMatrixHistory, setUserMatrixHistory] = useState([]);
   const [acceptance, setAcceptance] = useState(null);
 
+  const [detArr, setDetArr] = useState([]);
+
   const [rowOperationHistory, setRowOperationHistory] = useState([]);
 
   const [data, setData] = useState([]);
@@ -266,6 +268,8 @@ export default function SolutionManager({ children, Data, page, part, continueSt
         acceptance,
         rowOperationHistory,
         setRowOperationHistory,
+        detArr,
+        setDetArr,
         data
       }}
     >
