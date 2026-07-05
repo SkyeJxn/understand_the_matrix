@@ -14,7 +14,7 @@ export default function LevelOverview(){
     fetch(`/data/${mode}/level_meta.json`)
     .then(res => res.json())
     .then(data => setMetaData(data))
-  }, []);
+  }, [mode]);
 
   let levels = null;
   if(mode === 'tutorial'){
